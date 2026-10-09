@@ -77,24 +77,37 @@ function showLogin(message=""){
 function showSignedIn(user, profile){
   loginForm.hidden = true;
   signedInPanel.hidden = false;
-  $("#authHeading").textContent = "Signed in";
+  $("#authHeading").textContent = "Junacad School Portal";
   $("#authIntro").textContent = "";
   const safeName = esc(profile.full_name || user.email || "School user");
   const safeEmail = esc(user.email || profile.email || "");
   const safeRole = esc(profile.role || "unassigned");
-  signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+'</p><p>School role: <strong>'+safeRole+'</strong></p>' +
-    (profile.role === "admin"
-      ? '<p>Your administrator login is connected to the school profile.</p>'
-      : '<p class="notice">This account does not have the admin role. Ask the school administrator to check its profile.</p>') +
-    '<p class="notice"><strong>Setup still in progress:</strong> Sign-in is connected, but student records, homework, announcements, and chat have not yet been connected to live database data. Do not use this page for real student records yet.</p>' +
-    '<button class="secondary" id="signOutButton" type="button">Sign out</button>';
+  signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section></div>' : '<p class="notice">This account does not have the admin role.</p>') +
+    '<p class="notice">The student register and chat are not connected to live data yet.</p><button class="secondary" id="signOutButton" type="button">Sign out</button>';
   authMessage.textContent = "";
-  $("#signOutButton").onclick = async () => {
-    authMessage.textContent = "Signing out…";
-    const {error} = await supabaseClient.auth.signOut();
-    if(error) authMessage.textContent = "Sign-out error: " + error.message;
-    else showLogin("You have signed out.");
-  };
+  $("#signOutButton").onclick = async () => { const {error}=await supabaseClient.auth.signOut(); if(error) authMessage.textContent="Sign-out error: "+error.message; else showLogin("You have signed out."); };
+  if(profile.role === "admin") connectLiveRecords(user);
+}
+async function connectLiveRecords(user){
+  const status=(m)=>{const el=$("#liveStatus");if(el)el.textContent=m;};
+  const safe=(v)=>esc(v==null?"":String(v));
+  async function refresh(){
+    status("Loading announcements and homework…");
+    const results=await Promise.all([
+      supabaseClient.from("school_announcements").select("id,title,message,created_at").order("created_at",{ascending:false}).limit(100),
+      supabaseClient.from("school_homework").select("id,title,instructions,class_name,due_date,created_at").order("created_at",{ascending:false}).limit(100)
+    ]);
+    const ar=results[0],hr=results[1];
+    if(ar.error||hr.error){status("Could not load records. Check Supabase permissions and policies. "+(ar.error?ar.error.message:hr.error.message));return;}
+    const a=ar.data||[],h=hr.data||[];$("#annCount").textContent=a.length;$("#hwCount").textContent=h.length;
+    $("#liveAnnouncements").innerHTML=a.length?a.map(x=>'<article class="item"><div class="dot">📣</div><div><strong>'+safe(x.title)+'</strong><p>'+safe(x.message)+'</p></div></article>').join(""):'<p class="empty">No announcements saved yet.</p>';
+    $("#liveHomework").innerHTML=h.length?h.map(x=>'<article class="item"><div class="dot">📘</div><div><strong>'+safe(x.title)+'</strong><p>'+safe(x.class_name)+' · Due: '+safe(x.due_date||"Not set")+'</p><p>'+safe(x.instructions)+'</p></div></article>').join(""):'<p class="empty">No homework saved yet.</p>';
+    status("Live records loaded from Supabase.");
+  }
+  $("#liveAnnouncementForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const {error}=await supabaseClient.from("school_announcements").insert({title:String(fd.get("title")).trim(),message:String(fd.get("message")).trim(),created_by:user.id});if(error){status("Could not save announcement: "+error.message);return;}form.reset();await refresh();};
+  $("#liveHomeworkForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const row={title:String(fd.get("title")).trim(),instructions:String(fd.get("instructions")).trim(),class_name:String(fd.get("class_name")),created_by:user.id};const due=String(fd.get("due_date")||"");if(due)row.due_date=due;const {error}=await supabaseClient.from("school_homework").insert(row);if(error){status("Could not save homework: "+error.message);return;}form.reset();await refresh();};
+  await refresh();
 }
 async function loadSchoolProfile(user){
   authMessage.textContent = "Checking your school profile…";
