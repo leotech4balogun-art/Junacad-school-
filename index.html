@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#153b67">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <title>Junacad High School | School Portal</title>
 <style>
 :root{--navy:#153b67;--blue:#2368b5;--pale:#edf4fc;--ink:#17263a;--muted:#66758a;--line:#e2e9f2;--white:#fff;--green:#197653}
@@ -15,10 +16,13 @@
 <main class="wrap">
 <div class="sectionlabel">PREVIEW THE PORTAL AS</div><div class="rolebar" id="roles"><button class="rolebtn active" data-role="Admin">🛡️ Admin</button><button class="rolebtn" data-role="Teacher">📚 Teacher</button><button class="rolebtn" data-role="Student">🎒 Student</button></div>
 <nav class="tabs" id="tabs"></nav><div id="app"></div>
-<div class="notice"><strong>Demo only:</strong> This preview runs in your browser and uses sample information. It is not yet connected to a shared database, real accounts, or secure school records. Changes made here are temporary.</div>
+<div class="notice" id="connectionNotice"><strong>School portal setup:</strong> Connecting the Supabase client. This role-switching screen is still a demo; do not enter real student records yet.</div>
 <div class="footer">© Junacad High School · School portal preview</div>
 </main>
 <script>
+const SUPABASE_URL="https://ummipolawycrnxcxsrej.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_LcUBkl4oBiHjJZxCEXOjew_jYYLl5jf";
+const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 const defaults={students:[{name:"Ada Okafor",cls:"JSS 1"},{name:"Daniel Musa",cls:"JSS 2"},{name:"Grace Bello",cls:"SS 1"}],homework:[{title:"Algebra exercises",subject:"Mathematics",cls:"JSS 2"},{title:"Essay writing",subject:"English",cls:"SS 1"}],announcements:[{title:"Welcome to Junacad High School!",date:"School notice"},{title:"Second-term revision timetable is available.",date:"Academic office"}]};
 let data=JSON.parse(JSON.stringify(defaults)),role="Admin",tab="Dashboard";
 const $=s=>document.querySelector(s);
@@ -34,5 +38,7 @@ else if(tab==="Homework"){html='<section class="panel"><h3>'+(role==="Student"?"
 else if(tab==="Announcements"){html='<section class="panel"><h3>School announcements</h3>'+list(data.announcements,"📣","School notice")+'</section>'+(role!=="Student"?'<section class="panel" style="margin-top:14px">'+form("Publish announcement",'<input name="title" placeholder="Announcement message" required>',"Publish announcement")+'</section>':'')}
 else if(tab==="Class Chat"){html='<section class="panel"><h3>Class-restricted chat</h3><p>Chat rooms will be available after secure student accounts and class memberships are connected.</p><p class="muted">This preview does not send messages or provide real student chat.</p></section>'}
 $("#app").innerHTML=html;let f=$("#entry");if(f)f.onsubmit=e=>{e.preventDefault();let fd=new FormData(f);if(tab==="Students")data.students.push({name:fd.get("name"),cls:fd.get("cls")});if(tab==="Homework")data.homework.push({title:fd.get("title"),subject:fd.get("subject"),cls:fd.get("cls")});if(tab==="Announcements")data.announcements.unshift({title:fd.get("title"),date:"Just added"});render()}}
-$("#roles").querySelectorAll("button").forEach(b=>b.onclick=()=>{role=b.dataset.role;tab="Dashboard";$("#roles").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));render()});render();
+$("#roles").querySelectorAll("button").forEach(b=>b.onclick=()=>{role=b.dataset.role;tab="Dashboard";$("#roles").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));render()});
+if(supabaseClient){$("#connectionNotice").innerHTML="<strong>Supabase client configured.</strong> The school database project is set in this website. Sign-in, profile setup, and saving real records still need to be connected before real school use.";}else{$("#connectionNotice").innerHTML="<strong>Connection setup needs attention.</strong> The Supabase client library did not load. Refresh the page and try again.";}
+render();
 </script></body></html>
