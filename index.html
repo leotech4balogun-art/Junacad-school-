@@ -83,7 +83,7 @@ function showSignedIn(user, profile){
   const safeEmail = esc(user.email || profile.email || "");
   const safeRole = esc(profile.role || "unassigned");
   signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
-    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section></div>' : '<p class="notice">This account does not have the admin role.</p>') +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">The student receives an email invitation to set their own password. Only administrators can send invitations.</p><form class="form" id="studentRegisterForm"><input name="full_name" maxlength="120" required placeholder="Student full name"><input name="email" type="email" maxlength="254" required placeholder="Student email address"><select name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Invite student securely</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : '<p class="notice">This account does not have the admin role.</p>') +
     '<p class="notice">The student register and chat are not connected to live data yet.</p><button class="secondary" id="signOutButton" type="button">Sign out</button>';
   authMessage.textContent = "";
   $("#signOutButton").onclick = async () => { const {error}=await supabaseClient.auth.signOut(); if(error) authMessage.textContent="Sign-out error: "+error.message; else showLogin("You have signed out."); };
@@ -107,6 +107,25 @@ async function connectLiveRecords(user){
   }
   $("#liveAnnouncementForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const {error}=await supabaseClient.from("school_announcements").insert({title:String(fd.get("title")).trim(),message:String(fd.get("message")).trim(),created_by:user.id});if(error){status("Could not save announcement: "+error.message);return;}form.reset();await refresh();};
   $("#liveHomeworkForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const row={title:String(fd.get("title")).trim(),instructions:String(fd.get("instructions")).trim(),class_name:String(fd.get("class_name")),created_by:user.id};const due=String(fd.get("due_date")||"");if(due)row.due_date=due;const {error}=await supabaseClient.from("school_homework").insert(row);if(error){status("Could not save homework: "+error.message);return;}form.reset();await refresh();};
+  const studentForm = $("#studentRegisterForm");
+  if(studentForm){
+    studentForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const statusEl = $("#studentRegisterStatus");
+      const submit = studentForm.querySelector('button[type="submit"]');
+      const fd = new FormData(studentForm);
+      submit.disabled = true; submit.textContent = "Sending invitation…";
+      statusEl.textContent = "";
+      const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+        body: { full_name: String(fd.get("full_name")).trim(), email: String(fd.get("email")).trim(), class_name: String(fd.get("class_name")) }
+      });
+      submit.disabled = false; submit.textContent = "Invite student securely";
+      if(error){ statusEl.textContent = "Invitation failed. Deploy the secure admin-create-student function and check its logs. " + error.message; return; }
+      if(data?.error){ statusEl.textContent = "Invitation failed: " + data.error; return; }
+      studentForm.reset();
+      statusEl.textContent = "Invitation sent. Ask the student to check their email and follow the invitation link to set a password.";
+    };
+  }
   await refresh();
 }
 async function loadSchoolProfile(user){
