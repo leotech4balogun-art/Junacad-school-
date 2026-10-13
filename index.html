@@ -83,7 +83,7 @@ function showSignedIn(user, profile){
   const safeEmail = esc(user.email || profile.email || "");
   const safeRole = esc(profile.role || "unassigned");
   signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
-    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section><section class="panel" style="margin-top:14px"><h3>Student records</h3><p class="muted">Live student accounts from the school database.</p><div id="adminStudentRecords"><p class="muted">Loading student records…</p></div><button class="secondary" id="refreshStudentRecordsButton" type="button" style="margin-top:10px">Refresh student records</button></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">The student receives an email invitation to set their own password. Only administrators can send invitations.</p><form class="form" id="studentRegisterForm"><input name="full_name" maxlength="120" required placeholder="Student full name"><input name="email" type="email" maxlength="254" required placeholder="Student email address"><select name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Invite student securely</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>Reset a student password</h3><p class="muted">Only administrators can reset passwords. Enter the student user ID and a temporary password, then share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required value="683b9bbe-cb7d-4d08-ade1-780669ec86cb"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : '<p class="notice">This account does not have a student or administrator role. Please contact the school administrator.</p>')) +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section><section class="panel" style="margin-top:14px"><h3>Student records</h3><p class="muted">Live student accounts from the school database.</p><div id="adminStudentRecords"><p class="muted">Loading student records…</p></div><button class="secondary" id="refreshStudentRecordsButton" type="button" style="margin-top:10px">Refresh student records</button></section><section class="panel" style="margin-top:14px"><h3>Student attendance register</h3><p class="muted">Choose a date and class, mark each student, then save the register.</p><div class="form"><label for="attendanceDate">Attendance date</label><input id="attendanceDate" type="date" required><label for="attendanceClass">Class</label><select id="attendanceClass"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="secondary" id="loadAttendanceButton" type="button">Load register</button></div><div id="attendanceStatus" class="muted" role="status" aria-live="polite" style="margin-top:10px">Choose a date and class to load attendance.</div><div id="attendanceRecords"></div><button class="primary" id="saveAttendanceButton" type="button" style="margin-top:12px" disabled>Save attendance</button></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">The student receives an email invitation to set their own password. Only administrators can send invitations.</p><form class="form" id="studentRegisterForm"><input name="full_name" maxlength="120" required placeholder="Student full name"><input name="email" type="email" maxlength="254" required placeholder="Student email address"><select name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Invite student securely</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>Reset a student password</h3><p class="muted">Only administrators can reset passwords. Enter the student user ID and a temporary password, then share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required value="683b9bbe-cb7d-4d08-ade1-780669ec86cb"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : '<p class="notice">This account does not have a student or administrator role. Please contact the school administrator.</p>')) +
     '<p class="notice">The student register and chat are not connected to live data yet.</p><button class="secondary" id="signOutButton" type="button">Sign out</button>';
   authMessage.textContent = "";
   $("#signOutButton").onclick = async () => { const {error}=await supabaseClient.auth.signOut(); if(error) authMessage.textContent="Sign-out error: "+error.message; else showLogin("You have signed out."); };
@@ -155,6 +155,78 @@ async function connectLiveRecords(user){
       statusEl.textContent = "Invitation sent. Ask the student to check their email and follow the invitation link to set a password.";
     };
   }
+  // Attendance register: attendance data is stored per student and school date.
+  const attendanceDate = $("#attendanceDate");
+  const attendanceClass = $("#attendanceClass");
+  const attendanceRecords = $("#attendanceRecords");
+  const attendanceStatus = $("#attendanceStatus");
+  const loadAttendanceButton = $("#loadAttendanceButton");
+  const saveAttendanceButton = $("#saveAttendanceButton");
+  if (attendanceDate) {
+    const localToday = new Date();
+    attendanceDate.value = new Date(localToday.getTime() - localToday.getTimezoneOffset() * 60000).toISOString().slice(0,10);
+  }
+  async function loadAttendanceRegister() {
+    if (!attendanceDate || !attendanceClass || !attendanceRecords || !attendanceStatus || !saveAttendanceButton) return;
+    const date = attendanceDate.value;
+    const cls = attendanceClass.value;
+    if (!date || !cls) { attendanceStatus.textContent = "Choose an attendance date and class."; return; }
+    attendanceStatus.textContent = "Loading students and attendance…";
+    attendanceRecords.innerHTML = "";
+    saveAttendanceButton.disabled = true;
+    const {data: students, error: studentError} = await supabaseClient.from("school_profiles")
+      .select("auth_user_id,full_name,email,class_name")
+      .eq("role","student").eq("class_name",cls).order("full_name",{ascending:true}).limit(500);
+    if (studentError) { attendanceStatus.textContent = "Could not load students: " + studentError.message; return; }
+    const {data: marks, error: marksError} = await supabaseClient.from("school_attendance")
+      .select("student_user_id,status,notes")
+      .eq("attendance_date",date).eq("class_name",cls);
+    if (marksError) { attendanceStatus.textContent = "Attendance table is not ready or access is blocked. Please complete the attendance database setup first. Details: " + marksError.message; return; }
+    const markMap = new Map((marks || []).map(m => [m.student_user_id,m]));
+    const safe = v => esc(v == null ? "" : String(v));
+    if (!students || !students.length) {
+      attendanceRecords.innerHTML = '<p class="empty">No student accounts found in ' + safe(cls) + ' yet.</p>';
+      attendanceStatus.textContent = "No students found for this class.";
+      return;
+    }
+    attendanceRecords.innerHTML = students.map(s => {
+      const mark = markMap.get(s.auth_user_id) || {};
+      const options = [["present","Present"],["absent","Absent"],["late","Late"],["excused","Excused"]]
+        .map(([value,label]) => '<option value="' + value + '"' + (mark.status === value ? " selected" : "") + '>' + label + '</option>').join("");
+      return '<article class="item attendance-row" data-student-id="' + safe(s.auth_user_id) + '"><div class="dot">🎓</div><div style="flex:1;min-width:0"><strong>' + safe(s.full_name || "Student") + '</strong><p>' + safe(s.email || "") + '</p><label style="display:block;margin-top:8px;font-size:13px;font-weight:700">Attendance</label><select class="attendance-mark" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:9px;margin-top:4px">' + '<option value="">Choose status</option>' + options + '</select><input class="attendance-notes" maxlength="500" placeholder="Optional note" value="' + safe(mark.notes || "") + '" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:9px;margin-top:7px"></div></article>';
+    }).join("");
+    attendanceStatus.textContent = "Loaded " + students.length + " student(s) for " + date + " · " + cls + ".";
+    saveAttendanceButton.disabled = false;
+  }
+  if (loadAttendanceButton) loadAttendanceButton.onclick = loadAttendanceRegister;
+  if (attendanceDate) attendanceDate.onchange = loadAttendanceRegister;
+  if (attendanceClass) attendanceClass.onchange = loadAttendanceRegister;
+  if (saveAttendanceButton) saveAttendanceButton.onclick = async () => {
+    const date = attendanceDate?.value;
+    const cls = attendanceClass?.value;
+    const rows = Array.from(attendanceRecords?.querySelectorAll(".attendance-row") || []);
+    if (!date || !cls || !rows.length) { attendanceStatus.textContent = "Load a class register before saving."; return; }
+    const missing = rows.find(row => !row.querySelector(".attendance-mark").value);
+    if (missing) { attendanceStatus.textContent = "Choose Present, Absent, Late, or Excused for every student before saving."; missing.querySelector(".attendance-mark").focus(); return; }
+    const records = rows.map(row => ({
+      student_user_id: row.dataset.studentId,
+      class_name: cls,
+      attendance_date: date,
+      status: row.querySelector(".attendance-mark").value,
+      notes: row.querySelector(".attendance-notes").value.trim() || null,
+      marked_by: user.id
+    }));
+    saveAttendanceButton.disabled = true;
+    saveAttendanceButton.textContent = "Saving attendance…";
+    attendanceStatus.textContent = "Saving attendance records…";
+    const {error} = await supabaseClient.from("school_attendance").upsert(records, {onConflict:"student_user_id,attendance_date"});
+    saveAttendanceButton.disabled = false;
+    saveAttendanceButton.textContent = "Save attendance";
+    if (error) { attendanceStatus.textContent = "Attendance could not be saved: " + error.message; return; }
+    attendanceStatus.textContent = "Attendance saved successfully for " + records.length + " student(s) on " + date + ".";
+  };
+  if (attendanceDate && attendanceClass) await loadAttendanceRegister();
+
   const resetForm = $("#studentPasswordResetForm");
   if (resetForm) {
     resetForm.onsubmit = async (e) => {
