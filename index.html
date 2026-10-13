@@ -83,7 +83,7 @@ function showSignedIn(user, profile){
   const safeEmail = esc(user.email || profile.email || "");
   const safeRole = esc(profile.role || "unassigned");
   signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
-    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">The student receives an email invitation to set their own password. Only administrators can send invitations.</p><form class="form" id="studentRegisterForm"><input name="full_name" maxlength="120" required placeholder="Student full name"><input name="email" type="email" maxlength="254" required placeholder="Student email address"><select name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Invite student securely</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : '<p class="notice">This account does not have a student or administrator role. Please contact the school administrator.</p>')) +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><section class="panel"><h3>School announcements</h3><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish</button></form></section><section class="panel" style="margin-top:14px"><h3>Homework</h3><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">The student receives an email invitation to set their own password. Only administrators can send invitations.</p><form class="form" id="studentRegisterForm"><input name="full_name" maxlength="120" required placeholder="Student full name"><input name="email" type="email" maxlength="254" required placeholder="Student email address"><select name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Invite student securely</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>Reset a student password</h3><p class="muted">Only administrators can reset passwords. Enter the student user ID and a temporary password, then share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required value="683b9bbe-cb7d-4d08-ade1-780669ec86cb"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : '<p class="notice">This account does not have a student or administrator role. Please contact the school administrator.</p>')) +
     '<p class="notice">The student register and chat are not connected to live data yet.</p><button class="secondary" id="signOutButton" type="button">Sign out</button>';
   authMessage.textContent = "";
   $("#signOutButton").onclick = async () => { const {error}=await supabaseClient.auth.signOut(); if(error) authMessage.textContent="Sign-out error: "+error.message; else showLogin("You have signed out."); };
@@ -141,6 +141,43 @@ async function connectLiveRecords(user){
       if(data?.error){ statusEl.textContent = "Invitation failed: " + data.error; return; }
       studentForm.reset();
       statusEl.textContent = "Invitation sent. Ask the student to check their email and follow the invitation link to set a password.";
+    };
+  }
+  const resetForm = $("#studentPasswordResetForm");
+  if (resetForm) {
+    resetForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const statusEl = $("#studentPasswordResetStatus");
+      const submit = resetForm.querySelector('button[type="submit"]');
+      const fd = new FormData(resetForm);
+      const password = String(fd.get("password") || "");
+      const confirmation = String(fd.get("password_confirm") || "");
+      if (password !== confirmation) {
+        statusEl.textContent = "The passwords do not match. Please type them again.";
+        return;
+      }
+      if (password.length < 8 || password.length > 72) {
+        statusEl.textContent = "Use a password between 8 and 72 characters.";
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = "Resetting password…";
+      statusEl.textContent = "";
+      const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+        body: { action: "reset_password", user_id: String(fd.get("user_id")).trim(), password }
+      });
+      submit.disabled = false;
+      submit.textContent = "Reset student password";
+      if (error) {
+        statusEl.textContent = "Password reset failed. Check the function logs and administrator session. " + error.message;
+        return;
+      }
+      if (data?.error || !data?.success) {
+        statusEl.textContent = "Password reset failed: " + (data?.error || "Please try again.");
+        return;
+      }
+      resetForm.reset();
+      statusEl.textContent = "Password reset successfully. Give the temporary password to the student privately. Do not share it in this chat.";
     };
   }
   await refresh();
