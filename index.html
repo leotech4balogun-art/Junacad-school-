@@ -298,10 +298,22 @@ async function connectClassChat(user, profile){
       return;
     }
     const messages = rows || [];
+    const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
+    let senderProfiles = [];
+    if (senderIds.length) {
+      const profileResult = await supabaseClient.from("school_profiles")
+        .select("auth_user_id,full_name,email")
+        .in("auth_user_id", senderIds);
+      if (!profileResult.error) senderProfiles = profileResult.data || [];
+    }
+    const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
     messagesEl.innerHTML = messages.length ? messages.map(item => {
       const mine = item.sender_id === user.id;
+      const profile = profileById.get(item.sender_id);
+      const senderName = mine ? (profile?.full_name || profile?.email || user.email || "You") : (profile?.full_name || profile?.email || "Class member / staff");
+      const initials = senderName.split(/\\s+/).filter(Boolean).slice(0,2).map(part => part[0]).join("").toUpperCase() || "👤";
       const when = item.created_at ? new Date(item.created_at).toLocaleString() : "";
-      return '<article class="item"><div class="dot">'+(mine?'🟦':'💬')+'</div><div><strong>'+ (mine ? 'You' : 'Class member / staff') +'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
+      return '<article class="item"><div class="dot" aria-hidden="true">'+safe(initials)+'</div><div><strong>'+safe(senderName)+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
     }).join("") : '<p class="empty">No messages yet. Send the first message to your class.</p>';
     statusEl.textContent = "Showing " + messages.length + " recent message(s) for " + className + ".";
     if(refreshButton) refreshButton.disabled = false;
@@ -368,10 +380,22 @@ async function connectAdminClassChat(user){
       return;
     }
     const messages = rows || [];
+    const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
+    let senderProfiles = [];
+    if (senderIds.length) {
+      const profileResult = await supabaseClient.from("school_profiles")
+        .select("auth_user_id,full_name,email")
+        .in("auth_user_id", senderIds);
+      if (!profileResult.error) senderProfiles = profileResult.data || [];
+    }
+    const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
     messagesEl.innerHTML = messages.length ? messages.map(item => {
       const mine = item.sender_id === user.id;
+      const profile = profileById.get(item.sender_id);
+      const senderName = mine ? (profile?.full_name || profile?.email || user.email || "You") : (profile?.full_name || profile?.email || "Class member / staff");
+      const initials = senderName.split(/\\s+/).filter(Boolean).slice(0,2).map(part => part[0]).join("").toUpperCase() || "👤";
       const when = item.created_at ? new Date(item.created_at).toLocaleString() : "";
-      return '<article class="item"><div class="dot">'+(mine?'🟦':'💬')+'</div><div><strong>'+(mine?'You':'Class member / staff')+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
+      return '<article class="item"><div class="dot" aria-hidden="true">'+safe(initials)+'</div><div><strong>'+safe(senderName)+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
     }).join("") : '<p class="empty">No messages yet for ' + safe(className) + '.</p>';
     statusEl.textContent = "Showing " + messages.length + " recent message(s) for " + className + ".";
     refreshButton.disabled = false;
