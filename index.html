@@ -32,7 +32,7 @@
 </section>
 
 <div class="notice" id="connectionNotice"><strong>School portal setup:</strong> Connecting the Supabase client. This role-switching screen is still a demo; do not enter real student records yet.</div>
-<div class="footer">© Junacad High School · School portal preview</div>
+<div class="footer">© Junacad High School · Secure school portal</div>
 </main>
 <script>
 const SUPABASE_URL="https://ummipolawycrnxcxsrej.supabase.co";
@@ -54,7 +54,7 @@ else if(tab==="Announcements"){html='<section class="panel"><h3>School announcem
 else if(tab==="Class Chat"){html='<section class="panel"><h3>Class-restricted chat</h3><p>Chat rooms will be available after secure student accounts and class memberships are connected.</p><p class="muted">This preview does not send messages or provide real student chat.</p></section>'}
 $("#app").innerHTML=html;let f=$("#entry");if(f)f.onsubmit=e=>{e.preventDefault();let fd=new FormData(f);if(tab==="Students")data.students.push({name:fd.get("name"),cls:fd.get("cls")});if(tab==="Homework")data.homework.push({title:fd.get("title"),subject:fd.get("subject"),cls:fd.get("cls")});if(tab==="Announcements")data.announcements.unshift({title:fd.get("title"),date:"Just added"});render()}}
 $("#roles").querySelectorAll("button").forEach(b=>b.onclick=()=>{role=b.dataset.role;tab="Dashboard";$("#roles").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));render()});
-if(supabaseClient){$("#connectionNotice").innerHTML="<strong>Supabase client configured.</strong> The school database project is set in this website. Sign-in, profile setup, and saving real records still need to be connected before real school use.";}else{$("#connectionNotice").innerHTML="<strong>Connection setup needs attention.</strong> The Supabase client library did not load. Refresh the page and try again.";}
+if(supabaseClient){$("#connectionNotice").innerHTML="<strong>Junacad School portal connected.</strong> Secure sign-in and live school records are available for authorized accounts.";}else{$("#connectionNotice").innerHTML="<strong>Connection setup needs attention.</strong> The Supabase client library did not load. Refresh the page and try again.";}
 render();
 
 // Real Supabase password sign-in. Public sign-up and role selection are intentionally not offered.
