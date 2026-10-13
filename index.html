@@ -307,6 +307,19 @@ async function connectClassChat(user, profile){
     if(refreshButton) refreshButton.disabled = false;
   }
   if(refreshButton) refreshButton.onclick = loadMessages;
+  const studentChatChannel = supabaseClient
+    .channel("student-class-chat-" + user.id + "-" + Date.now())
+    .on("postgres_changes", {
+      event: "INSERT",
+      schema: "public",
+      table: "school_messages",
+      filter: "class_name=eq." + className
+    }, () => { loadMessages(); })
+    .subscribe((state) => {
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") {
+        statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
+      }
+    });
   form.onsubmit = async (event) => {
     event.preventDefault();
     const input = form.elements.namedItem("message");
@@ -365,6 +378,20 @@ async function connectAdminClassChat(user){
   }
   refreshButton.onclick = loadMessages;
   classPicker.onchange = loadMessages;
+  const adminChatChannel = supabaseClient
+    .channel("admin-class-chat-" + user.id + "-" + Date.now())
+    .on("postgres_changes", {
+      event: "INSERT",
+      schema: "public",
+      table: "school_messages"
+    }, (payload) => {
+      if (payload.new && payload.new.class_name === classPicker.value) loadMessages();
+    })
+    .subscribe((state) => {
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") {
+        statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
+      }
+    });
   form.onsubmit = async event => {
     event.preventDefault();
     const input = form.elements.namedItem("message");
