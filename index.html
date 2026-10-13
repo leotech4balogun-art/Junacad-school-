@@ -301,10 +301,10 @@ async function connectClassChat(user, profile){
     const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
     let senderProfiles = [];
     if (senderIds.length) {
-      const profileResult = await supabaseClient.from("school_profiles")
-        .select("auth_user_id,full_name,email")
-        .in("auth_user_id", senderIds);
-      if (!profileResult.error) senderProfiles = profileResult.data || [];
+      const profileResult = await supabaseClient.rpc("get_school_chat_profiles");
+      if (!profileResult.error) {
+        senderProfiles = (profileResult.data || []).filter(profile => senderIds.includes(profile.auth_user_id));
+      }
     }
     const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
     messagesEl.innerHTML = messages.length ? messages.map(item => {
@@ -383,10 +383,10 @@ async function connectAdminClassChat(user){
     const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
     let senderProfiles = [];
     if (senderIds.length) {
-      const profileResult = await supabaseClient.from("school_profiles")
-        .select("auth_user_id,full_name,email")
-        .in("auth_user_id", senderIds);
-      if (!profileResult.error) senderProfiles = profileResult.data || [];
+      const profileResult = await supabaseClient.rpc("get_school_chat_profiles");
+      if (!profileResult.error) {
+        senderProfiles = (profileResult.data || []).filter(profile => senderIds.includes(profile.auth_user_id));
+      }
     }
     const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
     messagesEl.innerHTML = messages.length ? messages.map(item => {
