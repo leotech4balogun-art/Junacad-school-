@@ -46,26 +46,26 @@ Deno.serve(async (req) => {
     .maybeSingle();
 
   if (profileError) return reply({ error: "Could not verify your school role." }, 500);
-  if (callerProfile?.role !== "admin") return reply({ error: "Only a school administrator can register students." }, 403);
+  if (callerProfile?.role !== "admin") return reply({ error: "Only a school administrator can register school accounts." }, 403);
 
-  let body: { full_name?: unknown; email?: unknown; class_name?: unknown };
+  let body: { full_name?: unknown; email?: unknown; class_name?: unknown; role?: unknown };
   try {
     body = await req.json();
   } catch {
-    return reply({ error: "Please provide valid student details." }, 400);
+    return reply({ error: "Please provide valid school account details." }, 400);
   }
 
   const fullName = typeof body.full_name === "string" ? body.full_name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
-  const className = typeof body.class_name === "string" ? body.class_name.trim() : "";
+  const className = typeof body.class_name === "string" ? body.class_name.trim() : "";\n  const role = body.role === "teacher" ? "teacher" : "student";
   const allowedClasses = ["JSS 1", "JSS 2", "JSS 3", "SS 1", "SS 2", "SS 3"];
 
-  if (fullName.length < 2 || fullName.length > 120) return reply({ error: "Enter a student name between 2 and 120 characters." }, 400);
+  if (fullName.length < 2 || fullName.length > 120) return reply({ error: "Enter a name between 2 and 120 characters." }, 400);
   if (email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return reply({ error: "Enter a valid student email address." }, 400);
   if (!allowedClasses.includes(className)) return reply({ error: "Choose a valid class." }, 400);
 
   const { data: inviteData, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName },
+    data: { full_name: fullName, role },
   });
   if (inviteError || !inviteData.user) {
     return reply({ error: inviteError?.message || "The student invitation could not be created." }, 400);
@@ -75,7 +75,7 @@ Deno.serve(async (req) => {
     auth_user_id: inviteData.user.id,
     full_name: fullName,
     email,
-    role: "student",
+    role,
     class_name: className,
   });
 
@@ -85,5 +85,5 @@ Deno.serve(async (req) => {
     return reply({ error: "The invitation was rolled back because the school profile could not be saved. Check for an existing profile and try again." }, 500);
   }
 
-  return reply({ success: true, message: "Student invitation sent.", student: { full_name: fullName, email, class_name: className } }, 201);
+  return reply({ success: true, message: role === "teacher" ? "Teacher invitation sent." : "Student invitation sent.", account: { full_name: fullName, email, class_name: className, role } }, 201);
 });
