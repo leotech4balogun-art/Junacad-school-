@@ -50,6 +50,42 @@ Deno.serve(async (req) => {
     return reply({ success: true, message: "Student password updated." });
   }
 
+  if (action === "update_student") {
+    const profileId = typeof body.profile_id === "string" ? body.profile_id.trim() : "";
+    const fullName = typeof body.full_name === "string" ? body.full_name.trim() : "";
+    const className = typeof body.class_name === "string" ? body.class_name.trim() : "";
+    if (!profileId) return reply({ error: "Select a student record." }, 400);
+    if (fullName.length < 2 || fullName.length > 120) return reply({ error: "Enter a name between 2 and 120 characters." }, 400);
+    if (!allowedClasses.includes(className)) return reply({ error: "Choose a valid class." }, 400);
+    const { data: student, error: findError } = await adminClient.from("school_profiles")
+      .select("id,role").eq("id", profileId).maybeSingle();
+    if (findError || !student) return reply({ error: "Student record not found." }, 404);
+    if (student.role !== "student") return reply({ error: "Only student records can be edited here." }, 400);
+    const { error } = await adminClient.from("school_profiles")
+      .update({ full_name: fullName, class_name: className }).eq("id", profileId).eq("role", "student");
+    if (error) return reply({ error: "Student details could not be updated: " + error.message }, 400);
+    return reply({ success: true, message: "Student details updated." });
+  }
+
+  if (action === "delete_student") {
+    const profileId = typeof body.profile_id === "string" ? body.profile_id.trim() : "";
+    if (!profileId) return reply({ error: "Select a student record." }, 400);
+    const { data: student, error: findError } = await adminClient.from("school_profiles")
+      .select("id,role,auth_user_id").eq("id", profileId).maybeSingle();
+    if (findError || !student) return reply({ error: "Student record not found." }, 404);
+    if (student.role !== "student") return reply({ error: "Only student records can be deleted here." }, 400);
+    const { error: deleteProfileError } = await adminClient.from("school_profiles")
+      .delete().eq("id", profileId).eq("role", "student");
+    if (deleteProfileError) return reply({ error: "Student record could not be deleted: " + deleteProfileError.message }, 400);
+    if (student.auth_user_id) {
+      const { error: deleteAuthError } = await adminClient.auth.admin.deleteUser(student.auth_user_id);
+      if (deleteAuthError) {
+        return reply({ success: true, warning: "Student profile removed, but the linked sign-in account could not be removed automatically. Please contact technical support." });
+      }
+    }
+    return reply({ success: true, message: "Student record and linked sign-in account deleted." });
+  }
+
   if (action === "create_record") {
     const fullName = typeof body.full_name === "string" ? body.full_name.trim() : "";
     const className = typeof body.class_name === "string" ? body.class_name.trim() : "";
