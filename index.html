@@ -123,7 +123,7 @@ async function connectStudentProfilePhoto(user, profile){
   const status=$("#studentPhotoStatus");
   const input=$("#studentPhotoFile");
   const safeName=String(profile.full_name||user.email||"Student");
-  if(initials) initials.textContent=safeName.split(/\\s+/).filter(Boolean).slice(0,2).map(part=>part[0]).join("").toUpperCase()||"👤";
+  if(initials) initials.textContent=safeName.split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0]).join("").toUpperCase()||"👤";
   async function showCurrentPhoto(){
     const path=user.id+"/avatar";
     const {data,error}=await supabaseClient.storage.from("student-profile-photos").createSignedUrl(path,3600);
