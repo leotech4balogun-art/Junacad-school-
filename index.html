@@ -236,7 +236,8 @@ async function connectLiveRecords(user){
     if(target) target.innerHTML = cards.join("");
     if(rosterTarget){
       const classOrder = ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"];
-      rosterTarget.innerHTML = classOrder.map(className => {
+      const displayClasses = [...classOrder, "Class not assigned"];
+      rosterTarget.innerHTML = displayClasses.map(className => {
         const members = students.filter(s => (s.class_name || "Class not assigned") === className);
         return '<section class="panel" style="margin:12px 0;padding:12px"><h4 style="margin:0 0 10px">'+safe(className)+' <span class="muted">('+members.length+')</span></h4>' +
           (members.length ? members.map(s => '<article class="item" style="margin:8px 0"><strong>'+safe(s.full_name || "Student")+'</strong><p>'+safe(s.email || "No email provided")+'</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary roster-edit-student" data-id="'+safe(s.id)+'" data-name="'+safe(s.full_name || "")+'" data-class="'+safe(s.class_name || className)+'">Edit</button><button type="button" class="secondary roster-delete-student" data-id="'+safe(s.id)+'" data-name="'+safe(s.full_name || "this student")+'" style="border-color:#d44;color:#b42318">Delete</button></div></article>').join("") : '<p class="muted">No students registered in this class.</p>') + '</section>';
