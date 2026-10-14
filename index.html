@@ -218,7 +218,19 @@ async function connectLiveRecords(user){
     const {data: rows, error} = await supabaseClient.from("school_profiles").select("auth_user_id,full_name,email,class_name").eq("role","student").order("full_name",{ascending:true}).limit(500);
     if(error){ target.innerHTML = '<p class="empty">Student records could not be loaded. Check the school_profiles table permissions.</p>'; return; }
     const students = rows || [];
-    target.innerHTML = students.length ? students.map(s => '<article class="item"><div class="dot">🎓</div><div><strong>'+safe(s.full_name || "Student")+'</strong><p>'+safe(s.email || "")+' · '+safe(s.class_name || "Class not assigned")+'</p><p class="muted">User ID: '+safe(s.auth_user_id || "Not linked")+'</p></div></article>').join("") : '<p class="empty">No student profiles found yet.</p>';
+    if (!students.length) { target.innerHTML = '<p class="empty">No student profiles found yet.</p>'; return; }
+    const cards = await Promise.all(students.map(async s => {
+      let photo = "";
+      if (s.auth_user_id) {
+        const photoResult = await supabaseClient.storage.from("student-profile-photos").createSignedUrl(s.auth_user_id + "/avatar", 3600);
+        if (!photoResult.error && photoResult.data && photoResult.data.signedUrl) photo = photoResult.data.signedUrl;
+      }
+      const avatar = photo
+        ? '<img src="'+safe(photo)+'" alt="'+safe(s.full_name || "Student")+' profile photo" style="width:56px;height:56px;object-fit:cover;border-radius:50%;border:2px solid #d8e5f4">'
+        : '<div class="dot" style="width:56px;height:56px;border-radius:50%;display:grid;place-items:center;flex-shrink:0">🎓</div>';
+      return '<article class="item" style="display:flex;align-items:center;gap:12px">'+avatar+'<div><strong>'+safe(s.full_name || "Student")+'</strong><p>'+safe(s.email || "")+' · '+safe(s.class_name || "Class not assigned")+'</p><p class="muted">User ID: '+safe(s.auth_user_id || "Not linked")+'</p></div></article>';
+    }));
+    target.innerHTML = cards.join("");
   }
   const refreshStudentButton = $("#refreshStudentRecordsButton");
   if(refreshStudentButton) refreshStudentButton.onclick = refreshStudentRecords;
