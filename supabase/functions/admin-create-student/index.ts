@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
   if (profileError) return reply({ error: "Could not verify your school role." }, 500);
   if (callerProfile?.role !== "admin") return reply({ error: "Only a school administrator can manage student accounts." }, 403);
 
-  let body: { action?: unknown; full_name?: unknown; email?: unknown; class_name?: unknown; role?: unknown; profile_id?: unknown; user_id?: unknown; password?: unknown };
+  let body: { action?: unknown; full_name?: unknown; email?: unknown; class_name?: unknown; class_names?: unknown; role?: unknown; profile_id?: unknown; user_id?: unknown; password?: unknown };
   try { body = await req.json(); } catch { return reply({ error: "Please provide valid account details." }, 400); }
 
   const action = typeof body.action === "string" ? body.action : "create_and_invite";
@@ -124,11 +124,17 @@ Deno.serve(async (req) => {
 
   const fullName = typeof body.full_name === "string" ? body.full_name.trim() : "";
   const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
-  const className = typeof body.class_name === "string" ? body.class_name.trim() : "";
   const role = body.role === "teacher" ? "teacher" : "student";
+  const requestedClasses = role === "teacher"
+    ? (Array.isArray(body.class_names) ? body.class_names : (typeof body.class_name === "string" ? [body.class_name] : []))
+    : (typeof body.class_name === "string" ? [body.class_name] : []);
+  const assignedClasses = [...new Set(requestedClasses.filter((value): value is string => typeof value === "string").map(value => value.trim()))];
   if (fullName.length < 2 || fullName.length > 120) return reply({ error: "Enter a name between 2 and 120 characters." }, 400);
   if (!validEmail(email)) return reply({ error: "Enter a valid email address." }, 400);
-  if (!allowedClasses.includes(className)) return reply({ error: "Choose a valid class." }, 400);
+  if (assignedClasses.length === 0 || assignedClasses.some(className => !allowedClasses.includes(className))) {
+    return reply({ error: role === "teacher" ? "Select at least one valid class for this staff member." : "Choose a valid class." }, 400);
+  }
+  const className = assignedClasses.join(", ");
 
   const { data: inviteData, error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(email, {
     data: { full_name: fullName, role },
@@ -141,5 +147,5 @@ Deno.serve(async (req) => {
     await adminClient.auth.admin.deleteUser(inviteData.user.id);
     return reply({ error: "Invitation was rolled back because the school profile could not be saved. Check for an existing profile and try again." }, 500);
   }
-  return reply({ success: true, message: role === "teacher" ? "Teacher invitation sent." : "Student invitation sent.", account: { full_name: fullName, email, class_name: className, role } }, 201);
+  return reply({ success: true, message: role === "teacher" ? "Teacher invitation sent for: " + className + "." : "Student invitation sent.", account: { full_name: fullName, email, class_name: className, class_names: assignedClasses, role } }, 201);
 });
