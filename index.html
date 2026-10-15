@@ -538,7 +538,7 @@ async function connectClassChat(user, profile){
     const className = activeClass();
     const sendButton = form.querySelector('button[type="submit"]');
     sendButton.disabled = true;
-    statusEl.textContent = "Sending invitation…".replace("invitation", "message");
+    statusEl.textContent = "Sending message…";
     const {error} = await supabaseClient.from("school_messages").insert({ class_name: className, sender_id: user.id, message });
     sendButton.disabled = false;
     if(error){ statusEl.textContent = "Message not sent: " + error.message; return; }
