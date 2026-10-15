@@ -470,17 +470,25 @@ async function connectClassChat(user, profile){
   const form = $("#classChatForm");
   const statusEl = $("#classChatStatus");
   const refreshButton = $("#refreshClassChatButton");
-  const className = String(profile.class_name || "").trim();
+  const classPicker = $("#teacherChatClass");
   const safe = (value) => esc(value == null ? "" : String(value));
+  const classNames = [...new Set(String(profile.class_name || "").split(",").map(value => value.trim()).filter(Boolean))];
   if(!messagesEl || !form || !statusEl) return;
-  if(!className){
+  if(!classNames.length){
     messagesEl.innerHTML = '<p class="empty">Your account does not have a class assigned yet. Please contact the school administrator.</p>';
     statusEl.textContent = "Class chat is unavailable until your school profile has a class.";
     form.hidden = true;
     if(refreshButton) refreshButton.hidden = true;
+    if(classPicker) classPicker.hidden = true;
     return;
   }
+  if(classPicker){
+    classPicker.innerHTML = classNames.map(name => '<option value="'+safe(name)+'">'+safe(name)+'</option>').join("");
+    classPicker.hidden = classNames.length < 2;
+  }
+  const activeClass = () => classPicker && !classPicker.hidden ? classPicker.value : classNames[0];
   async function loadMessages(){
+    const className = activeClass();
     if(refreshButton) refreshButton.disabled = true;
     messagesEl.innerHTML = '<p class="muted">Loading class messages…</p>';
     const {data: rows, error} = await supabaseClient.from("school_messages")
@@ -499,15 +507,13 @@ async function connectClassChat(user, profile){
     let senderProfiles = [];
     if (senderIds.length) {
       const profileResult = await supabaseClient.rpc("get_school_chat_profiles");
-      if (!profileResult.error) {
-        senderProfiles = (profileResult.data || []).filter(profile => senderIds.includes(profile.auth_user_id));
-      }
+      if (!profileResult.error) senderProfiles = (profileResult.data || []).filter(item => senderIds.includes(item.auth_user_id));
     }
-    const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
+    const profileById = new Map(senderProfiles.map(item => [item.auth_user_id, item]));
     messagesEl.innerHTML = messages.length ? messages.map(item => {
       const mine = item.sender_id === user.id;
-      const profile = profileById.get(item.sender_id);
-      const senderName = mine ? (profile?.full_name || profile?.email || user.email || "You") : (profile?.full_name || profile?.email || "Class member / staff");
+      const senderProfile = profileById.get(item.sender_id);
+      const senderName = mine ? (senderProfile?.full_name || senderProfile?.email || user.email || "You") : (senderProfile?.full_name || senderProfile?.email || "Class member / staff");
       const initials = senderName.split(/\\s+/).filter(Boolean).slice(0,2).map(part => part[0]).join("").toUpperCase() || "👤";
       const when = item.created_at ? new Date(item.created_at).toLocaleString() : "";
       return '<article class="item"><div class="dot" aria-hidden="true">'+safe(initials)+'</div><div><strong>'+safe(senderName)+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
@@ -516,39 +522,28 @@ async function connectClassChat(user, profile){
     if(refreshButton) refreshButton.disabled = false;
   }
   if(refreshButton) refreshButton.onclick = loadMessages;
-  const studentChatChannel = supabaseClient
-    .channel("student-class-chat-" + user.id + "-" + Date.now())
-    .on("postgres_changes", {
-      event: "INSERT",
-      schema: "public",
-      table: "school_messages",
-      filter: "class_name=eq." + className
-    }, () => { loadMessages(); })
+  if(classPicker) classPicker.onchange = loadMessages;
+  const chatChannel = supabaseClient.channel("class-chat-" + user.id + "-" + Date.now())
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "school_messages" }, payload => {
+      if(payload.new && classNames.includes(payload.new.class_name) && payload.new.class_name === activeClass()) loadMessages();
+    })
     .subscribe((state) => {
-      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") {
-        statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
-      }
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
     });
   form.onsubmit = async (event) => {
     event.preventDefault();
     const input = form.elements.namedItem("message");
     const message = String(input.value || "").trim();
     if(!message) return;
+    const className = activeClass();
     const sendButton = form.querySelector('button[type="submit"]');
     sendButton.disabled = true;
-    statusEl.textContent = "Sending message…";
-    const {error} = await supabaseClient.from("school_messages").insert({
-      class_name: className,
-      sender_id: user.id,
-      message
-    });
+    statusEl.textContent = "Sending invitation…".replace("invitation", "message");
+    const {error} = await supabaseClient.from("school_messages").insert({ class_name: className, sender_id: user.id, message });
     sendButton.disabled = false;
-    if(error){
-      statusEl.textContent = "Message not sent: " + error.message;
-      return;
-    }
+    if(error){ statusEl.textContent = "Message not sent: " + error.message; return; }
     input.value = "";
-    statusEl.textContent = "Message sent.";
+    statusEl.textContent = "Message sent to " + className + ".";
     await loadMessages();
   };
   await loadMessages();
