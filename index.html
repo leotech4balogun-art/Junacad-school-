@@ -1255,7 +1255,11 @@ async function connectAdminFees(user) {
           "</strong> · Paid: <strong>" + money(row.paid) +
           "</strong> · Balance: <strong>" +
           money(row.balance) + "</strong></p>" +
-          paymentRows + "</div>"
+          paymentRows +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">' +
+          '<button type="button" class="secondary fee-edit-invoice" data-invoice-id="' + safe(invoice.id) + '">Edit fee</button>' +
+          '<button type="button" class="secondary fee-delete-invoice" data-invoice-id="' + safe(invoice.id) + '">Delete fee</button>' +
+          '</div></div>'
         );
       }).join("");
 
@@ -1276,6 +1280,79 @@ async function connectAdminFees(user) {
         rows + "</div></article>"
       );
     }).join("");
+
+    list.querySelectorAll(".fee-edit-invoice").forEach(button => {
+      button.onclick = async () => {
+        const invoice = invoices.find(item => item.id === button.dataset.invoiceId);
+        if (!invoice) return;
+        const description = prompt("Fee description:", invoice.description || "");
+        if (description === null) return;
+        const academicYear = prompt("Academic year:", invoice.academic_year || "");
+        if (academicYear === null) return;
+        const term = prompt("Term (e.g. First Term):", invoice.term || "");
+        if (term === null) return;
+        const amountText = prompt("Total fee amount (NGN):", String(invoice.amount_due || ""));
+        if (amountText === null) return;
+        const amount = Number(amountText);
+        const dueDate = prompt("Due date (YYYY-MM-DD, leave blank for none):", invoice.due_date || "");
+        if (dueDate === null) return;
+        const alreadyPaid = paidForInvoiceForPayment(invoice.id);
+        if (!description.trim() || !academicYear.trim() || !term.trim() ||
+            !Number.isFinite(amount) || amount <= 0) {
+          alert("Enter a description, academic year, term, and a fee amount greater than zero.");
+          return;
+        }
+        if (amount < alreadyPaid) {
+          alert("The fee cannot be lower than payments already received (" + money(alreadyPaid) + ").");
+          return;
+        }
+        button.disabled = true;
+        const { error } = await supabaseClient.from("school_fee_invoices")
+          .update({
+            description: description.trim(),
+            academic_year: academicYear.trim(),
+            term: term.trim(),
+            amount_due: amount,
+            due_date: dueDate.trim() || null
+          }).eq("id", invoice.id);
+        button.disabled = false;
+        if (error) {
+          alert("Fee could not be edited: " + error.message);
+          return;
+        }
+        if (invoiceStatus) invoiceStatus.textContent = "Fee invoice updated.";
+        await refreshInvoices();
+      };
+    });
+
+    list.querySelectorAll(".fee-delete-invoice").forEach(button => {
+      button.onclick = async () => {
+        const invoice = invoices.find(item => item.id === button.dataset.invoiceId);
+        if (!invoice) return;
+        const { data: linkedPayments, error: paymentCheckError } = await supabaseClient
+          .from("school_fee_payments").select("id").eq("invoice_id", invoice.id).limit(1);
+        if (paymentCheckError) {
+          alert("Could not verify linked payments. Fee was not deleted: " + paymentCheckError.message);
+          return;
+        }
+        if (linkedPayments && linkedPayments.length) {
+          alert("This fee has linked payment records. To protect the student's account history, it cannot be deleted. Edit the fee instead.");
+          return;
+        }
+        if (!confirm("Delete the fee invoice '" + (invoice.description || "School fee") +
+          "' for " + (invoice.student_name || "this student") + "? This cannot be undone.")) return;
+        button.disabled = true;
+        const { error } = await supabaseClient.from("school_fee_invoices")
+          .delete().eq("id", invoice.id);
+        button.disabled = false;
+        if (error) {
+          alert("Fee could not be deleted: " + error.message);
+          return;
+        }
+        if (invoiceStatus) invoiceStatus.textContent = "Fee invoice deleted.";
+        await refreshInvoices();
+      };
+    });
   }
 
   invoiceForm.onsubmit = async event => {
