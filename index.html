@@ -1,0 +1,1662 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#153b67">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<title>Junacad High School | School Portal</title>
+<style>
+:root{--navy:#153b67;--blue:#2368b5;--pale:#edf4fc;--ink:#17263a;--muted:#66758a;--line:#e2e9f2;--white:#fff;--green:#197653}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fb;color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}.top{background:linear-gradient(120deg,#153b67,#235f9c);color:#fff;padding:22px max(18px,calc((100% - 1100px)/2)) 28px}.brand{display:flex;gap:12px;align-items:center}.crest{width:48px;height:48px;border-radius:14px;background:#ffffff20;display:grid;place-items:center;font-size:26px}.brand h1{font-size:19px;margin:0;letter-spacing:.04em}.brand p{margin:1px 0 0;color:#d6e7fa;font-size:12px}.hero{margin-top:24px;display:flex;justify-content:space-between;gap:16px;align-items:end;flex-wrap:wrap}.hero h2{font-size:clamp(25px,4vw,36px);margin:0}.hero p{margin:5px 0 0;color:#d6e7fa}.demo{background:#fff;color:#153b67;border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700;align-self:start}.wrap{max-width:1100px;margin:0 auto;padding:20px 16px 48px}.rolebar,.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.rolebtn,.tab{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:10px 14px;font-weight:650}.rolebtn.active,.tab.active{background:var(--navy);color:#fff;border-color:var(--navy)}.sectionlabel{font-size:12px;color:var(--muted);font-weight:800;letter-spacing:.08em;margin:8px 0 10px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0 22px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 3px 12px #152c4a08}.stat-icon{font-size:22px}.stat-num{font-size:27px;font-weight:800;margin-top:7px}.muted{color:var(--muted);font-size:13px}.contentgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.panel h3{margin:0 0 12px;font-size:17px}.item{padding:12px 0;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}.item:first-of-type{border-top:0}.dot{width:35px;height:35px;flex:0 0 35px;border-radius:10px;background:var(--pale);display:grid;place-items:center}.item strong{display:block}.item p{margin:3px 0 0;color:var(--muted);font-size:13px}.form{display:grid;gap:9px;margin-top:12px}.form input,.form textarea,.form select{width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:10px 11px;background:#fff;color:var(--ink)}.primary{border:0;background:var(--blue);color:#fff;border-radius:9px;padding:11px 14px;font-weight:700}.secondary{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 12px}.pill{font-size:11px;color:var(--green);background:#e7f7ef;padding:4px 8px;border-radius:99px;font-weight:750}.empty{color:var(--muted);font-size:14px;padding:10px 0}.notice{background:#fff7df;border:1px solid #f4df9f;border-radius:12px;padding:12px 14px;font-size:13px;margin-top:16px}.auth-panel{margin:0 0 16px}.auth-panel label{font-size:13px;font-weight:700}.whatsapp-help{display:flex;align-items:center;justify-content:center;gap:8px;text-align:center;text-decoration:none;border:1px solid #b8e6cb;background:#effbf3;color:#176b3a;border-radius:10px;padding:11px 12px;font-weight:750}.whatsapp-help:hover{background:#e3f7e9}.auth-panel[hidden],[hidden]{display:none!important}#roles,#tabs,#app,.sectionlabel,.demo{display:none!important}.footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}.admin-welcome{display:flex;justify-content:space-between;align-items:center;gap:18px;padding:24px;margin:18px 0;background:linear-gradient(125deg,#102d52,#276db3 70%,#4c93d1);border-radius:20px;color:#fff;box-shadow:0 12px 30px #153b6720}.admin-welcome h2{font-size:clamp(24px,4vw,32px);margin:4px 0}.admin-welcome p{margin:0;color:#e0efff}.welcome-mark{width:68px;height:68px;border-radius:22px;background:#ffffff20;display:grid;place-items:center;font-size:34px;flex-shrink:0}.eyebrow{display:block;font-size:10px;letter-spacing:.14em;font-weight:850;color:#6a8ab0;margin-bottom:5px}.admin-welcome .eyebrow{color:#d0e6ff}.admin-shortcuts{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin:18px 0 22px}.shortcut{min-width:0;text-align:left;border:1px solid #e0e8f3;border-radius:15px;background:#fff;padding:14px 12px;display:flex;flex-direction:column;align-items:flex-start;gap:4px;color:var(--ink);box-shadow:0 5px 18px #173b6708;transition:transform .15s,border-color .15s,box-shadow .15s}.shortcut:hover,.shortcut.active{border-color:#7caee4;box-shadow:0 8px 22px #2368b51a;transform:translateY(-2px)}.shortcut.active{background:#edf5ff}.shortcut span{font-size:24px;margin-bottom:4px}.shortcut strong{font-size:13px;line-height:1.25}.shortcut small{font-size:11px;color:var(--muted);line-height:1.3}.admin-page{animation:pageIn .2s ease-out}.panel-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.panel-heading h3{margin:0}.spotlight-preview{margin-top:18px}.spotlight-placeholder{min-height:140px;display:grid;place-content:center;text-align:center;border:1px dashed #b6c8dc;border-radius:16px;background:#f5f9ff;color:#71849c;padding:24px}.spotlight-card{overflow:hidden;border-radius:18px;background:linear-gradient(135deg,#153b67,#2670b9);color:#fff;display:grid;grid-template-columns:minmax(120px, .8fr) 1.2fr;max-width:700px}.spotlight-card img{width:100%;height:100%;min-height:210px;object-fit:cover}.chat-fab{position:fixed;right:22px;bottom:22px;z-index:1000;border:0;border-radius:999px;padding:13px 18px;background:linear-gradient(135deg,#153b67,#2877c5);color:#fff;box-shadow:0 10px 28px #102d5250;display:flex;align-items:center;gap:9px;font-weight:800}.chat-fab span{font-size:22px}.chat-overlay{position:fixed;inset:0;z-index:999;background:#0d1e32a6;display:flex;align-items:flex-end;justify-content:flex-end;padding:22px}.chat-overlay[hidden]{display:none!important}.chat-popup{width:min(520px,100%);max-height:min(82vh,760px);overflow:auto;box-shadow:0 24px 80px #061a32a0;border-radius:20px}.chat-popup-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.chat-popup-head h3{margin:0}.chat-close{width:38px;height:38px;border:0;border-radius:50%;background:#edf4fc;color:#153b67;font-size:28px;line-height:1}.chat-popup #classChatMessages{max-height:280px;overflow:auto}.chat-popup .form textarea{min-height:78px}.spotlight-copy{padding:22px}.spotlight-copy .eyebrow{color:#c5e0ff}.spotlight-copy h3{font-size:24px;margin:5px 0}.spotlight-copy p{color:#e3efff;margin:7px 0}@keyframes pageIn{from{opacity:.6;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:900px){.admin-shortcuts{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:760px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.contentgrid{grid-template-columns:1fr}.top{padding-top:18px}.wrap{padding-top:16px}.hero h2{font-size:27px}.admin-welcome{padding:19px}.admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.shortcut{padding:12px}.spotlight-card{grid-template-columns:1fr}.spotlight-card img{height:240px;min-height:0}.chat-overlay{padding:10px}.chat-popup{max-height:88vh}.chat-fab{right:14px;bottom:14px}}@media(max-width:360px){.rolebtn,.tab{padding:9px 10px;font-size:14px}.admin-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand"><div class="crest">🎓</div><div><h1>JUNACAD HIGH SCHOOL</h1><p>SCHOOL MANAGEMENT PORTAL</p></div></div><div class="hero"><div><h2 id="welcome">Admin Dashboard</h2><p>Your school. Your learning. One platform.</p></div><span class="demo">DEMO PREVIEW</span></div></header>
+<main class="wrap">
+<div class="sectionlabel">PREVIEW THE PORTAL AS</div><div class="rolebar" id="roles"><button class="rolebtn active" data-role="Admin">🛡️ Admin</button><button class="rolebtn" data-role="Teacher">📚 Teacher</button><button class="rolebtn" data-role="Student">🎒 Student</button></div>
+<nav class="tabs" id="tabs"></nav><div id="app"></div>
+
+<section class="panel auth-panel" id="authPanel">
+  <h3 id="authHeading">Administrator sign-in</h3>
+  <p class="muted" id="authIntro">Sign in with the email and password you created in Supabase Authentication.</p>
+  <form class="form" id="loginForm">
+    <label for="loginEmail">Email address</label>
+    <input id="loginEmail" name="email" type="email" autocomplete="username" placeholder="Your administrator email" required>
+    <label for="loginPassword">Password</label>
+    <input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Your password" required>
+    <button class="primary" id="loginButton" type="submit">Sign in securely</button>
+    <a class="whatsapp-help" href="https://wa.me/2348086689511?text=Hello%20Junacad%20High%20School%2C%20I%20need%20help%20signing%20in%20to%20my%20account." target="_blank" rel="noopener noreferrer">💬 Chat with us on WhatsApp</a>
+    <p class="muted" style="text-align:center;margin:0">WhatsApp support: +234 808 668 9511</p>
+  </form>
+  <p id="authMessage" class="muted" role="status" aria-live="polite"></p>
+  <div id="signedInPanel" hidden></div>
+</section>
+
+<div class="notice" id="connectionNotice">Sign in with your school account to access the live portal. Only authenticated accounts with a linked school profile can continue.</div>
+<div class="footer">© Junacad High School · Secure school portal</div>
+</main>
+<script>
+const SUPABASE_URL="https://ummipolawycrnxcxsrej.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_LcUBkl4oBiHjJZxCEXOjew_jYYLl5jf";
+const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const defaults={students:[{name:"Ada Okafor",cls:"JSS 1"},{name:"Daniel Musa",cls:"JSS 2"},{name:"Grace Bello",cls:"SS 1"}],homework:[{title:"Algebra exercises",subject:"Mathematics",cls:"JSS 2"},{title:"Essay writing",subject:"English",cls:"SS 1"}],announcements:[{title:"Welcome to Junacad High School!",date:"School notice"},{title:"Second-term revision timetable is available.",date:"Academic office"}]};
+let data=JSON.parse(JSON.stringify(defaults)),role="Admin",tab="Dashboard";
+const $=s=>document.querySelector(s);
+function tabs(){let list=role==="Admin"?["Dashboard","Students","Homework","Announcements"]:role==="Teacher"?["Dashboard","Homework","Announcements"]:["Dashboard","Homework","Announcements","Class Chat"];$("#tabs").innerHTML=list.map(t=>'<button class="tab '+(t===tab?"active":"")+'" data-tab="'+t+'">'+t+'</button>').join("");$("#tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()})}
+function stats(){return '<div class="stats">'+[['👥',data.students.length,'Demo students'],['📘',data.homework.length,'Homework tasks'],['📣',data.announcements.length,'Announcements'],['🛡️','3','Portal roles']].map(x=>'<div class="card"><div class="stat-icon">'+x[0]+'</div><div class="stat-num">'+x[1]+'</div><div class="muted">'+x[2]+'</div></div>').join('')+'</div>'}
+function list(items,icon,sub){return items.length?items.map(x=>'<div class="item"><div class="dot">'+icon+'</div><div><strong>'+esc(x.title||x.name)+'</strong><p>'+esc(x.subject?x.subject+' · '+x.cls:x.cls||x.date||sub||'Demo record')+'</p></div></div>').join(''):'<div class="empty">Nothing here yet.</div>'}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function form(title,fields,button,fn){return '<form class="form" id="entry"><h3>'+title+'</h3>'+fields+'<button class="primary" type="submit">'+button+'</button></form>'}
+function render(){tabs();$("#welcome").textContent=role+" "+(tab==="Dashboard"?"Dashboard":tab);let html='';
+if(tab==="Dashboard"){html=(role==="Admin"?stats():'')+'<div class="contentgrid"><section class="panel"><h3>📣 Latest announcements</h3>'+list(data.announcements,"📣","School news")+'</section><section class="panel"><h3>'+(role==="Student"?"📘 Your homework":"📘 Homework overview")+'</h3>'+list(data.homework,"📘","Homework")+'</section></div>'}
+else if(tab==="Students"&&role==="Admin"){html='<section class="panel"><h3>Student register <span class="pill">DEMO DATA</span></h3>'+list(data.students,"🎓","Student")+'</section><section class="panel" style="margin-top:14px">'+form("Add a sample student",'<input name="name" placeholder="Student full name" required><select name="cls"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select>',"Add student")+'</section>'}
+else if(tab==="Homework"){html='<section class="panel"><h3>'+(role==="Student"?"Homework for your class":"Homework tasks")+'</h3>'+list(data.homework,"📘","Homework")+'</section>'+(role!=="Student"?'<section class="panel" style="margin-top:14px">'+form("Create homework",'<input name="title" placeholder="Homework title" required><input name="subject" placeholder="Subject" required><select name="cls"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select>',"Add homework")+'</section>':'<section class="panel" style="margin-top:14px"><h3>Need help?</h3><p class="muted">Ask your teacher about a task or request help understanding a topic.</p></section>')}
+else if(tab==="Announcements"){html='<section class="panel"><h3>School announcements</h3>'+list(data.announcements,"📣","School notice")+'</section>'+(role!=="Student"?'<section class="panel" style="margin-top:14px">'+form("Publish announcement",'<input name="title" placeholder="Announcement message" required>',"Publish announcement")+'</section>':'')}
+else if(tab==="Class Chat"){html='<section class="panel"><h3>Class-restricted chat</h3><p>Chat rooms will be available after secure student accounts and class memberships are connected.</p><p class="muted">This preview does not send messages or provide real student chat.</p></section>'}
+$("#app").innerHTML=html;let f=$("#entry");if(f)f.onsubmit=e=>{e.preventDefault();let fd=new FormData(f);if(tab==="Students")data.students.push({name:fd.get("name"),cls:fd.get("cls")});if(tab==="Homework")data.homework.push({title:fd.get("title"),subject:fd.get("subject"),cls:fd.get("cls")});if(tab==="Announcements")data.announcements.unshift({title:fd.get("title"),date:"Just added"});render()}}
+$("#roles").querySelectorAll("button").forEach(b=>b.onclick=()=>{role=b.dataset.role;tab="Dashboard";$("#roles").querySelectorAll("button").forEach(x=>x.classList.toggle("active",x===b));render()});
+if(supabaseClient){$("#connectionNotice").innerHTML="<strong>Junacad School portal connected.</strong> Secure sign-in and live school records are available for authorized accounts.";}else{$("#connectionNotice").innerHTML="<strong>Connection setup needs attention.</strong> The Supabase client library did not load. Refresh the page and try again.";}
+render();
+
+// Real Supabase password sign-in. Public sign-up and role selection are intentionally not offered.
+const authPanelEl = $("#authPanel");
+const loginForm = $("#loginForm");
+const authMessage = $("#authMessage");
+const signedInPanel = $("#signedInPanel");
+const loginButton = $("#loginButton");
+let authRequestInProgress = false;
+
+function showLogin(message=""){
+  loginForm.hidden = false;
+  signedInPanel.hidden = true;
+  $("#authHeading").textContent = "Administrator sign-in";
+  $("#authIntro").textContent = "Sign in with the email and password created in Supabase Authentication.";
+  authMessage.textContent = message;
+  loginButton.disabled = false;
+  loginButton.textContent = "Sign in securely";
+}
+function showSignedIn(user, profile){
+  loginForm.hidden = true;
+  signedInPanel.hidden = false;
+  $("#authHeading").textContent = "Junacad School Portal";
+  $("#authIntro").textContent = "";
+  const safeName = esc(profile.full_name || user.email || "School user");
+  const safeEmail = esc(user.email || profile.email || "");
+  const safeRole = esc(profile.role || "unassigned");
+  signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="admin-welcome"><div><span class="eyebrow">ADMINISTRATION</span><h2>School overview</h2><p>Manage learning, attendance and student life from one place.</p></div><div class="welcome-mark">🎓</div></div><nav class="admin-shortcuts" aria-label="Admin pages"><button type="button" class="shortcut active" data-admin-page="dashboard"><span>🏠</span><strong>Home</strong><small>Overview</small></button><button type="button" class="shortcut" data-admin-page="chat"><span>💬</span><strong>Class chat</strong><small>Talk to classes</small></button><button type="button" class="shortcut" data-admin-page="students"><span>🎓</span><strong>Student records</strong><small>View and register</small></button><button type="button" class="shortcut" data-admin-page="registered-students"><span>📋</span><strong>Registered students</strong><small>Class lists and management</small></button><button type="button" class="shortcut" data-admin-page="attendance"><span>🗓️</span><strong>Attendance</strong><small>Daily register</small></button><button type="button" class="shortcut" data-admin-page="password"><span>🔐</span><strong>Reset password</strong><small>Account support</small></button><button type="button" class="shortcut" data-admin-page="support"><span>✉️</span><strong>Message Admin</strong><small>Private student inbox</small></button><button type="button" class="shortcut" data-admin-page="fees"><span>💳</span><strong>School fees</strong><small>Invoices and payments</small></button><button type="button" class="shortcut" data-admin-page="spotlight"><span>🏆</span><strong>Student spotlight</strong><small>Week or month</small></button></nav><section id="adminPage-dashboard" class="admin-page"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div><div class="card"><div class="stat-icon">✨</div><div class="stat-num">1</div><div class="muted">School community</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><div class="contentgrid" style="margin-top:14px"><section class="panel"><div class="panel-heading"><div><span class="eyebrow">KEEP EVERYONE INFORMED</span><h3>📣 School announcements</h3></div></div><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish announcement</button></form></section><section class="panel"><div class="panel-heading"><div><span class="eyebrow">CLASSROOM LEARNING</span><h3>📘 Homework</h3></div></div><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section></div></section><section id="adminPage-chat" class="admin-page" hidden><section class="panel" id="adminClassChat"><span class="eyebrow">CONNECT WITH LEARNERS</span><h3>💬 Class Chat</h3><p class="muted">Choose a class to read and send class messages.</p><label for="adminChatClass">Choose class</label><select id="adminChatClass" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:10px;margin-top:6px"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><div id="adminClassChatMessages" aria-live="polite" style="margin-top:10px"><p class="muted">Loading class messages…</p></div><button class="secondary" id="adminRefreshClassChatButton" type="button" style="margin-top:8px">Refresh messages</button><form id="adminClassChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to this class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="adminClassChatStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">STUDENT DIRECTORY</span><h3>🎓 Student records</h3><p class="muted">Live student accounts from the school database.</p><div id="adminStudentRecords"><p class="muted">Loading student records…</p></div><button class="secondary" id="refreshStudentRecordsButton" type="button" style="margin-top:10px">Refresh student records</button></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">Send a secure email invitation so the student can set their password.</p><form class="form" id="studentRegisterForm"><label for="newStudentName">Student full name</label><input id="newStudentName" name="full_name" maxlength="120" required placeholder="Student full name"><label for="newStudentEmail">Email address (optional)</label><input id="newStudentEmail" name="email" type="email" maxlength="254" placeholder="Leave blank if the student has no email yet"><label for="newStudentClass">Class</label><select id="newStudentClass" name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Register student</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>👩‍🏫 Register a staff member</h3><p class="muted">Invite a teacher securely by email. Staff choose their own password through the invitation link.</p><form class="form" id="staffRegisterForm"><input name="full_name" maxlength="120" required placeholder="Staff full name"><input name="email" type="email" maxlength="254" required placeholder="Staff email address"><fieldset style="border:1px solid var(--line);border-radius:10px;padding:12px"><legend>Assigned classes (select all that apply)</legend><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px"><label><input type="checkbox" name="class_names" value="JSS 1"> JSS 1</label><label><input type="checkbox" name="class_names" value="JSS 2"> JSS 2</label><label><input type="checkbox" name="class_names" value="JSS 3"> JSS 3</label><label><input type="checkbox" name="class_names" value="SS 1"> SS 1</label><label><input type="checkbox" name="class_names" value="SS 2"> SS 2</label><label><input type="checkbox" name="class_names" value="SS 3"> SS 3</label></div></fieldset><button class="primary" type="submit">Invite teacher securely</button></form><p id="staffRegisterStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-registered-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">CLASS ROSTERS</span><h3>📋 Registered students by class</h3><p class="muted">Students are grouped by their registered class. Use Edit to change a name or class, or Delete to remove a student record and linked login.</p><div id="registeredStudentsByClass"><p class="muted">Loading class lists…</p></div><button class="secondary" id="refreshRegisteredStudentsButton" type="button" style="margin-top:10px">Refresh class lists</button><p id="registeredStudentsStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-attendance" class="admin-page" hidden><section class="panel"><span class="eyebrow">DAILY CLASS REGISTER</span><h3>🗓️ Student attendance</h3><p class="muted">Choose a date and class, mark each student, then save the register.</p><div class="form"><label for="attendanceDate">Attendance date</label><input id="attendanceDate" type="date" required><label for="attendanceClass">Class</label><select id="attendanceClass"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="secondary" id="loadAttendanceButton" type="button">Load register</button></div><div id="attendanceStatus" class="muted" role="status" aria-live="polite" style="margin-top:10px">Choose a date and class to load attendance.</div><div id="attendanceRecords"></div><button class="primary" id="saveAttendanceButton" type="button" style="margin-top:12px" disabled>Save attendance</button></section></section><section id="adminPage-password" class="admin-page" hidden><section class="panel"><span class="eyebrow">ACCOUNT SUPPORT</span><h3>🔐 Reset a student password</h3><p class="muted">Enter the student user ID and a temporary password. Share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required placeholder="Paste student user ID"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-support" class="admin-page" hidden><section class="panel"><span class="eyebrow">PRIVATE STUDENT SUPPORT</span><h3>✉️ Student messages</h3><p class="muted">Private messages are visible only to the student who sent them and school administrators. Open a message to reply, review receipts, and update its status.</p><button class="secondary" id="refreshAdminPrivateMessages" type="button">Refresh inbox</button><p id="adminPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><div id="adminPrivateMessageList"><p class="muted">Loading private messages…</p></div></section></section><section id="adminPage-fees" class="admin-page" hidden>\n<section class="panel"><span class="eyebrow">FEES MANAGEMENT</span><h3>💳 School fees and payments</h3><p class="muted">Create a fee invoice for a student, record cash or bank-transfer payments, and track the remaining balance. Online payment setup will be connected in a later step.</p></section>\n<div class="contentgrid" style="margin-top:14px">\n<section class="panel"><h3>Create fee invoice</h3><form class="form" id="feeInvoiceForm">\n<label for="feeStudent">Student</label><select id="feeStudent" name="student_id" required><option value="">Loading students…</option></select>\n<label for="feeDescription">Fee description</label><input id="feeDescription" name="description" maxlength="180" required placeholder="e.g. Tuition fees">\n<label for="feeAcademicYear">Academic year</label><input id="feeAcademicYear" name="academic_year" maxlength="30" required placeholder="e.g. 2026/2027">\n<label for="feeTerm">Term</label><select id="feeTerm" name="term" required><option value="First Term">First Term</option><option value="Second Term">Second Term</option><option value="Third Term">Third Term</option></select>\n<label for="feeAmountDue">Amount due (₦)</label><input id="feeAmountDue" name="amount_due" type="number" min="1" step="0.01" required placeholder="e.g. 75000">\n<label for="feeDueDate">Due date (optional)</label><input id="feeDueDate" name="due_date" type="date">\n<button class="primary" type="submit">Create fee invoice</button></form><p id="feeInvoiceStatus" class="muted" role="status" aria-live="polite"></p></section>\n<section class="panel"><h3>Record a manual payment</h3><form class="form" id="feePaymentForm">\n<label for="feePaymentInvoice">Fee invoice</label><select id="feePaymentInvoice" name="invoice_id" required><option value="">Loading invoices…</option></select>\n<label for="feePaymentAmount">Amount received (₦)</label><input id="feePaymentAmount" name="amount" type="number" min="1" step="0.01" required placeholder="e.g. 25000">\n<label for="feePaymentMethod">Payment method</label><select id="feePaymentMethod" name="payment_method" required><option value="cash">Cash</option><option value="bank_transfer">Bank transfer</option><option value="pos">POS</option><option value="other">Other</option></select>\n<label for="feePaymentReference">Receipt / bank reference (optional)</label><input id="feePaymentReference" name="reference" maxlength="120" placeholder="Receipt number or transfer reference">\n<label for="feePaymentNotes">Notes (optional)</label><textarea id="feePaymentNotes" name="notes" rows="2" maxlength="500" placeholder="Additional payment details"></textarea>\n<button class="primary" type="submit">Record payment</button></form><p id="feePaymentStatus" class="muted" role="status" aria-live="polite"></p></section>\n</div>\n<section class="panel" style="margin-top:14px"><div class="panel-heading"><div><span class="eyebrow">CURRENT ACCOUNTS</span><h3>Invoices and balances</h3></div><button class="secondary" id="refreshFeeRecords" type="button">Refresh</button></div><div id="feeInvoiceList"><p class="muted">Loading fee records…</p></div></section>\n</section>\n<section id="adminPage-spotlight" class="admin-page" hidden><section class="panel spotlight-admin"><span class="eyebrow">CELEBRATE EXCELLENCE</span><h3>🏆 Student of the week or month</h3><p class="muted">Upload a student photo and publish a recognition card for the school community.</p><form class="form" id="spotlightForm"><label for="spotlightPeriod">Recognition period</label><select id="spotlightPeriod" name="period"><option value="Student of the Week">Student of the Week</option><option value="Student of the Month">Student of the Month</option></select><label for="spotlightName">Student name</label><input id="spotlightName" name="student_name" maxlength="120" required placeholder="Student full name"><label for="spotlightClass">Class</label><select id="spotlightClass" name="class_name"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label for="spotlightReason">Achievement or reason</label><textarea id="spotlightReason" name="reason" maxlength="1000" rows="3" placeholder="For example: Excellent academic progress and kindness"></textarea><label for="spotlightImage">Student photo</label><input id="spotlightImage" name="image" type="file" accept="image/png,image/jpeg,image/webp" required><p class="muted">Use JPG, PNG or WebP, up to 5 MB. Please use a photo approved for school publication.</p><button class="primary" type="submit">Publish student spotlight</button></form><p id="spotlightStatus" class="muted" role="status" aria-live="polite"></p><div id="spotlightPreview" class="spotlight-preview"><div class="spotlight-placeholder">🏆<br>Student recognition preview will appear here.</div></div></section></section></div>'  : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div id="studentAvatarFrame" style="width:96px;height:96px;border-radius:50%;background:#edf4fc;border:2px solid #d8e5f4;display:grid;place-items:center;overflow:hidden;flex-shrink:0"><span id="studentAvatarInitials" style="font-size:30px;font-weight:800;color:#153b67">👤</span></div><div style="flex:1;min-width:180px"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p><form id="studentPhotoForm" class="form"><label for="studentPhotoFile">Profile picture (JPG, PNG or WebP; up to 3 MB)</label><input id="studentPhotoFile" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required><button class="primary" type="submit">Upload / change picture</button></form><p id="studentPhotoStatus" class="muted" role="status" aria-live="polite"></p></div></div></section><nav class="admin-shortcuts" aria-label="Student pages" style="grid-template-columns:repeat(2,minmax(0,1fr))"><button type="button" class="shortcut" id="studentFeesButton"><span>💳</span><strong>School fees</strong><small>Invoices and balances</small></button><button type="button" class="shortcut" id="studentAttendanceButton"><span>🗓️</span><strong>Attendance</strong><small>Your attendance record</small></button></nav><section class="panel" id="studentFeesSection" style="margin-top:14px"><h3>💳 My school fees</h3><div id="studentFees"><p class="muted">Loading your fee records…</p></div></section><section class="panel" id="studentAttendanceSection" style="margin-top:14px"><h3>🗓️ My attendance</h3><div id="studentAttendance"><p class="muted">Loading your attendance…</p></div></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><div class="panel-heading"><div><span class="eyebrow">CELEBRATING OUR LEARNERS</span><h3>🏆 Student spotlight</h3></div></div><div id="studentSpotlight"><p class="muted">Loading student recognition…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><section class="panel" style="margin-top:14px" id="studentPrivateSupport"><span class="eyebrow">PRIVATE SCHOOL SUPPORT</span><h3>✉️ Message Admin</h3><p class="muted">Only you and the school administrator can see these messages. You may attach a payment receipt (image or PDF, up to 5 MB).</p><form id="studentPrivateMessageForm" class="form"><label for="privateMessageSubject">Subject</label><input id="privateMessageSubject" name="subject" maxlength="160" required placeholder="e.g. School fees payment question"><label for="privateMessageBody">Your message</label><textarea id="privateMessageBody" name="message" maxlength="5000" rows="4" required placeholder="Explain how the school can help…"></textarea><label for="privateMessageAttachment">Attach receipt (optional)</label><input id="privateMessageAttachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><button class="primary" type="submit">Send private message</button></form><p id="studentPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><h4>Your private messages</h4><div id="studentPrivateMessageList"><p class="muted">Loading your messages…</p></div><button class="secondary" id="refreshStudentPrivateMessages" type="button">Refresh messages</button></section><button id="studentChatLauncher" class="chat-fab" type="button" aria-label="Open class chat"><span>💬</span><b>Class chat</b></button><div id="studentChatOverlay" class="chat-overlay" hidden><section class="panel chat-popup" role="dialog" aria-modal="true" aria-labelledby="studentChatTitle"><div class="chat-popup-head"><div><span class="eyebrow">YOUR CLASS COMMUNITY</span><h3 id="studentChatTitle">💬 Class chat</h3></div><button id="closeStudentChat" class="chat-close" type="button" aria-label="Close chat">×</button></div><p class="muted">Messages are shared with members of your class and school staff.</p><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : (profile.role === "teacher" ? '<div id="teacherPortal"><section class="panel"><h3>👩‍🏫 Teacher dashboard</h3><p>Welcome to the Junacad class portal.</p><p><strong>Assigned classes:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>💬 Class chat</h3><p class="muted">Exchange messages with students and school staff in your assigned classes.</p><label for="teacherChatClass">Choose class chat</label><select id="teacherChatClass" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0"></select><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : '<p class="notice">This account does not have a student, teacher, or administrator role. Please contact the school administrator.</p>'))) +
+    '<button class="secondary" id="signOutButton" type="button">Sign out</button>';
+  authMessage.textContent = "";
+  if(profile.role === "student"){
+    connectStudentProfilePhoto(user, profile);
+    connectStudentPrivateSupport(user);
+    const launcher=$("#studentChatLauncher"), overlay=$("#studentChatOverlay"), closer=$("#closeStudentChat");
+    if(launcher&&overlay) launcher.onclick=()=>{overlay.hidden=false;};
+    if(closer&&overlay) closer.onclick=()=>{overlay.hidden=true;};
+    if(overlay) overlay.addEventListener("click",event=>{if(event.target===overlay)overlay.hidden=true;});
+  }
+  if(profile.role === "admin"){
+    const pageButtons = Array.from(signedInPanel.querySelectorAll("[data-admin-page]"));
+    const adminPages = Array.from(signedInPanel.querySelectorAll(".admin-page"));
+    pageButtons.forEach(button => button.addEventListener("click", () => {
+      const target = button.dataset.adminPage;
+      pageButtons.forEach(item => item.classList.toggle("active", item === button));
+      adminPages.forEach(page => { page.hidden = page.id !== "adminPage-" + target; });
+      const title = button.querySelector("strong")?.textContent || "School overview";
+      const welcome = signedInPanel.querySelector(".admin-welcome h2");
+      if(welcome) welcome.textContent = target === "dashboard" ? "School overview" : title;
+      const pageTop = signedInPanel.querySelector(".admin-welcome");
+      if(pageTop) pageTop.scrollIntoView({behavior:"smooth",block:"start"});
+    }));
+    connectStudentSpotlight(user);
+    connectAdminPrivateMessages(user);
+    connectAdminFees(user);
+  }
+  $("#signOutButton").onclick = async () => { const {error}=await supabaseClient.auth.signOut(); if(error) authMessage.textContent="Sign-out error: "+error.message; else showLogin("You have signed out."); };
+  if(profile.role === "admin") connectLiveRecords(user);
+  if(profile.role === "student") connectStudentDashboard(profile);
+  if(profile.role === "student" || profile.role === "teacher") connectClassChat(user, profile);
+  if(profile.role === "admin") connectAdminClassChat(user);
+}
+function safeNameText(value){return esc(value == null ? "" : String(value));}
+async function connectStudentProfilePhoto(user, profile){
+  const frame=$("#studentAvatarFrame");
+  const initials=$("#studentAvatarInitials");
+  const form=$("#studentPhotoForm");
+  const status=$("#studentPhotoStatus");
+  const input=$("#studentPhotoFile");
+  const safeName=String(profile.full_name||user.email||"Student");
+  if(initials) initials.textContent=safeName.split(/\s+/).filter(Boolean).slice(0,2).map(part=>part[0]).join("").toUpperCase()||"👤";
+  async function showCurrentPhoto(){
+    const path=user.id+"/avatar";
+    const {data,error}=await supabaseClient.storage.from("student-profile-photos").createSignedUrl(path,3600);
+    if(!error && data?.signedUrl && frame){
+      frame.innerHTML='<img src="'+esc(data.signedUrl)+'" alt="Student profile picture" style="width:100%;height:100%;object-fit:cover">';
+    }
+  }
+  await showCurrentPhoto();
+  if(!form||!input||!status)return;
+  form.onsubmit=async event=>{
+    event.preventDefault();
+    const file=input.files&&input.files[0];
+    if(!file){status.textContent="Choose a picture first.";return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){status.textContent="Please choose a JPG, PNG or WebP image.";return;}
+    if(file.size>3*1024*1024){status.textContent="The picture must be 3 MB or smaller.";return;}
+    const button=form.querySelector('button[type="submit"]');
+    button.disabled=true;button.textContent="Uploading picture…";status.textContent="";
+    const {error}=await supabaseClient.storage.from("student-profile-photos").upload(user.id+"/avatar",file,{upsert:true,contentType:file.type,cacheControl:"3600"});
+    button.disabled=false;button.textContent="Upload / change picture";
+    if(error){status.textContent="Picture upload failed: "+error.message;return;}
+    if(frame)frame.innerHTML='<span id="studentAvatarInitials" style="font-size:30px;font-weight:800;color:#153b67">👤</span>';
+    await showCurrentPhoto();
+    status.textContent="Profile picture updated successfully.";
+    form.reset();
+  };
+}
+async function connectStudentDashboard(profile){
+  const statusEl = $("#studentDataStatus");
+  const safe = (value) => esc(value == null ? "" : String(value));
+  const announcementsEl = $("#studentAnnouncements");
+  const homeworkEl = $("#studentHomework");
+  const announcementsResult = await supabaseClient.from("school_announcements").select("id,title,message,created_at").order("created_at",{ascending:false}).limit(50);
+  if(announcementsResult.error){announcementsEl.innerHTML='<p class="empty">Announcements could not be loaded yet.</p>'; if(statusEl) statusEl.textContent='Your profile loaded, but school announcements need database read permissions.';}
+  else { const rows=(announcementsResult.data||[]).filter(x=>!String(x.title||"").startsWith("STUDENT_SPOTLIGHT:")); announcementsEl.innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="dot">📣</div><div><strong>'+safe(x.title)+'</strong><p>'+safe(x.message)+'</p></div></article>').join(''):'<p class="empty">No school announcements yet.</p>'; }
+  const spotlightEl=$("#studentSpotlight");
+  if(spotlightEl){
+    const spotlightResult=await supabaseClient.from("school_announcements").select("title,message,created_at").like("title","STUDENT_SPOTLIGHT:%").order("created_at",{ascending:false}).limit(1);
+    if(spotlightResult.error||!spotlightResult.data||!spotlightResult.data.length){spotlightEl.innerHTML='<div class="spotlight-placeholder">🏆<br>Our student spotlight will appear here.</div>';}
+    else {try{const item=JSON.parse(spotlightResult.data[0].message||"{}");spotlightEl.innerHTML='<article class="spotlight-card"><img src="'+safe(item.image_url||"")+'" alt="Featured student"><div class="spotlight-copy"><span class="eyebrow">'+safe(item.period||"Student Spotlight")+'</span><h3>'+safe(item.student_name||"Featured student")+'</h3><p>'+safe(item.class_name||"")+'</p><p>'+safe(item.reason||"Celebrating achievement and positive school spirit.")+'</p></div></article>';}catch(_e){spotlightEl.innerHTML='<p class="empty">Student spotlight is being updated.</p>';}}
+  }
+  const feesEl = $("#studentFees");
+  const attendanceEl = $("#studentAttendance");
+  const feesButton = $("#studentFeesButton");
+  const attendanceButton = $("#studentAttendanceButton");
+  if(feesButton) feesButton.onclick=()=>$("#studentFeesSection")?.scrollIntoView({behavior:"smooth",block:"start"});
+  if(attendanceButton) attendanceButton.onclick=()=>$("#studentAttendanceSection")?.scrollIntoView({behavior:"smooth",block:"start"});
+
+  if(profile.auth_user_id && feesEl){
+    const money = value => new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 2
+    }).format(Number(value) || 0);
+
+    const [invoiceResult, balanceResult] = await Promise.all([
+      supabaseClient.from("school_fee_invoices")
+        .select("id,description,academic_year,term,amount_due,due_date,created_at")
+        .eq("student_auth_user_id", profile.auth_user_id)
+        .order("created_at", { ascending: false }).limit(100),
+      supabaseClient.from("school_fee_opening_balances")
+        .select("id,academic_year,term,opening_balance,source_academic_year,source_term,created_at")
+        .eq("student_auth_user_id", profile.auth_user_id)
+        .eq("status", "approved")
+        .order("created_at", { ascending: false }).limit(500)
+    ]);
+
+    if(invoiceResult.error || balanceResult.error){
+      feesEl.innerHTML = '<p class="empty">Fee records could not be fully loaded. Please contact the school administrator.</p>';
+    } else {
+      const invoices = invoiceResult.data || [];
+      const balances = balanceResult.data || [];
+
+      const [paymentResult, openingPaymentResult] = await Promise.all([
+        invoices.length
+          ? supabaseClient.from("school_fee_payments")
+              .select("invoice_id,amount,status")
+              .in("invoice_id", invoices.map(x => x.id))
+              .eq("status", "paid").limit(5000)
+          : Promise.resolve({ data: [], error: null }),
+        balances.length
+          ? supabaseClient.from("school_fee_opening_balance_payments")
+              .select("opening_balance_id,amount,status")
+              .in("opening_balance_id", balances.map(x => x.id))
+              .eq("status", "paid").limit(5000)
+          : Promise.resolve({ data: [], error: null })
+      ]);
+
+      if(paymentResult.error || openingPaymentResult.error){
+        feesEl.innerHTML = '<p class="empty">Your fee records loaded, but payment details could not be loaded. Please contact the school administrator.</p>';
+      } else {
+        const payments = paymentResult.data || [];
+        const openingPayments = openingPaymentResult.data || [];
+
+        const invoiceCards = invoices.map(inv => {
+          const paid = payments.filter(p => p.invoice_id === inv.id)
+            .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+          const due = Number(inv.amount_due) || 0;
+
+          return '<article class="item"><div class="dot">Fee</div><div><strong>' +
+            safe(inv.description || "School fee") + '</strong><p>' +
+            safe(inv.academic_year || "") + ' · ' + safe(inv.term || "") +
+            ' · Due: ' + safe(inv.due_date || "Not set") +
+            '</p><p>Amount: <strong>' + money(due) +
+            '</strong> · Paid: <strong>' + money(paid) +
+            '</strong> · Balance: <strong>' + money(Math.max(0, due - paid)) +
+            '</strong></p></div></article>';
+        });
+
+        const openingCards = balances.map(b => {
+          const paid = openingPayments
+            .filter(p => p.opening_balance_id === b.id)
+            .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+          const amount = Number(b.opening_balance) || 0;
+
+          return '<article class="item"><div class="dot">Carry</div><div><strong>Opening balance (carried forward)</strong><p>' +
+            safe(b.academic_year || "") + ' · ' + safe(b.term || "") +
+            '</p><p>Previous term: ' + safe(b.source_academic_year || "") +
+            ' · ' + safe(b.source_term || "") +
+            '</p><p>Opening amount: <strong>' + money(amount) +
+            '</strong> · Paid: <strong>' + money(paid) +
+            '</strong> · Remaining: <strong>' +
+            money(Math.max(0, amount - paid)) +
+            '</strong></p></div></article>';
+        });
+
+        const cards = [...openingCards, ...invoiceCards];
+        feesEl.innerHTML = cards.length
+          ? cards.join("")
+          : '<p class="empty">No fee invoices or approved opening balances have been issued to your account yet.</p>';
+      }
+    }
+  } else if(feesEl){
+    feesEl.innerHTML = '<p class="empty">Your student account is not linked correctly. Please contact the school administrator.</p>';
+  }
+  if(profile.auth_user_id && attendanceEl){
+    const attendanceResult=await supabaseClient.from("school_attendance").select("attendance_date,status,notes,class_name").eq("student_user_id",profile.auth_user_id).order("attendance_date",{ascending:false}).limit(100);
+    if(attendanceResult.error){attendanceEl.innerHTML='<p class="empty">Your attendance records could not be loaded. Please contact the school administrator.</p>';}
+    else {
+      const rows=attendanceResult.data||[];
+      attendanceEl.innerHTML=rows.length?rows.map(item=>'<article class="item"><div class="dot">🗓️</div><div><strong>'+safe(item.attendance_date||"Attendance")+' · '+safe(String(item.status||"Not marked").replace(/^\\w/,c=>c.toUpperCase()))+'</strong><p>'+safe(item.class_name||profile.class_name||"")+(item.notes?' · '+safe(item.notes):'')+'</p></div></article>').join(""):'<p class="empty">No attendance records have been entered for you yet.</p>';
+    }
+  } else if(attendanceEl){attendanceEl.innerHTML='<p class="empty">Your student account is not linked correctly. Please contact the school administrator.</p>';}
+  if(profile.class_name){
+    const homeworkResult = await supabaseClient.from("school_homework").select("id,title,instructions,class_name,due_date,created_at").eq("class_name",profile.class_name).order("created_at",{ascending:false}).limit(100);
+    if(homeworkResult.error){homeworkEl.innerHTML='<p class="empty">Homework could not be loaded yet.</p>'; if(statusEl) statusEl.textContent='Your profile loaded, but homework needs database read permissions.';}
+    else {const rows=homeworkResult.data||[];homeworkEl.innerHTML=rows.length?rows.map(x=>'<article class="item"><div class="dot">📘</div><div><strong>'+safe(x.title)+'</strong><p>'+safe(x.class_name)+' · Due: '+safe(x.due_date||'Not set')+'</p><p>'+safe(x.instructions)+'</p></div></article>').join(''):'<p class="empty">No homework assigned to your class yet.</p>';}
+  } else { homeworkEl.innerHTML='<p class="empty">Your class has not been assigned yet. Please contact the school administrator.</p>'; }
+  if(statusEl && !announcementsResult.error) statusEl.textContent='Student dashboard loaded. School information is shown below when available.';
+}
+async function connectLiveRecords(user){
+  const status=(m)=>{const el=$("#liveStatus");if(el)el.textContent=m;};
+  const safe=(v)=>esc(v==null?"":String(v));
+  // Registered teacher directory and teacher deletion.
+  async function refreshStaffRecords() {
+    let target = document.getElementById("adminStaffRecords");
+
+    if (!target) {
+      const staffForm = document.getElementById("staffRegisterForm");
+      if (!staffForm) return;
+
+      const panel = document.createElement("section");
+      panel.className = "panel";
+      panel.style.marginTop = "14px";
+      panel.innerHTML = '<h3>Registered staff</h3><p class="muted">Teachers registered in the school system.</p><div id="adminStaffRecords"><p class="muted">Loading staff records...</p></div><button class="secondary" id="refreshStaffRecordsButton" type="button">Refresh staff records</button><p id="staffRecordsStatus" class="muted" role="status" aria-live="polite"></p>';
+      staffForm.insertAdjacentElement("afterend", panel);
+      target = document.getElementById("adminStaffRecords");
+
+      document.getElementById("refreshStaffRecordsButton").addEventListener("click", refreshStaffRecords);
+      target.addEventListener("click", async (event) => {
+        const button = event.target.closest("button[data-delete-staff-id]");
+        if (!button) return;
+
+        const staffId = button.dataset.deleteStaffId;
+        const staffName = button.dataset.staffName || "this teacher";
+        if (!window.confirm("Delete " + staffName + "? This removes the teacher profile and attempts to remove the linked sign-in account. This cannot be undone.")) return;
+
+        button.disabled = true;
+        const status = document.getElementById("staffRecordsStatus");
+        if (status) status.textContent = "Deleting teacher...";
+
+        try {
+          const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+            body: { action: "delete_staff", profile_id: staffId }
+          });
+          if (error || data?.error) {
+            if (status) status.textContent = "Could not delete teacher: " + (data?.error || error?.message || "Unknown error");
+            button.disabled = false;
+            return;
+          }
+          if (status) status.textContent = data?.warning || data?.message || "Teacher deleted.";
+          await refreshStaffRecords();
+        } catch (err) {
+          if (status) status.textContent = "Could not delete teacher. Check your connection and try again.";
+          button.disabled = false;
+        }
+      });
+    }
+
+    target.innerHTML = '<p class="muted">Loading staff records...</p>';
+    const { data: rows, error } = await supabaseClient.from("school_profiles")
+      .select("id,auth_user_id,full_name,email,class_name")
+      .eq("role", "teacher").order("full_name", { ascending: true }).limit(500);
+
+    if (error) {
+      target.innerHTML = '<p class="muted">Could not load staff records: ' + safe(error.message) + '</p>';
+      return;
+    }
+    if (!rows || rows.length === 0) {
+      target.innerHTML = '<p class="muted">No registered teachers found.</p>';
+      return;
+    }
+
+    target.innerHTML = rows.map((row) => {
+      const id = safe(row.id);
+      const name = safe(row.full_name || "Unnamed teacher");
+      const email = safe(row.email || "No email recorded");
+      const className = safe(row.class_name || "Not assigned");
+      const rawName = String(row.full_name || "teacher").replace(/[&<>"']/g, "");
+      return '<article class="panel" style="margin:10px 0;padding:12px"><strong>' + name + '</strong><p class="muted">Email: ' + email + '</p><p class="muted">Class: ' + className + '</p><button type="button" class="danger" data-delete-staff-id="' + id + '" data-staff-name="' + safe(rawName) + '">Delete teacher</button></article>';
+    }).join("");
+  }
+
+  window.refreshStaffRecords = refreshStaffRecords;
+  refreshStaffRecords();
+  async function refreshStudentRecords(){
+    const target = $("#adminStudentRecords");
+    const rosterTarget = $("#registeredStudentsByClass");
+    if(!target && !rosterTarget) return;
+    if(target) target.innerHTML = '<p class="muted">Loading student records…</p>';
+    if(rosterTarget) rosterTarget.innerHTML = '<p class="muted">Loading class lists…</p>';
+    const {data: rows, error} = await supabaseClient.from("school_profiles").select("id,auth_user_id,full_name,email,class_name").eq("role","student").order("full_name",{ascending:true}).limit(500);
+    if(error){ if(target) target.innerHTML = '<p class="empty">Student records could not be loaded. Check the school_profiles table permissions.</p>'; if(rosterTarget) rosterTarget.innerHTML = '<p class="empty">Class lists could not be loaded. Check school_profiles permissions.</p>'; return; }
+    const students = rows || [];
+    if (!students.length) { if(target) target.innerHTML = '<p class="empty">No student profiles found yet.</p>'; if(rosterTarget) rosterTarget.innerHTML = '<p class="empty">No registered students found yet.</p>'; return; }
+    const cards = await Promise.all(students.map(async s => {
+      let photo = "";
+      if (s.auth_user_id) {
+        const photoResult = await supabaseClient.storage.from("student-profile-photos").createSignedUrl(s.auth_user_id + "/avatar", 3600);
+        if (!photoResult.error && photoResult.data && photoResult.data.signedUrl) photo = photoResult.data.signedUrl;
+      }
+      const avatar = photo
+        ? '<img src="'+safe(photo)+'" alt="'+safe(s.full_name || "Student")+' profile photo" style="width:56px;height:56px;object-fit:cover;border-radius:50%;border:2px solid #d8e5f4">'
+        : '<div class="dot" style="width:56px;height:56px;border-radius:50%;display:grid;place-items:center;flex-shrink:0">🎓</div>';
+      const emailEditor = !s.email ? '<form class="form student-email-link-form" data-profile-id="'+safe(s.id)+'" style="margin-top:8px"><label>Email provided by student</label><input name="email" type="email" maxlength="254" required placeholder="student@example.com"><button class="secondary" type="submit">Save email and send invitation</button><p class="muted" role="status"></p></form>' : (s.auth_user_id ? '<p class="muted">Invitation/account linked</p>' : '<p class="muted">Email saved, but no login is linked yet. Contact administrator support.</p>');
+      return '<article class="item" style="display:flex;align-items:flex-start;gap:12px">'+avatar+'<div style="flex:1;min-width:0"><strong>'+safe(s.full_name || "Student")+'</strong><p>'+safe(s.email || "No email provided yet")+' · '+safe(s.class_name || "Class not assigned")+'</p><p class="muted">User ID: '+safe(s.auth_user_id || "Not linked yet")+'</p>'+emailEditor+'</div></article>';
+    }));
+    if(target) target.innerHTML = cards.join("");
+    if(rosterTarget){
+      const classOrder = ["JSS 1","JSS 2","JSS 3","SS 1","SS 2","SS 3"];
+      const displayClasses = [...classOrder, "Class not assigned"];
+      rosterTarget.innerHTML = displayClasses.map(className => {
+        const members = students.filter(s => (s.class_name || "Class not assigned") === className);
+        return '<section class="panel" style="margin:12px 0;padding:12px"><h4 style="margin:0 0 10px">'+safe(className)+' <span class="muted">('+members.length+')</span></h4>' +
+          (members.length ? members.map(s => '<article class="item" style="margin:8px 0"><strong>'+safe(s.full_name || "Student")+'</strong><p>'+safe(s.email || "No email provided")+'</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary roster-edit-student" data-id="'+safe(s.id)+'" data-name="'+safe(s.full_name || "")+'" data-class="'+safe(s.class_name || className)+'">Edit</button><button type="button" class="secondary roster-delete-student" data-id="'+safe(s.id)+'" data-name="'+safe(s.full_name || "this student")+'" style="border-color:#d44;color:#b42318">Delete</button></div></article>').join("") : '<p class="muted">No students registered in this class.</p>') + '</section>';
+      }).join("");
+      rosterTarget.querySelectorAll(".roster-edit-student").forEach(button => {
+        button.onclick = async () => {
+          const profileId = button.dataset.id;
+          const currentName = button.dataset.name || "";
+          const currentClass = button.dataset.class || "JSS 1";
+          const name = window.prompt("Enter the student's full name:", currentName);
+          if(name === null) return;
+          const cleanName = name.trim();
+          if(cleanName.length < 2 || cleanName.length > 120){ window.alert("Name must be between 2 and 120 characters."); return; }
+          const className = window.prompt("Enter class exactly as JSS 1, JSS 2, JSS 3, SS 1, SS 2 or SS 3:", currentClass);
+          if(className === null) return;
+          const cleanClass = className.trim().toUpperCase().replace(/^(JSS|SS)\s*(\d)$/,"$1 $2");
+          if(!classOrder.includes(cleanClass)){ window.alert("Please enter one of the six listed classes."); return; }
+          const statusEl = $("#registeredStudentsStatus");
+          statusEl.textContent = "Saving student changes…";
+          button.disabled = true;
+          const result = await supabaseClient.functions.invoke("admin-create-student",{body:{action:"update_student",profile_id:profileId,full_name:cleanName,class_name:cleanClass}});
+          button.disabled = false;
+          if(result.error || result.data?.error || !result.data?.success){statusEl.textContent = "Could not update student: "+(result.data?.error || result.error?.message || "Please try again.");return;}
+          statusEl.textContent = "Student details updated.";
+          await refreshStudentRecords();
+        };
+      });
+      rosterTarget.querySelectorAll(".roster-delete-student").forEach(button => {
+        button.onclick = async () => {
+          if(!window.confirm('Delete "'+(button.dataset.name || "this student")+'" from the registered student list? This cannot be undone.')) return;
+          const statusEl = $("#registeredStudentsStatus");
+          statusEl.textContent = "Deleting student record…";
+          button.disabled = true;
+          const result = await supabaseClient.functions.invoke("admin-create-student",{body:{action:"delete_student",profile_id:button.dataset.id}});
+          button.disabled = false;
+          if(result.error || result.data?.error || !result.data?.success){statusEl.textContent = "Could not delete student: "+(result.data?.error || result.error?.message || "Please try again.");return;}
+          statusEl.textContent = result.data?.warning || "Student record deleted.";
+          await refreshStudentRecords();
+        };
+      });
+    }
+    if(target) target.querySelectorAll(".student-email-link-form").forEach(form => {
+      form.onsubmit = async event => {
+        event.preventDefault();
+        const emailStatus = form.querySelector('[role="status"]');
+        const button = form.querySelector('button[type="submit"]');
+        const email = String(new FormData(form).get("email") || "").trim();
+        button.disabled = true; button.textContent = "Sending invitation…"; emailStatus.textContent = "";
+        const {data,error} = await supabaseClient.functions.invoke("admin-create-student", {body:{action:"invite_existing",profile_id:form.dataset.profileId,email}});
+        button.disabled = false; button.textContent = "Save email and send invitation";
+        if(error || data?.error || !data?.success){emailStatus.textContent = "Could not send invitation: "+(data?.error || error?.message || "Please try again.");return;}
+        emailStatus.textContent = "Email saved and invitation sent successfully.";
+        await refreshStudentRecords();
+      };
+    });
+  }
+  const refreshStudentButton = $("#refreshStudentRecordsButton");
+  if(refreshStudentButton) refreshStudentButton.onclick = refreshStudentRecords;
+  const refreshRosterButton = $("#refreshRegisteredStudentsButton");
+  if(refreshRosterButton) refreshRosterButton.onclick = refreshStudentRecords;
+  async function refresh(){
+    status("Loading announcements and homework…");
+    const results=await Promise.all([
+      supabaseClient.from("school_announcements").select("id,title,message,created_at").order("created_at",{ascending:false}).limit(100),
+      supabaseClient.from("school_homework").select("id,title,instructions,class_name,due_date,created_at").order("created_at",{ascending:false}).limit(100)
+    ]);
+    const ar=results[0],hr=results[1];
+    if(ar.error||hr.error){status("Could not load records. Check Supabase permissions and policies. "+(ar.error?ar.error.message:hr.error.message));return;}
+    const a=(ar.data||[]).filter(item=>!String(item.title||"").startsWith("STUDENT_SPOTLIGHT:")),h=hr.data||[];$("#annCount").textContent=a.length;$("#hwCount").textContent=h.length;
+    $("#liveAnnouncements").innerHTML=a.length?a.map(x=>'<article class="item"><div class="dot">📣</div><div style="flex:1;min-width:0"><strong>'+safe(x.title)+'</strong><p>'+safe(x.message)+'</p><button type="button" class="secondary delete-announcement" data-id="'+safe(x.id)+'" data-title="'+safe(x.title)+'" style="margin-top:8px;border-color:#d44;color:#b42318">Delete announcement</button></div></article>').join(""):'<p class="empty">No announcements saved yet.</p>';
+    $("#liveHomework").innerHTML=h.length?h.map(x=>'<article class="item"><div class="dot">📘</div><div style="flex:1;min-width:0"><strong>'+safe(x.title)+'</strong><p>'+safe(x.class_name)+' · Due: '+safe(x.due_date||"Not set")+'</p><p>'+safe(x.instructions)+'</p><button type="button" class="secondary delete-homework" data-id="'+safe(x.id)+'" data-title="'+safe(x.title)+'" style="margin-top:8px;border-color:#d44;color:#b42318">Delete homework</button></div></article>').join(""):'<p class="empty">No homework saved yet.</p>';
+    $("#liveAnnouncements").querySelectorAll(".delete-announcement").forEach(button=>{button.onclick=async()=>{if(!window.confirm('Delete announcement "'+(button.dataset.title||"this announcement")+'"? This cannot be undone.'))return;button.disabled=true;status("Deleting announcement…");const {error}=await supabaseClient.from("school_announcements").delete().eq("id",button.dataset.id);if(error){button.disabled=false;status("Could not delete announcement: "+error.message);return;}status("Announcement deleted.");await refresh();};});
+    $("#liveHomework").querySelectorAll(".delete-homework").forEach(button=>{button.onclick=async()=>{if(!window.confirm('Delete homework "'+(button.dataset.title||"this homework")+'"? This cannot be undone.'))return;button.disabled=true;status("Deleting homework…");const {error}=await supabaseClient.from("school_homework").delete().eq("id",button.dataset.id);if(error){button.disabled=false;status("Could not delete homework: "+error.message);return;}status("Homework deleted.");await refresh();};});
+    status("Live records loaded from Supabase.");
+    await refreshStudentRecords();
+  }
+  $("#liveAnnouncementForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const {error}=await supabaseClient.from("school_announcements").insert({title:String(fd.get("title")).trim(),message:String(fd.get("message")).trim(),created_by:user.id});if(error){status("Could not save announcement: "+error.message);return;}form.reset();await refresh();};
+  $("#liveHomeworkForm").onsubmit=async(e)=>{e.preventDefault();const form=e.currentTarget,fd=new FormData(form);const row={title:String(fd.get("title")).trim(),instructions:String(fd.get("instructions")).trim(),class_name:String(fd.get("class_name")),created_by:user.id};const due=String(fd.get("due_date")||"");if(due)row.due_date=due;const {error}=await supabaseClient.from("school_homework").insert(row);if(error){status("Could not save homework: "+error.message);return;}form.reset();await refresh();};
+  const studentForm = $("#studentRegisterForm");
+  if(studentForm){
+    studentForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const statusEl = $("#studentRegisterStatus");
+      const submit = studentForm.querySelector('button[type="submit"]');
+      const fd = new FormData(studentForm);
+      const email = String(fd.get("email") || "").trim();
+      submit.disabled = true; submit.textContent = email ? "Sending invitation…" : "Registering student…";
+      statusEl.textContent = "";
+      const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+        body: { action: email ? "create_and_invite" : "create_record", full_name: String(fd.get("full_name")).trim(), email, class_name: String(fd.get("class_name")), role: "student" }
+      });
+      submit.disabled = false; submit.textContent = "Register student";
+      if(error){ let detail = error.message || 'Request failed.'; try { if(error.context && typeof error.context.json === 'function'){ const responseBody = await error.context.json(); if(responseBody?.error) detail = responseBody.error; } } catch(_) {} statusEl.textContent = 'Staff invitation failed: ' + detail; return; }
+      if(data?.error){ statusEl.textContent = "Student registration failed: " + data.error; return; }
+      studentForm.reset();
+      statusEl.textContent = email ? "Student registered and invitation sent. Ask the student to check their email and follow the invitation link to set a password." : "Student record created without an email. When the student provides an email, add it in Student records to send their invitation.";
+      await refreshStudentRecords();
+    };
+  }
+  const staffForm = $("#staffRegisterForm");
+  if(staffForm){
+    staffForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const statusEl = $("#staffRegisterStatus");
+      const submit = staffForm.querySelector('button[type="submit"]');
+      const fd = new FormData(staffForm);
+      submit.disabled = true; submit.textContent = "Sending invitation…";
+      statusEl.textContent = "";
+      const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+        body: { full_name: String(fd.get("full_name")).trim(), email: String(fd.get("email")).trim(), class_names: fd.getAll("class_names").map(value => String(value)), role: "teacher" }
+      });
+      submit.disabled = false; submit.textContent = "Invite teacher securely";
+      if(error){ let detail = error.message || 'Request failed.'; try { if(error.context && typeof error.context.json === 'function'){ const responseBody = await error.context.json(); if(responseBody?.error) detail = responseBody.error; } } catch(_) {} statusEl.textContent = 'Staff invitation failed: ' + detail; return; }
+      if(data?.error){ statusEl.textContent = "Staff invitation failed: " + data.error; return; }
+      staffForm.reset();
+      statusEl.textContent = "Teacher invitation sent. Ask the staff member to check their email and follow the link to set a password.";
+      if (typeof window.refreshStaffRecords === "function") await window.refreshStaffRecords();
+    };
+  }
+  // Attendance register: attendance data is stored per student and school date.
+  const attendanceDate = $("#attendanceDate");
+  const attendanceClass = $("#attendanceClass");
+  const attendanceRecords = $("#attendanceRecords");
+  const attendanceStatus = $("#attendanceStatus");
+  const loadAttendanceButton = $("#loadAttendanceButton");
+  const saveAttendanceButton = $("#saveAttendanceButton");
+  if (attendanceDate) {
+    const localToday = new Date();
+    attendanceDate.value = new Date(localToday.getTime() - localToday.getTimezoneOffset() * 60000).toISOString().slice(0,10);
+  }
+  async function loadAttendanceRegister() {
+    if (!attendanceDate || !attendanceClass || !attendanceRecords || !attendanceStatus || !saveAttendanceButton) return;
+    const date = attendanceDate.value;
+    const cls = attendanceClass.value;
+    if (!date || !cls) { attendanceStatus.textContent = "Choose an attendance date and class."; return; }
+    attendanceStatus.textContent = "Loading students and attendance…";
+    attendanceRecords.innerHTML = "";
+    saveAttendanceButton.disabled = true;
+    const {data: students, error: studentError} = await supabaseClient.from("school_profiles")
+      .select("auth_user_id,full_name,email,class_name")
+      .eq("role","student").eq("class_name",cls).order("full_name",{ascending:true}).limit(500);
+    if (studentError) { attendanceStatus.textContent = "Could not load students: " + studentError.message; return; }
+    const {data: marks, error: marksError} = await supabaseClient.from("school_attendance")
+      .select("student_user_id,status,notes")
+      .eq("attendance_date",date).eq("class_name",cls);
+    if (marksError) { attendanceStatus.textContent = "Attendance table is not ready or access is blocked. Please complete the attendance database setup first. Details: " + marksError.message; return; }
+    const markMap = new Map((marks || []).map(m => [m.student_user_id,m]));
+    const safe = v => esc(v == null ? "" : String(v));
+    if (!students || !students.length) {
+      attendanceRecords.innerHTML = '<p class="empty">No student accounts found in ' + safe(cls) + ' yet.</p>';
+      attendanceStatus.textContent = "No students found for this class.";
+      return;
+    }
+    attendanceRecords.innerHTML = students.map(s => {
+      const mark = markMap.get(s.auth_user_id) || {};
+      const options = [["present","Present"],["absent","Absent"],["late","Late"],["excused","Excused"]]
+        .map(([value,label]) => '<option value="' + value + '"' + (mark.status === value ? " selected" : "") + '>' + label + '</option>').join("");
+      return '<article class="item attendance-row" data-student-id="' + safe(s.auth_user_id) + '"><div class="dot">🎓</div><div style="flex:1;min-width:0"><strong>' + safe(s.full_name || "Student") + '</strong><p>' + safe(s.email || "") + '</p><label style="display:block;margin-top:8px;font-size:13px;font-weight:700">Attendance</label><select class="attendance-mark" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:9px;margin-top:4px">' + '<option value="">Choose status</option>' + options + '</select><input class="attendance-notes" maxlength="500" placeholder="Optional note" value="' + safe(mark.notes || "") + '" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:9px;margin-top:7px"></div></article>';
+    }).join("");
+    attendanceStatus.textContent = "Loaded " + students.length + " student(s) for " + date + " · " + cls + ".";
+    saveAttendanceButton.disabled = false;
+  }
+  if (loadAttendanceButton) loadAttendanceButton.onclick = loadAttendanceRegister;
+  if (attendanceDate) attendanceDate.onchange = loadAttendanceRegister;
+  if (attendanceClass) attendanceClass.onchange = loadAttendanceRegister;
+  if (saveAttendanceButton) saveAttendanceButton.onclick = async () => {
+    const date = attendanceDate?.value;
+    const cls = attendanceClass?.value;
+    const rows = Array.from(attendanceRecords?.querySelectorAll(".attendance-row") || []);
+    if (!date || !cls || !rows.length) { attendanceStatus.textContent = "Load a class register before saving."; return; }
+    const missing = rows.find(row => !row.querySelector(".attendance-mark").value);
+    if (missing) { attendanceStatus.textContent = "Choose Present, Absent, Late, or Excused for every student before saving."; missing.querySelector(".attendance-mark").focus(); return; }
+    const records = rows.map(row => ({
+      student_user_id: row.dataset.studentId,
+      class_name: cls,
+      attendance_date: date,
+      status: row.querySelector(".attendance-mark").value,
+      notes: row.querySelector(".attendance-notes").value.trim() || null,
+      marked_by: user.id
+    }));
+    saveAttendanceButton.disabled = true;
+    saveAttendanceButton.textContent = "Saving attendance…";
+    attendanceStatus.textContent = "Saving attendance records…";
+    const {error} = await supabaseClient.from("school_attendance").upsert(records, {onConflict:"student_user_id,attendance_date"});
+    saveAttendanceButton.disabled = false;
+    saveAttendanceButton.textContent = "Save attendance";
+    if (error) { attendanceStatus.textContent = "Attendance could not be saved: " + error.message; return; }
+    attendanceStatus.textContent = "Attendance saved successfully for " + records.length + " student(s) on " + date + ".";
+  };
+  if (attendanceDate && attendanceClass) await loadAttendanceRegister();
+
+  const resetForm = $("#studentPasswordResetForm");
+  if (resetForm) {
+    resetForm.onsubmit = async (e) => {
+      e.preventDefault();
+      const statusEl = $("#studentPasswordResetStatus");
+      const submit = resetForm.querySelector('button[type="submit"]');
+      const fd = new FormData(resetForm);
+      const password = String(fd.get("password") || "");
+      const confirmation = String(fd.get("password_confirm") || "");
+      if (password !== confirmation) {
+        statusEl.textContent = "The passwords do not match. Please type them again.";
+        return;
+      }
+      if (password.length < 8 || password.length > 72) {
+        statusEl.textContent = "Use a password between 8 and 72 characters.";
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = "Resetting password…";
+      statusEl.textContent = "";
+      const { data, error } = await supabaseClient.functions.invoke("admin-create-student", {
+        body: { action: "reset_password", user_id: String(fd.get("user_id")).trim(), password }
+      });
+      submit.disabled = false;
+      submit.textContent = "Reset student password";
+      if (error) {
+        statusEl.textContent = "Password reset failed. Check the function logs and administrator session. " + error.message;
+        return;
+      }
+      if (data?.error || !data?.success) {
+        statusEl.textContent = "Password reset failed: " + (data?.error || "Please try again.");
+        return;
+      }
+      resetForm.reset();
+      statusEl.textContent = "Password reset successfully. Give the temporary password to the student privately. Do not share it in this chat.";
+    };
+  }
+  await refresh();
+}
+async function connectClassChat(user, profile){
+  const messagesEl = $("#classChatMessages");
+  const form = $("#classChatForm");
+  const statusEl = $("#classChatStatus");
+  const refreshButton = $("#refreshClassChatButton");
+  const classPicker = $("#teacherChatClass");
+  const safe = (value) => esc(value == null ? "" : String(value));
+  const classNames = [...new Set(String(profile.class_name || "").split(",").map(value => value.trim()).filter(Boolean))];
+  if(!messagesEl || !form || !statusEl) return;
+  if(!classNames.length){
+    messagesEl.innerHTML = '<p class="empty">Your account does not have a class assigned yet. Please contact the school administrator.</p>';
+    statusEl.textContent = "Class chat is unavailable until your school profile has a class.";
+    form.hidden = true;
+    if(refreshButton) refreshButton.hidden = true;
+    if(classPicker) classPicker.hidden = true;
+    return;
+  }
+  if(classPicker){
+    classPicker.innerHTML = classNames.map(name => '<option value="'+safe(name)+'">'+safe(name)+'</option>').join("");
+    classPicker.hidden = classNames.length < 2;
+  }
+  const activeClass = () => classPicker && !classPicker.hidden ? classPicker.value : classNames[0];
+  async function loadMessages(){
+    const className = activeClass();
+    if(refreshButton) refreshButton.disabled = true;
+    messagesEl.innerHTML = '<p class="muted">Loading class messages…</p>';
+    const {data: rows, error} = await supabaseClient.from("school_messages")
+      .select("class_name,sender_id,message,created_at")
+      .eq("class_name", className)
+      .order("created_at", {ascending:true})
+      .limit(100);
+    if(error){
+      messagesEl.innerHTML = '<p class="empty">Class messages could not be loaded.</p>';
+      statusEl.textContent = "Chat database access error: " + error.message;
+      if(refreshButton) refreshButton.disabled = false;
+      return;
+    }
+    const messages = rows || [];
+    const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
+    let senderProfiles = [];
+    if (senderIds.length) {
+      const profileResult = await supabaseClient.rpc("get_school_chat_profiles");
+      if (!profileResult.error) senderProfiles = (profileResult.data || []).filter(item => senderIds.includes(item.auth_user_id));
+    }
+    const profileById = new Map(senderProfiles.map(item => [item.auth_user_id, item]));
+    messagesEl.innerHTML = messages.length ? messages.map(item => {
+      const mine = item.sender_id === user.id;
+      const senderProfile = profileById.get(item.sender_id);
+      const senderName = mine ? (senderProfile?.full_name || senderProfile?.email || user.email || "You") : (senderProfile?.full_name || senderProfile?.email || "Class member / staff");
+      const initials = senderName.split(/\\s+/).filter(Boolean).slice(0,2).map(part => part[0]).join("").toUpperCase() || "👤";
+      const when = item.created_at ? new Date(item.created_at).toLocaleString() : "";
+      return '<article class="item"><div class="dot" aria-hidden="true">'+safe(initials)+'</div><div><strong>'+safe(senderName)+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
+    }).join("") : '<p class="empty">No messages yet. Send the first message to your class.</p>';
+    statusEl.textContent = "Showing " + messages.length + " recent message(s) for " + className + ".";
+    if(refreshButton) refreshButton.disabled = false;
+  }
+  if(refreshButton) refreshButton.onclick = loadMessages;
+  if(classPicker) classPicker.onchange = loadMessages;
+  const chatChannel = supabaseClient.channel("class-chat-" + user.id + "-" + Date.now())
+    .on("postgres_changes", { event: "INSERT", schema: "public", table: "school_messages" }, payload => {
+      if(payload.new && classNames.includes(payload.new.class_name) && payload.new.class_name === activeClass()) loadMessages();
+    })
+    .subscribe((state) => {
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
+    });
+  form.onsubmit = async (event) => {
+    event.preventDefault();
+    const input = form.elements.namedItem("message");
+    const message = String(input.value || "").trim();
+    if(!message) return;
+    const className = activeClass();
+    const sendButton = form.querySelector('button[type="submit"]');
+    sendButton.disabled = true;
+    statusEl.textContent = "Sending message…";
+    const {error} = await supabaseClient.from("school_messages").insert({ class_name: className, sender_id: user.id, message });
+    sendButton.disabled = false;
+    if(error){ let detail = error.message || 'Request failed.'; try { if(error.context && typeof error.context.json === 'function'){ const responseBody = await error.context.json(); if(responseBody?.error) detail = responseBody.error; } } catch(_) {} statusEl.textContent = 'Staff invitation failed: ' + detail; return; }
+    input.value = "";
+    statusEl.textContent = "Message sent to " + className + ".";
+    await loadMessages();
+  };
+  await loadMessages();
+}
+async function connectStudentSpotlight(user){
+  const form = $("#spotlightForm");
+  const status = $("#spotlightStatus");
+  const preview = $("#spotlightPreview");
+  if(!form || !status || !preview) return;
+  const {data: existing, error: readError} = await supabaseClient.from("school_announcements")
+    .select("title,message,created_at").like("title","STUDENT_SPOTLIGHT:%").order("created_at",{ascending:false}).limit(1);
+  if(!readError && existing && existing[0]){
+    try{
+      const saved = JSON.parse(existing[0].message || "{}");
+      renderSpotlight(saved);
+    }catch(_e){}
+  }
+  function renderSpotlight(item){
+    if(!item || !item.image_url){preview.innerHTML='<div class="spotlight-placeholder">🏆<br>No student spotlight published yet.</div>';return;}
+    preview.innerHTML='<article class="spotlight-card"><img src="'+esc(item.image_url)+'" alt="Student of the week or month"><div class="spotlight-copy"><span class="eyebrow">'+esc(item.period || "Student Spotlight")+'</span><h3>'+esc(item.student_name || "Featured student")+'</h3><p>'+esc(item.class_name || "")+'</p><p>'+esc(item.reason || "Celebrating achievement and positive school spirit.")+'</p></div></article>';
+  }
+  form.onsubmit = async (event) => {
+    event.preventDefault();
+    const fd = new FormData(form);
+    const file = fd.get("image");
+    if(!(file instanceof File) || !file.size){status.textContent="Please choose a student photo.";return;}
+    if(file.size > 5*1024*1024){status.textContent="That image is larger than 5 MB. Choose a smaller photo.";return;}
+    if(!["image/jpeg","image/png","image/webp"].includes(file.type)){status.textContent="Choose a JPG, PNG or WebP image.";return;}
+    const button = form.querySelector('button[type="submit"]');
+    button.disabled = true; button.textContent = "Uploading photo…"; status.textContent="";
+    const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
+    const path = user.id + "/" + Date.now() + "." + ext;
+    const {error: uploadError} = await supabaseClient.storage.from("student-awards").upload(path,file,{upsert:true,contentType:file.type});
+    if(uploadError){button.disabled=false;button.textContent="Publish student spotlight";status.textContent="Photo upload failed. Please check that the student-awards storage bucket and admin upload policy have been created. "+uploadError.message;return;}
+    const {data: urlData} = supabaseClient.storage.from("student-awards").getPublicUrl(path);
+    const item = {period:String(fd.get("period")),student_name:String(fd.get("student_name")).trim(),class_name:String(fd.get("class_name")),reason:String(fd.get("reason")||"").trim(),image_url:urlData.publicUrl};
+    const {error: saveError} = await supabaseClient.from("school_announcements").insert({title:"STUDENT_SPOTLIGHT:"+item.period,message:JSON.stringify(item),created_by:user.id});
+    button.disabled=false;button.textContent="Publish student spotlight";
+    if(saveError){status.textContent="Photo uploaded, but the spotlight record could not be saved: "+saveError.message;return;}
+    renderSpotlight(item);form.reset();status.textContent="Student spotlight published successfully.";
+  };
+}
+
+async function connectAdminFees(user) {
+  const studentSelect = $("#feeStudent");
+  const invoiceSelect = $("#feePaymentInvoice");
+  const invoiceForm = $("#feeInvoiceForm");
+  const paymentForm = $("#feePaymentForm");
+  const invoiceStatus = $("#feeInvoiceStatus");
+  const paymentStatus = $("#feePaymentStatus");
+  const list = $("#feeInvoiceList");
+
+  if (!studentSelect || !invoiceSelect || !invoiceForm ||
+      !paymentForm || !list) return;
+
+  const money = value =>
+    new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+      maximumFractionDigits: 2
+    }).format(Number(value) || 0);
+
+  const safe = value =>
+    esc(value == null ? "" : String(value));
+
+  let students = [];
+  let invoices = [];
+  let payments = [];
+
+  function paidForInvoiceForPayment(invoiceId) { return payments.filter(p => p.invoice_id === invoiceId).reduce((sum, payment) => sum + Number(payment.amount || 0), 0); }
+
+  async function loadStudents() {
+    studentSelect.innerHTML =
+      '<option value="">Loading students...</option>';
+
+    const { data, error } = await supabaseClient
+      .from("school_profiles")
+      .select("id,auth_user_id,full_name,email,class_name")
+      .eq("role", "student")
+      .order("full_name", { ascending: true })
+      .limit(1000);
+
+    if (error) {
+      studentSelect.innerHTML =
+        '<option value="">Could not load students</option>';
+      if (invoiceStatus) {
+        invoiceStatus.textContent =
+          "Student list error: " + error.message;
+      }
+      return false;
+    }
+
+    students = data || [];
+
+    studentSelect.innerHTML =
+      '<option value="">Choose a student</option>' +
+      students.map(student =>
+        '<option value="' + safe(student.id) + '">' +
+        safe(student.full_name || student.email || "Student") +
+        " — " + safe(student.class_name || "Class not assigned") +
+        (student.auth_user_id ? "" : " — No login yet") +
+        "</option>"
+      ).join("");
+
+    return true;
+  }
+
+
+  // FEES OPENING BALANCE UPGRADE
+  let openingBalances = [];
+  let openingBalancePayments = [];
+
+  const openingPanel = document.createElement("section");
+  openingPanel.className = "panel";
+  openingPanel.style.marginTop = "14px";
+  openingPanel.innerHTML = [
+    '<span class="eyebrow">BALANCE BROUGHT FORWARD</span>',
+    '<h3>Opening balances and carry-forward</h3>',
+    '<p class="muted">Calculate unpaid fees, create a pending balance, and approve it after review. Original invoices and payments remain unchanged.</p>',
+    '<div class="form" style="max-width:700px">',
+    '<label>Student</label><select id="obStudent" required><option value="">Choose a student</option></select>',
+    '<label>Source academic year</label><input id="obSourceYear" maxlength="30" placeholder="e.g. 2025/2026" required>',
+    '<label>Source term</label><select id="obSourceTerm"><option>First Term</option><option>Second Term</option><option>Third Term</option></select>',
+    '<label>Target academic year</label><input id="obTargetYear" maxlength="30" placeholder="e.g. 2026/2027" required>',
+    '<label>Target term</label><select id="obTargetTerm"><option>First Term</option><option>Second Term</option><option>Third Term</option></select>',
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="obPreview" type="button">Calculate unpaid balance</button><button class="primary" id="obCreate" type="button">Create pending balance</button></div>',
+    '<p id="obStatus" class="muted" role="status" aria-live="polite"></p>',
+    '<div id="obPreviewResult"></div></div>',
+    '<hr style="margin:18px 0">',
+    '<div class="panel-heading"><h3>Review and manage balances</h3><button class="secondary" id="obRefresh" type="button">Refresh balances</button></div>',
+    '<div id="obList"><p class="muted">Loading opening balances…</p></div>'
+  ].join("");
+
+  const accountPanel = list.closest(".panel");
+  if (accountPanel && accountPanel.parentNode) {
+    accountPanel.parentNode.insertBefore(openingPanel, accountPanel);
+  }
+
+  const ob = id => openingPanel.querySelector("#" + id);
+  const obStatus = ob("obStatus");
+
+  function outstandingOpeningBalance(balance) {
+    const paid = openingBalancePayments
+      .filter(p => p.opening_balance_id === balance.id && p.status === "paid")
+      .reduce((sum, p) => sum + Number(p.amount || 0), 0);
+    return Math.max(0, Number(balance.opening_balance || 0) - paid);
+  }
+
+  function calculateCarryForward(studentId, sourceYear, sourceTerm) {
+    const student = students.find(s => s.id === studentId);
+    if (!student) return { amount: 0, error: "Choose a student." };
+    if (!sourceYear || !sourceTerm) {
+      return { amount: 0, error: "Enter the source year and term." };
+    }
+
+    const sourceInvoices = invoices.filter(inv =>
+      inv.academic_year === sourceYear &&
+      inv.term === sourceTerm &&
+      (inv.student_profile_id === studentId ||
+       (!inv.student_profile_id && student.auth_user_id &&
+        inv.student_auth_user_id === student.auth_user_id))
+    );
+
+    let amount = sourceInvoices.reduce((sum, inv) =>
+      sum + Math.max(0, Number(inv.amount_due || 0) -
+        paidForInvoiceForPayment(inv.id)), 0);
+
+    amount += openingBalances.filter(b =>
+      b.student_profile_id === studentId &&
+      b.academic_year === sourceYear &&
+      b.term === sourceTerm &&
+      b.status === "approved"
+    ).reduce((sum, b) =>
+      sum + outstandingOpeningBalance(b), 0);
+
+    return {
+      amount: Math.round((amount + Number.EPSILON) * 100) / 100
+    };
+  }
+
+  async function refreshOpeningBalances() {
+    const results = await Promise.all([
+      supabaseClient.from("school_fee_opening_balances")
+        .select("*").order("created_at", { ascending: false }).limit(2000),
+      supabaseClient.from("school_fee_opening_balance_payments")
+        .select("*").order("created_at", { ascending: false }).limit(5000)
+    ]);
+
+    if (results[0].error || results[1].error) {
+      ob("obList").innerHTML =
+        '<p class="empty">Could not load opening balances: ' +
+        safe((results[0].error || results[1].error).message) + "</p>";
+      return;
+    }
+
+    openingBalances = results[0].data || [];
+    openingBalancePayments = results[1].data || [];
+
+    ob("obStudent").innerHTML =
+      '<option value="">Choose a student</option>' +
+      students.map(st =>
+        '<option value="' + safe(st.id) + '">' +
+        safe(st.full_name || st.email || "Student") + " — " +
+        safe(st.class_name || "Class not assigned") + "</option>"
+      ).join("");
+
+    if (!openingBalances.length) {
+      ob("obList").innerHTML =
+        '<p class="muted">No opening balances have been created yet.</p>';
+      return;
+    }
+
+    ob("obList").innerHTML = openingBalances.map(b => {
+      const student = students.find(st => st.id === b.student_profile_id);
+      const remaining = outstandingOpeningBalance(b);
+
+      const history = openingBalancePayments.filter(p =>
+        p.opening_balance_id === b.id && p.status === "paid"
+      ).map(p =>
+        '<p class="muted">Payment: ' + money(p.amount) + " · " +
+        safe(String(p.payment_method || "").replace(/_/g, " ")) + " · " +
+        safe(p.reference || "No reference") + " · " +
+        safe(p.paid_at || p.created_at || "") + "</p>"
+      ).join("");
+
+      let actions = "";
+      if (b.status === "pending") {
+        actions =
+          '<button class="primary" type="button" data-ob-action="approve" data-id="' +
+          safe(b.id) + '">Approve</button> ' +
+          '<button class="secondary" type="button" data-ob-action="reject" data-id="' +
+          safe(b.id) + '">Reject</button>';
+      } else if (b.status === "approved" && remaining > 0) {
+        actions =
+          '<form data-ob-payment="' + safe(b.id) +
+          '" class="form" style="margin-top:10px">' +
+          '<label>Payment amount (₦)</label><input name="amount" type="number" min="0.01" step="0.01" max="' +
+          remaining.toFixed(2) + '" required>' +
+          '<label>Payment method</label><select name="payment_method"><option value="cash">Cash</option><option value="bank_transfer">Bank transfer</option><option value="pos">POS</option><option value="other">Other</option></select>' +
+          '<label>Receipt or transfer reference</label><input name="reference" maxlength="120">' +
+          '<button class="primary" type="submit">Record opening-balance payment</button></form>';
+      }
+
+      return '<article class="item"><div style="width:100%">' +
+        "<strong>" + safe(student?.full_name || "Student") + "</strong>" +
+        '<p class="muted">' + safe(student?.class_name || "") + " · " +
+        safe(b.academic_year) + " · " + safe(b.term) + "</p>" +
+        "<p>Opening balance: <strong>" + money(b.opening_balance) +
+        "</strong> · Remaining: <strong>" + money(remaining) +
+        "</strong> · Status: <strong>" + safe(b.status) + "</strong></p>" +
+        '<p class="muted">Source: ' + safe(b.source_academic_year || "") +
+        " · " + safe(b.source_term || "") + "</p>" +
+        history + actions + "</div></article>";
+    }).join("");
+  }
+
+  ob("obPreview").onclick = () => {
+    const result = calculateCarryForward(
+      ob("obStudent").value,
+      ob("obSourceYear").value.trim(),
+      ob("obSourceTerm").value
+    );
+    ob("obPreviewResult").innerHTML = result.error
+      ? '<p class="empty">' + safe(result.error) + "</p>"
+      : "<p>Unpaid amount to review: <strong>" +
+        money(result.amount) + "</strong></p>";
+    obStatus.textContent = result.error ||
+      "Calculation completed. Review the amount before creating a pending balance.";
+  };
+
+  ob("obCreate").onclick = async () => {
+    const student = students.find(st => st.id === ob("obStudent").value);
+    const sourceYear = ob("obSourceYear").value.trim();
+    const sourceTerm = ob("obSourceTerm").value;
+    const targetYear = ob("obTargetYear").value.trim();
+    const targetTerm = ob("obTargetTerm").value;
+
+    if (!student || !sourceYear || !targetYear) {
+      obStatus.textContent = "Choose a student and complete both academic years.";
+      return;
+    }
+    if (sourceYear === targetYear && sourceTerm === targetTerm) {
+      obStatus.textContent = "Source and target terms must be different.";
+      return;
+    }
+
+    const calc = calculateCarryForward(student.id, sourceYear, sourceTerm);
+    if (calc.error || calc.amount <= 0) {
+      obStatus.textContent = calc.error ||
+        "No unpaid balance was found for that student and source term.";
+      return;
+    }
+
+    if (openingBalances.some(b =>
+      b.student_profile_id === student.id &&
+      b.academic_year === targetYear &&
+      b.term === targetTerm
+    )) {
+      obStatus.textContent =
+        "An opening balance already exists for this student and target term.";
+      return;
+    }
+
+    const button = ob("obCreate");
+    button.disabled = true;
+    button.textContent = "Creating…";
+
+    const { error } = await supabaseClient
+      .from("school_fee_opening_balances")
+      .insert({
+        student_profile_id: student.id,
+        student_auth_user_id: student.auth_user_id || null,
+        academic_year: targetYear,
+        term: targetTerm,
+        opening_balance: calc.amount,
+        status: "pending",
+        source_academic_year: sourceYear,
+        source_term: sourceTerm,
+        created_by: user.id
+      });
+
+    button.disabled = false;
+    button.textContent = "Create pending balance";
+
+    if (error) {
+      obStatus.textContent = "Could not create pending balance: " + error.message;
+      return;
+    }
+
+    obStatus.textContent = "Pending balance created. It must be approved before use.";
+    ob("obPreviewResult").innerHTML = "";
+    await refreshOpeningBalances();
+  };
+
+  openingPanel.addEventListener("click", async event => {
+    if (event.target.closest("#obRefresh")) {
+      await refreshOpeningBalances();
+      return;
+    }
+
+    const button = event.target.closest("button[data-ob-action]");
+    if (button) {
+      const action = button.getAttribute("data-ob-action");
+      const id = button.getAttribute("data-id");
+      const balance = openingBalances.find(b => b.id === id);
+      if (!balance || balance.status !== "pending") return;
+
+      button.disabled = true;
+      const payload = action === "approve"
+        ? { status: "approved", approved_by: user.id, approved_at: new Date().toISOString() }
+        : { status: "rejected" };
+
+      const { error } = await supabaseClient
+        .from("school_fee_opening_balances").update(payload).eq("id", id);
+
+      if (error) {
+        obStatus.textContent = "Could not update balance: " + error.message;
+        button.disabled = false;
+        return;
+      }
+
+      obStatus.textContent = action === "approve"
+        ? "Opening balance approved." : "Opening balance rejected.";
+      await refreshOpeningBalances();
+    }
+  });
+
+  openingPanel.addEventListener("submit", async event => {
+    const form = event.target.closest("form[data-ob-payment]");
+    if (!form) return;
+    event.preventDefault();
+
+    const id = form.getAttribute("data-ob-payment");
+    const balance = openingBalances.find(b => b.id === id);
+    if (!balance || balance.status !== "approved") {
+      obStatus.textContent = "Only approved opening balances can receive payments.";
+      return;
+    }
+
+    const fd = new FormData(form);
+    const amount = Number(fd.get("amount"));
+    const remaining = outstandingOpeningBalance(balance);
+
+    if (!Number.isFinite(amount) || amount <= 0 || amount > remaining) {
+      obStatus.textContent = "Enter a valid payment no greater than " +
+        money(remaining) + ".";
+      return;
+    }
+
+    const button = form.querySelector('button[type="submit"]');
+    if (button) { button.disabled = true; button.textContent = "Recording…"; }
+
+    const { error } = await supabaseClient
+      .from("school_fee_opening_balance_payments")
+      .insert({
+        opening_balance_id: balance.id,
+        student_profile_id: balance.student_profile_id,
+        student_auth_user_id: balance.student_auth_user_id || null,
+        amount,
+        payment_method: String(fd.get("payment_method") || "other"),
+        reference: String(fd.get("reference") || "").trim() || null,
+        status: "paid",
+        received_by: user.id,
+        paid_at: new Date().toISOString()
+      });
+
+    if (error) {
+      obStatus.textContent = "Payment could not be recorded: " + error.message;
+      if (button) {
+        button.disabled = false;
+        button.textContent = "Record opening-balance payment";
+      }
+      return;
+    }
+
+    obStatus.textContent = "Opening-balance payment recorded.";
+    await refreshOpeningBalances();
+  });
+  async function refreshInvoices() {
+    list.innerHTML =
+      '<p class="muted">Loading fee records...</p>';
+
+    const [invoiceResult, paymentResult] = await Promise.all([
+      supabaseClient
+        .from("school_fee_invoices")
+        .select(
+          "id,student_profile_id,student_auth_user_id,student_name," +
+          "class_name,description,academic_year,term,amount_due," +
+          "due_date,created_at"
+        )
+        .order("created_at", { ascending: false })
+        .limit(1000),
+
+      supabaseClient
+        .from("school_fee_payments")
+        .select(
+          "id,invoice_id,student_profile_id,student_auth_user_id," +
+          "amount,payment_method,status,reference,paid_at,created_at"
+        )
+        .eq("status", "paid")
+        .order("created_at", { ascending: false })
+        .limit(5000)
+    ]);
+
+    if (invoiceResult.error) {
+      list.innerHTML =
+        '<p class="empty">Could not load invoices: ' +
+        safe(invoiceResult.error.message) + "</p>";
+      return;
+    }
+
+    if (paymentResult.error) {
+      list.innerHTML =
+        '<p class="empty">Could not load payments: ' +
+        safe(paymentResult.error.message) + "</p>";
+      return;
+    }
+
+    invoices = invoiceResult.data || [];
+    payments = paymentResult.data || [];
+
+    function invoicePayments(invoiceId) {
+      return payments.filter(p => p.invoice_id === invoiceId);
+    }
+
+    function paidForInvoice(invoiceId) {
+      return invoicePayments(invoiceId).reduce(
+        (sum, payment) => sum + Number(payment.amount || 0),
+        0
+      );
+    }
+
+    invoiceSelect.innerHTML =
+      '<option value="">Choose an invoice</option>' +
+      invoices.map(invoice => {
+        const balance = Math.max(
+          0,
+          Number(invoice.amount_due || 0) -
+          paidForInvoiceForPayment(invoice.id)
+        );
+
+        return (
+          '<option value="' + safe(invoice.id) + '">' +
+          safe(invoice.student_name) + " — " +
+          safe(invoice.description) + " (" +
+          money(balance) + " outstanding)</option>"
+        );
+      }).join("");
+
+    if (!invoices.length) {
+      list.innerHTML =
+        '<p class="empty">No fee invoices yet. Create the first invoice above.</p>';
+      return;
+    }
+
+    const accounts = new Map();
+
+    invoices.forEach(invoice => {
+      let profileId = invoice.student_profile_id;
+
+      if (!profileId && invoice.student_auth_user_id) {
+        const match = students.find(
+          student =>
+            student.auth_user_id === invoice.student_auth_user_id
+        );
+        if (match) profileId = match.id;
+      }
+
+      const key = profileId
+        ? "profile:" + profileId
+        : "legacy:" + invoice.student_auth_user_id +
+          ":" + invoice.student_name;
+
+      if (!accounts.has(key)) {
+        const student = students.find(s => s.id === profileId);
+
+        accounts.set(key, {
+          name: student?.full_name ||
+            invoice.student_name || "Student",
+          className: student?.class_name ||
+            invoice.class_name || "",
+          profileId,
+          rows: [],
+          totalFees: 0,
+          totalPaid: 0
+        });
+      }
+
+      const account = accounts.get(key);
+      const paid = paidForInvoiceForPayment(invoice.id);
+      const amountDue = Number(invoice.amount_due || 0);
+
+      account.rows.push({
+        invoice,
+        paid,
+        balance: Math.max(0, amountDue - paid),
+        payments: invoicePayments(invoice.id)
+      });
+
+      account.totalFees += amountDue;
+      account.totalPaid += paid;
+    });
+
+    list.innerHTML = Array.from(accounts.values()).map(account => {
+      const rows = account.rows.map(row => {
+        const invoice = row.invoice;
+
+        const paymentRows = row.payments.map(payment =>
+          '<p class="muted">Payment: ' +
+          money(payment.amount) + " · " +
+          safe(String(payment.payment_method || "").replace(/_/g, " ")) +
+          " · " + safe(payment.reference || "No reference") +
+          " · " + safe(payment.paid_at || payment.created_at || "") +
+          "</p>"
+        ).join("");
+
+        return (
+          '<div style="border-top:1px solid #ddd;padding:10px 0">' +
+          "<strong>" + safe(invoice.description) + "</strong>" +
+          '<p class="muted">' +
+          safe(invoice.academic_year) + " · " +
+          safe(invoice.term) + " · Due: " +
+          safe(invoice.due_date || "Not set") + "</p>" +
+          "<p>Fee: <strong>" + money(invoice.amount_due) +
+          "</strong> · Paid: <strong>" + money(row.paid) +
+          "</strong> · Balance: <strong>" +
+          money(row.balance) + "</strong></p>" +
+          paymentRows + "</div>"
+        );
+      }).join("");
+
+      return (
+        '<article class="item">' +
+        '<div class="dot">🧾</div>' +
+        '<div style="width:100%">' +
+        "<strong>" + safe(account.name) + "</strong>" +
+        '<p class="muted">' +
+        safe(account.className || "Class not assigned") +
+        "</p>" +
+        "<p>Total fees: <strong>" + money(account.totalFees) +
+        "</strong> · Payments received: <strong>" +
+        money(account.totalPaid) + "</strong></p>" +
+        "<p>Outstanding balance: <strong>" +
+        money(Math.max(0, account.totalFees - account.totalPaid)) +
+        "</strong></p>" +
+        rows + "</div></article>"
+      );
+    }).join("");
+  }
+
+  invoiceForm.onsubmit = async event => {
+    event.preventDefault();
+
+    const fd = new FormData(invoiceForm);
+    const student = students.find(
+      s => s.id === String(fd.get("student_id"))
+    );
+
+    if (!student) {
+      if (invoiceStatus) invoiceStatus.textContent =
+        "Choose a registered student first.";
+      return;
+    }
+
+    const description = String(fd.get("description") || "").trim();
+    const academicYear = String(fd.get("academic_year") || "").trim();
+    const term = String(fd.get("term") || "");
+    const amount = Number(fd.get("amount_due"));
+
+    if (!description || !academicYear || !term) {
+      if (invoiceStatus) invoiceStatus.textContent =
+        "Complete the fee description, academic year and term.";
+      return;
+    }
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      if (invoiceStatus) invoiceStatus.textContent =
+        "Enter an amount greater than zero.";
+      return;
+    }
+
+    const button = invoiceForm.querySelector('button[type="submit"]');
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Saving invoice...";
+    }
+    if (invoiceStatus) invoiceStatus.textContent = "";
+
+    const { error } = await supabaseClient
+      .from("school_fee_invoices")
+      .insert({
+        student_profile_id: student.id,
+        student_auth_user_id: student.auth_user_id || null,
+        student_name: student.full_name || student.email || "Student",
+        class_name: student.class_name || null,
+        description,
+        academic_year: academicYear,
+        term,
+        amount_due: amount,
+        due_date: String(fd.get("due_date") || "") || null,
+        created_by: user.id
+      });
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Create fee invoice";
+    }
+
+    if (error) {
+      if (invoiceStatus) invoiceStatus.textContent =
+        "Invoice could not be saved: " + error.message;
+      return;
+    }
+
+    invoiceForm.reset();
+    if (invoiceStatus) invoiceStatus.textContent =
+      "Fee invoice created successfully.";
+
+    await refreshInvoices();
+  };
+
+  paymentForm.onsubmit = async event => {
+    event.preventDefault();
+
+    const fd = new FormData(paymentForm);
+    const invoice = invoices.find(
+      item => item.id === String(fd.get("invoice_id"))
+    );
+
+    if (!invoice) {
+      if (paymentStatus) paymentStatus.textContent =
+        "Choose a valid invoice first.";
+      return;
+    }
+
+    const amount = Number(fd.get("amount"));
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      if (paymentStatus) paymentStatus.textContent =
+        "Enter an amount greater than zero.";
+      return;
+    }
+
+    const outstanding = Math.max(
+      0,
+      Number(invoice.amount_due || 0) -
+      paidForInvoiceForPayment(invoice.id)
+    );
+
+    if (amount > outstanding) {
+      if (paymentStatus) paymentStatus.textContent =
+        "Payment exceeds the outstanding balance of " +
+        money(outstanding) + ".";
+      return;
+    }
+
+    const button = paymentForm.querySelector('button[type="submit"]');
+    if (button) {
+      button.disabled = true;
+      button.textContent = "Recording payment...";
+    }
+    if (paymentStatus) paymentStatus.textContent = "";
+
+    const payload = {
+      invoice_id: invoice.id,
+      student_profile_id: invoice.student_profile_id || null,
+      student_auth_user_id: invoice.student_auth_user_id || null,
+      amount,
+      payment_method: String(fd.get("payment_method") || ""),
+      status: "paid",
+      received_by: user.id,
+      notes: String(fd.get("notes") || "").trim() || null,
+      paid_at: new Date().toISOString()
+    };
+
+    const reference = String(fd.get("reference") || "").trim();
+    if (reference) payload.reference = reference;
+
+    const { error } = await supabaseClient
+      .from("school_fee_payments")
+      .insert(payload);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "Record payment";
+    }
+
+    if (error) {
+      if (paymentStatus) paymentStatus.textContent =
+        "Payment could not be recorded: " + error.message;
+      return;
+    }
+
+    paymentForm.reset();
+    if (paymentStatus) paymentStatus.textContent =
+      "Payment recorded successfully.";
+
+    await refreshInvoices();
+  };
+
+  const refreshButton = $("#refreshFeeRecords");
+  if (refreshButton) refreshButton.onclick = refreshInvoices;
+
+  await loadStudents();
+  await refreshInvoices();
+  await refreshOpeningBalances();
+}
+
+async function connectAdminClassChat(user){
+  const messagesEl = $("#adminClassChatMessages");
+  const form = $("#adminClassChatForm");
+  const statusEl = $("#adminClassChatStatus");
+  const classPicker = $("#adminChatClass");
+  const refreshButton = $("#adminRefreshClassChatButton");
+  const safe = value => esc(value == null ? "" : String(value));
+  if(!messagesEl || !form || !statusEl || !classPicker) return;
+  async function loadMessages(){
+    const className = classPicker.value;
+    refreshButton.disabled = true;
+    messagesEl.innerHTML = '<p class="muted">Loading class messages…</p>';
+    const {data: rows, error} = await supabaseClient.from("school_messages")
+      .select("class_name,sender_id,message,created_at")
+      .eq("class_name", className)
+      .order("created_at", {ascending:true})
+      .limit(100);
+    if(error){
+      messagesEl.innerHTML = '<p class="empty">Class messages could not be loaded.</p>';
+      statusEl.textContent = "Chat database access error: " + error.message;
+      refreshButton.disabled = false;
+      return;
+    }
+    const messages = rows || [];
+    const senderIds = [...new Set(messages.map(item => item.sender_id).filter(Boolean))];
+    let senderProfiles = [];
+    if (senderIds.length) {
+      const profileResult = await supabaseClient.rpc("get_school_chat_profiles");
+      if (!profileResult.error) {
+        senderProfiles = (profileResult.data || []).filter(profile => senderIds.includes(profile.auth_user_id));
+      }
+    }
+    const profileById = new Map(senderProfiles.map(p => [p.auth_user_id, p]));
+    messagesEl.innerHTML = messages.length ? messages.map(item => {
+      const mine = item.sender_id === user.id;
+      const profile = profileById.get(item.sender_id);
+      const senderName = mine ? (profile?.full_name || profile?.email || user.email || "You") : (profile?.full_name || profile?.email || "Class member / staff");
+      const initials = senderName.split(/\\s+/).filter(Boolean).slice(0,2).map(part => part[0]).join("").toUpperCase() || "👤";
+      const when = item.created_at ? new Date(item.created_at).toLocaleString() : "";
+      return '<article class="item"><div class="dot" aria-hidden="true">'+safe(initials)+'</div><div><strong>'+safe(senderName)+'</strong><p>'+safe(item.message)+'</p><p class="muted">'+safe(when)+'</p></div></article>';
+    }).join("") : '<p class="empty">No messages yet for ' + safe(className) + '.</p>';
+    statusEl.textContent = "Showing " + messages.length + " recent message(s) for " + className + ".";
+    refreshButton.disabled = false;
+  }
+  refreshButton.onclick = loadMessages;
+  classPicker.onchange = loadMessages;
+  const adminChatChannel = supabaseClient
+    .channel("admin-class-chat-" + user.id + "-" + Date.now())
+    .on("postgres_changes", {
+      event: "INSERT",
+      schema: "public",
+      table: "school_messages"
+    }, (payload) => {
+      if (payload.new && payload.new.class_name === classPicker.value) loadMessages();
+    })
+    .subscribe((state) => {
+      if (state === "CHANNEL_ERROR" || state === "TIMED_OUT") {
+        statusEl.textContent = "Live updates are unavailable right now. Use Refresh messages to check for new messages.";
+      }
+    });
+  form.onsubmit = async event => {
+    event.preventDefault();
+    const input = form.elements.namedItem("message");
+    const message = String(input.value || "").trim();
+    if(!message) return;
+    const sendButton = form.querySelector('button[type="submit"]');
+    sendButton.disabled = true;
+    statusEl.textContent = "Sending message…";
+    const {error} = await supabaseClient.from("school_messages").insert({
+      class_name: classPicker.value,
+      sender_id: user.id,
+      message
+    });
+    sendButton.disabled = false;
+    if(error){ let detail = error.message || 'Request failed.'; try { if(error.context && typeof error.context.json === 'function'){ const responseBody = await error.context.json(); if(responseBody?.error) detail = responseBody.error; } } catch(_) {} statusEl.textContent = 'Staff invitation failed: ' + detail; return; }
+    input.value = "";
+    statusEl.textContent = "Message sent.";
+    await loadMessages();
+  };
+  await loadMessages();
+}
+
+
+async function connectStudentPrivateSupport(user){
+  const form=$("#studentPrivateMessageForm"), list=$("#studentPrivateMessageList"), status=$("#studentPrivateMessageStatus");
+  const refresh=$("#refreshStudentPrivateMessages"), fileInput=$("#privateMessageAttachment");
+  if(!form||!list||!status||!refresh||!fileInput)return;
+  const safe=value=>esc(value==null?"":String(value));
+  async function loadMessages(){
+    list.innerHTML='<p class="muted">Loading your private messages…</p>';
+    const {data:rows,error}=await supabaseClient.from("school_private_messages")
+      .select("id,subject,message,attachment_path,status,admin_reply,admin_replied_at,created_at,updated_at")
+      .eq("student_auth_user_id",user.id).order("created_at",{ascending:false}).limit(100);
+    if(error){list.innerHTML='<p class="empty">Could not load messages: '+safe(error.message)+'</p>';return;}
+    if(!rows||!rows.length){list.innerHTML='<p class="empty">You have not sent a private message yet.</p>';return;}
+    const cards=[];
+    for(const item of rows){
+      let attachment="";
+      if(item.attachment_path){
+        const {data}=await supabaseClient.storage.from("student-private-attachments").createSignedUrl(item.attachment_path,3600);
+        if(data?.signedUrl) attachment='<p><a href="'+safe(data.signedUrl)+'" target="_blank" rel="noopener noreferrer">View your attachment / receipt</a></p>';
+      }
+      const statusLabel=String(item.status||"open").replace(/_/g," ");
+      cards.push('<article class="item"><div class="dot">✉️</div><div style="width:100%"><strong>'+safe(item.subject)+'</strong><p>'+safe(item.message)+'</p><p class="muted">Sent: '+safe(item.created_at?new Date(item.created_at).toLocaleString():"")+' · Status: '+safe(statusLabel)+'</p>'+attachment+(item.admin_reply?'<div class="notice"><strong>Administrator reply</strong><p>'+safe(item.admin_reply)+'</p><p class="muted">'+safe(item.admin_replied_at?new Date(item.admin_replied_at).toLocaleString():"")+'</p></div>':'<p class="muted">Waiting for the administrator to reply.</p>')+'</div></article>');
+    }
+    list.innerHTML=cards.join("");
+  }
+  refresh.onclick=loadMessages;
+  form.onsubmit=async event=>{
+    event.preventDefault();
+    const fd=new FormData(form), subject=String(fd.get("subject")||"").trim(), message=String(fd.get("message")||"").trim(), file=fileInput.files?.[0];
+    if(!subject||!message){status.textContent="Enter a subject and message.";return;}
+    if(file&&(file.size>5*1024*1024||!["image/jpeg","image/png","image/webp","application/pdf"].includes(file.type))){status.textContent="Use a JPG, PNG, WebP or PDF file up to 5 MB.";return;}
+    const button=form.querySelector('button[type="submit"]');button.disabled=true;button.textContent="Sending message…";status.textContent="";
+    let attachmentPath=null;
+    const messageId=crypto.randomUUID();
+    if(file){
+      attachmentPath=user.id+"/"+messageId+"/"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(-120);
+      try{
+        const {error:uploadError}=await supabaseClient.storage.from("student-private-attachments").upload(attachmentPath,file,{upsert:false,contentType:file.type,cacheControl:"3600"});
+        if(uploadError){button.disabled=false;button.textContent="Send private message";status.textContent="Receipt upload failed: "+uploadError.message;return;}
+      }catch(error){button.disabled=false;button.textContent="Send private message";status.textContent="Receipt upload failed: "+(error?.message||"Network error");return;}
+    }
+    const {error}=await supabaseClient.from("school_private_messages").insert({id:messageId,student_auth_user_id:user.id,subject,message,attachment_path:attachmentPath});
+    button.disabled=false;button.textContent="Send private message";
+    if(error){status.textContent="Message could not be sent: "+error.message;return;}
+    form.reset();status.textContent="Your private message was sent to the administrator.";await loadMessages();
+  };
+  await loadMessages();
+}
+
+async function connectAdminPrivateMessages(user){
+  const list=$("#adminPrivateMessageList"), status=$("#adminPrivateMessageStatus"), refresh=$("#refreshAdminPrivateMessages");
+  if(!list||!status||!refresh)return;
+  const safe=value=>esc(value==null?"":String(value));
+  async function loadMessages(){
+    refresh.disabled=true;list.innerHTML='<p class="muted">Loading private inbox…</p>';status.textContent="";
+    const {data:rows,error}=await supabaseClient.from("school_private_messages")
+      .select("id,student_auth_user_id,subject,message,attachment_path,status,admin_reply,admin_replied_at,created_at,updated_at")
+      .order("created_at",{ascending:false}).limit(300);
+    if(error){list.innerHTML='<p class="empty">Inbox could not be loaded: '+safe(error.message)+'</p>';status.textContent="Check the school_private_messages table policies. "+error.message;refresh.disabled=false;return;}
+    if(!rows||!rows.length){list.innerHTML='<p class="empty">No private student messages yet.</p>';refresh.disabled=false;return;}
+    const ids=[...new Set(rows.map(item=>item.student_auth_user_id).filter(Boolean))];
+    let profiles=[];
+    if(ids.length){const result=await supabaseClient.from("school_profiles").select("auth_user_id,full_name,email,class_name").in("auth_user_id",ids);if(!result.error)profiles=result.data||[];}
+    const profileById=new Map(profiles.map(p=>[p.auth_user_id,p]));
+    const cards=[];
+    for(const item of rows){
+      const p=profileById.get(item.student_auth_user_id)||{};
+      let attachment="";
+      if(item.attachment_path){
+        const {data}=await supabaseClient.storage.from("student-private-attachments").createSignedUrl(item.attachment_path,3600);
+        if(data?.signedUrl)attachment='<p><a href="'+safe(data.signedUrl)+'" target="_blank" rel="noopener noreferrer">Open attached receipt / file</a></p>';
+        else attachment='<p class="muted">Attachment exists but could not be opened.</p>';
+      }
+      cards.push('<article class="item"><div class="dot">🎓</div><div style="width:100%"><strong>'+safe(p.full_name||p.email||"Student")+' — '+safe(item.subject)+'</strong><p class="muted">'+safe(p.class_name||"Class not assigned")+' · '+safe(p.email||"")+' · Sent '+safe(item.created_at?new Date(item.created_at).toLocaleString():"")+'</p><p>'+safe(item.message)+'</p>'+attachment+'<form class="form admin-private-reply-form" data-message-id="'+safe(item.id)+'"><label>Reply to student</label><textarea name="admin_reply" maxlength="5000" rows="3" required placeholder="Write a private reply…">'+safe(item.admin_reply||"")+'</textarea><label>Message status</label><select name="status"><option value="open"'+(item.status==="open"?" selected":"")+'>Open</option><option value="in_progress"'+(item.status==="in_progress"?" selected":"")+'>In progress</option><option value="resolved"'+(item.status==="resolved"?" selected":"")+'>Resolved</option></select><button class="primary" type="submit">'+(item.admin_reply?"Save reply and status":"Send reply")+'</button><p class="muted reply-status" role="status" aria-live="polite"></p></form></div></article>');
+    }
+    list.innerHTML=cards.join("");
+    list.querySelectorAll(".admin-private-reply-form").forEach(form=>{
+      form.onsubmit=async event=>{
+        event.preventDefault();const fd=new FormData(form), reply=String(fd.get("admin_reply")||"").trim(), newStatus=String(fd.get("status")||"open"), button=form.querySelector('button[type="submit"]'), localStatus=form.querySelector(".reply-status");
+        if(!reply){localStatus.textContent="Write a reply before saving.";return;}
+        button.disabled=true;button.textContent="Saving reply…";
+        const {error:updateError}=await supabaseClient.from("school_private_messages").update({admin_reply:reply,admin_reply_by:user.id,admin_replied_at:new Date().toISOString(),status:newStatus,updated_at:new Date().toISOString()}).eq("id",form.dataset.messageId);
+        button.disabled=false;button.textContent="Save reply and status";
+        if(updateError){localStatus.textContent="Could not save reply: "+updateError.message;return;}
+        localStatus.textContent="Reply sent privately to the student.";status.textContent="Inbox updated.";await loadMessages();
+      };
+    });
+    refresh.disabled=false;status.textContent="Showing "+rows.length+" private message(s).";
+  }
+  refresh.onclick=loadMessages;
+  await loadMessages();
+}
+
+async function loadSchoolProfile(user){
+  authMessage.textContent = "Checking your school profile…";
+  const {data:profile, error} = await supabaseClient
+    .from("school_profiles")
+    .select("auth_user_id, full_name, email, role, class_name")
+    .eq("auth_user_id", user.id)
+    .maybeSingle();
+  if(error){
+    showLogin("Signed in, but the school profile could not be loaded. Check the school_profiles read policy and try again. Details: " + error.message);
+    return;
+  }
+  if(!profile){
+    showLogin("This login has no linked school profile. Contact the school administrator.");
+    return;
+  }
+  showSignedIn(user, profile);
+}
+loginForm.addEventListener("submit", async (event)=>{
+  event.preventDefault();
+  if(!supabaseClient){ showLogin("Supabase did not load. Refresh the page and try again."); return; }
+  if(authRequestInProgress) return;
+  authRequestInProgress = true;
+  loginButton.disabled = true;
+  loginButton.textContent = "Signing in…";
+  authMessage.textContent = "";
+  const formData = new FormData(loginForm);
+  const {data, error} = await supabaseClient.auth.signInWithPassword({
+    email: String(formData.get("email")).trim(),
+    password: String(formData.get("password"))
+  });
+  authRequestInProgress = false;
+  if(error){
+    showLogin("Sign-in failed. Check your email and password. If your email is unconfirmed, confirm it in Supabase first.");
+    return;
+  }
+  if(data.user) await loadSchoolProfile(data.user);
+});
+async function initializeAuth(){
+  if(!supabaseClient){ showLogin("Supabase client library did not load. Refresh the page and try again."); return; }
+  const {data, error} = await supabaseClient.auth.getSession();
+  if(error){ showLogin("Could not check your sign-in session. Refresh the page and try again."); return; }
+  if(data.session?.user) await loadSchoolProfile(data.session.user);
+  else showLogin();
+  supabaseClient.auth.onAuthStateChange((event, session)=>{
+    if(event === "SIGNED_OUT" || !session) showLogin();
+  });
+}
+initializeAuth();
+</script></body></html>
