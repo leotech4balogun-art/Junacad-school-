@@ -87,7 +87,30 @@ function showSignedIn(user, profile){
   const safeEmail = esc(user.email || profile.email || "");
   const safeRole = esc(profile.role || "unassigned");
   signedInPanel.innerHTML = '<p><strong>Welcome, '+safeName+'</strong></p><p class="muted">'+safeEmail+' · Role: '+safeRole+'</p>' +
-    (profile.role === "admin" ? '<div id="livePortal"><div class="admin-welcome"><div><span class="eyebrow">ADMINISTRATION</span><h2>School overview</h2><p>Manage learning, attendance and student life from one place.</p></div><div class="welcome-mark">🎓</div></div><nav class="admin-shortcuts" aria-label="Admin pages"><button type="button" class="shortcut active" data-admin-page="dashboard"><span>🏠</span><strong>Home</strong><small>Overview</small></button><button type="button" class="shortcut" data-admin-page="chat"><span>💬</span><strong>Class chat</strong><small>Talk to classes</small></button><button type="button" class="shortcut" data-admin-page="students"><span>🎓</span><strong>Student records</strong><small>View and register</small></button><button type="button" class="shortcut" data-admin-page="registered-students"><span>📋</span><strong>Registered students</strong><small>Class lists and management</small></button><button type="button" class="shortcut" data-admin-page="attendance"><span>🗓️</span><strong>Attendance</strong><small>Daily register</small></button><button type="button" class="shortcut" data-admin-page="password"><span>🔐</span><strong>Reset password</strong><small>Account support</small></button><button type="button" class="shortcut" data-admin-page="support"><span>✉️</span><strong>Message Admin</strong><small>Private student inbox</small></button><button type="button" class="shortcut" data-admin-page="fees"><span>💳</span><strong>School fees</strong><small>Invoices and payments</small></button><button type="button" class="shortcut" data-admin-page="spotlight"><span>🏆</span><strong>Student spotlight</strong><small>Week or month</small></button></nav><section id="adminPage-dashboard" class="admin-page"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div><div class="card"><div class="stat-icon">✨</div><div class="stat-num">1</div><div class="muted">School community</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><div class="contentgrid" style="margin-top:14px"><section class="panel"><div class="panel-heading"><div><span class="eyebrow">KEEP EVERYONE INFORMED</span><h3>📣 School announcements</h3></div></div><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish announcement</button></form></section><section class="panel"><div class="panel-heading"><div><span class="eyebrow">CLASSROOM LEARNING</span><h3>📘 Homework</h3></div></div><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section></div></section><section id="adminPage-chat" class="admin-page" hidden><section class="panel" id="adminClassChat"><span class="eyebrow">CONNECT WITH LEARNERS</span><h3>💬 Class Chat</h3><p class="muted">Choose a class to read and send class messages.</p><label for="adminChatClass">Choose class</label><select id="adminChatClass" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:10px;margin-top:6px"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><div id="adminClassChatMessages" aria-live="polite" style="margin-top:10px"><p class="muted">Loading class messages…</p></div><button class="secondary" id="adminRefreshClassChatButton" type="button" style="margin-top:8px">Refresh messages</button><form id="adminClassChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to this class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="adminClassChatStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">STUDENT DIRECTORY</span><h3>🎓 Student records</h3><p class="muted">Live student accounts from the school database.</p><div id="adminStudentRecords"><p class="muted">Loading student records…</p></div><button class="secondary" id="refreshStudentRecordsButton" type="button" style="margin-top:10px">Refresh student records</button></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">Send a secure email invitation so the student can set their password.</p><form class="form" id="studentRegisterForm"><label for="newStudentName">Student full name</label><input id="newStudentName" name="full_name" maxlength="120" required placeholder="Student full name"><label for="newStudentEmail">Email address (optional)</label><input id="newStudentEmail" name="email" type="email" maxlength="254" placeholder="Leave blank if the student has no email yet"><label for="newStudentClass">Class</label><select id="newStudentClass" name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Register student</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>👩‍🏫 Register a staff member</h3><p class="muted">Invite a teacher securely by email. Staff choose their own password through the invitation link.</p><form class="form" id="staffRegisterForm"><input name="full_name" maxlength="120" required placeholder="Staff full name"><input name="email" type="email" maxlength="254" required placeholder="Staff email address"><fieldset style="border:1px solid var(--line);border-radius:10px;padding:12px"><legend>Assigned classes (select all that apply)</legend><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px"><label><input type="checkbox" name="class_names" value="JSS 1"> JSS 1</label><label><input type="checkbox" name="class_names" value="JSS 2"> JSS 2</label><label><input type="checkbox" name="class_names" value="JSS 3"> JSS 3</label><label><input type="checkbox" name="class_names" value="SS 1"> SS 1</label><label><input type="checkbox" name="class_names" value="SS 2"> SS 2</label><label><input type="checkbox" name="class_names" value="SS 3"> SS 3</label></div></fieldset><button class="primary" type="submit">Invite teacher securely</button></form><p id="staffRegisterStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-registered-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">CLASS ROSTERS</span><h3>📋 Registered students by class</h3><p class="muted">Students are grouped by their registered class. Use Edit to change a name or class, or Delete to remove a student record and linked login.</p><div id="registeredStudentsByClass"><p class="muted">Loading class lists…</p></div><button class="secondary" id="refreshRegisteredStudentsButton" type="button" style="margin-top:10px">Refresh class lists</button><p id="registeredStudentsStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-attendance" class="admin-page" hidden><section class="panel"><span class="eyebrow">DAILY CLASS REGISTER</span><h3>🗓️ Student attendance</h3><p class="muted">Choose a date and class, mark each student, then save the register.</p><div class="form"><label for="attendanceDate">Attendance date</label><input id="attendanceDate" type="date" required><label for="attendanceClass">Class</label><select id="attendanceClass"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="secondary" id="loadAttendanceButton" type="button">Load register</button></div><div id="attendanceStatus" class="muted" role="status" aria-live="polite" style="margin-top:10px">Choose a date and class to load attendance.</div><div id="attendanceRecords"></div><button class="primary" id="saveAttendanceButton" type="button" style="margin-top:12px" disabled>Save attendance</button></section></section><section id="adminPage-password" class="admin-page" hidden><section class="panel"><span class="eyebrow">ACCOUNT SUPPORT</span><h3>🔐 Reset a student password</h3><p class="muted">Enter the student user ID and a temporary password. Share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required placeholder="Paste student user ID"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-support" class="admin-page" hidden><section class="panel"><span class="eyebrow">PRIVATE STUDENT SUPPORT</span><h3>✉️ Student messages</h3><p class="muted">Private messages are visible only to the student who sent them and school administrators. Open a message to reply, review receipts, and update its status.</p><button class="secondary" id="refreshAdminPrivateMessages" type="button">Refresh inbox</button><p id="adminPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><div id="adminPrivateMessageList"><p class="muted">Loading private messages…</p></div></section></section><section id="adminPage-fees" class="admin-page" hidden>\n<section class="panel"><span class="eyebrow">FEES MANAGEMENT</span><h3>💳 School fees and payments</h3><p class="muted">Create a fee invoice for a student, record cash or bank-transfer payments, and track the remaining balance. Online payment setup will be connected in a later step.</p></section>\n<div class="contentgrid" style="margin-top:14px">\n<section class="panel"><h3>Create fee invoice</h3><form class="form" id="feeInvoiceForm">\n<label for="feeStudent">Student</label><select id="feeStudent" name="student_id" required><option value="">Loading students…</option></select>\n<label for="feeDescription">Fee description</label><input id="feeDescription" name="description" maxlength="180" required placeholder="e.g. Tuition fees">\n<label for="feeAcademicYear">Academic year</label><input id="feeAcademicYear" name="academic_year" maxlength="30" required placeholder="e.g. 2026/2027">\n<label for="feeTerm">Term</label><select id="feeTerm" name="term" required><option value="First Term">First Term</option><option value="Second Term">Second Term</option><option value="Third Term">Third Term</option></select>\n<label for="feeAmountDue">Amount due (₦)</label><input id="feeAmountDue" name="amount_due" type="number" min="1" step="0.01" required placeholder="e.g. 75000">\n<label for="feeDueDate">Due date (optional)</label><input id="feeDueDate" name="due_date" type="date">\n<button class="primary" type="submit">Create fee invoice</button></form><p id="feeInvoiceStatus" class="muted" role="status" aria-live="polite"></p></section>\n<section class="panel"><h3>Record a manual payment</h3><form class="form" id="feePaymentForm">\n<label for="feePaymentInvoice">Fee invoice</label><select id="feePaymentInvoice" name="invoice_id" required><option value="">Loading invoices…</option></select>\n<label for="feePaymentAmount">Amount received (₦)</label><input id="feePaymentAmount" name="amount" type="number" min="1" step="0.01" required placeholder="e.g. 25000">\n<label for="feePaymentMethod">Payment method</label><select id="feePaymentMethod" name="payment_method" required><option value="cash">Cash</option><option value="bank_transfer">Bank transfer</option><option value="pos">POS</option><option value="other">Other</option></select>\n<label for="feePaymentReference">Receipt / bank reference (optional)</label><input id="feePaymentReference" name="reference" maxlength="120" placeholder="Receipt number or transfer reference">\n<label for="feePaymentNotes">Notes (optional)</label><textarea id="feePaymentNotes" name="notes" rows="2" maxlength="500" placeholder="Additional payment details"></textarea>\n<button class="primary" type="submit">Record payment</button></form><p id="feePaymentStatus" class="muted" role="status" aria-live="polite"></p></section>\n</div>\n<section class="panel" style="margin-top:14px"><div class="panel-heading"><div><span class="eyebrow">CURRENT ACCOUNTS</span><h3>Invoices and balances</h3></div><button class="secondary" id="refreshFeeRecords" type="button">Refresh</button></div><div id="feeInvoiceList"><p class="muted">Loading fee records…</p></div></section>\n</section>\n<section id="adminPage-spotlight" class="admin-page" hidden><section class="panel spotlight-admin"><span class="eyebrow">CELEBRATE EXCELLENCE</span><h3>🏆 Student of the week or month</h3><p class="muted">Upload a student photo and publish a recognition card for the school community.</p><form class="form" id="spotlightForm"><label for="spotlightPeriod">Recognition period</label><select id="spotlightPeriod" name="period"><option value="Student of the Week">Student of the Week</option><option value="Student of the Month">Student of the Month</option></select><label for="spotlightName">Student name</label><input id="spotlightName" name="student_name" maxlength="120" required placeholder="Student full name"><label for="spotlightClass">Class</label><select id="spotlightClass" name="class_name"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label for="spotlightReason">Achievement or reason</label><textarea id="spotlightReason" name="reason" maxlength="1000" rows="3" placeholder="For example: Excellent academic progress and kindness"></textarea><label for="spotlightImage">Student photo</label><input id="spotlightImage" name="image" type="file" accept="image/png,image/jpeg,image/webp" required><p class="muted">Use JPG, PNG or WebP, up to 5 MB. Please use a photo approved for school publication.</p><button class="primary" type="submit">Publish student spotlight</button></form><p id="spotlightStatus" class="muted" role="status" aria-live="polite"></p><div id="spotlightPreview" class="spotlight-preview"><div class="spotlight-placeholder">🏆<br>Student recognition preview will appear here.</div></div></section></section></div>'  : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div id="studentAvatarFrame" style="width:96px;height:96px;border-radius:50%;background:#edf4fc;border:2px solid #d8e5f4;display:grid;place-items:center;overflow:hidden;flex-shrink:0"><span id="studentAvatarInitials" style="font-size:30px;font-weight:800;color:#153b67">👤</span></div><div style="flex:1;min-width:180px"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p><form id="studentPhotoForm" class="form"><label for="studentPhotoFile">Profile picture (JPG, PNG or WebP; up to 3 MB)</label><input id="studentPhotoFile" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required><button class="primary" type="submit">Upload / change picture</button></form><p id="studentPhotoStatus" class="muted" role="status" aria-live="polite"></p></div></div></section><nav class="admin-shortcuts" aria-label="Student pages" style="grid-template-columns:repeat(2,minmax(0,1fr))"><button type="button" class="shortcut" id="studentFeesButton"><span>💳</span><strong>School fees</strong><small>Invoices and balances</small></button><button type="button" class="shortcut" id="studentAttendanceButton"><span>🗓️</span><strong>Attendance</strong><small>Your attendance record</small></button></nav><section class="panel" id="studentFeesSection" style="margin-top:14px"><h3>💳 My school fees</h3><div id="studentFees"><p class="muted">Loading your fee records…</p></div></section><section class="panel" id="studentAttendanceSection" style="margin-top:14px"><h3>🗓️ My attendance</h3><div id="studentAttendance"><p class="muted">Loading your attendance…</p></div></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><div class="panel-heading"><div><span class="eyebrow">CELEBRATING OUR LEARNERS</span><h3>🏆 Student spotlight</h3></div></div><div id="studentSpotlight"><p class="muted">Loading student recognition…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><section class="panel" style="margin-top:14px" id="studentPrivateSupport"><span class="eyebrow">PRIVATE SCHOOL SUPPORT</span><h3>✉️ Message Admin</h3><p class="muted">Only you and the school administrator can see these messages. You may attach a payment receipt (image or PDF, up to 5 MB).</p><form id="studentPrivateMessageForm" class="form"><label for="privateMessageSubject">Subject</label><input id="privateMessageSubject" name="subject" maxlength="160" required placeholder="e.g. School fees payment question"><label for="privateMessageBody">Your message</label><textarea id="privateMessageBody" name="message" maxlength="5000" rows="4" required placeholder="Explain how the school can help…"></textarea><label for="privateMessageAttachment">Attach receipt (optional)</label><input id="privateMessageAttachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><button class="primary" type="submit">Send private message</button></form><p id="studentPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><h4>Your private messages</h4><div id="studentPrivateMessageList"><p class="muted">Loading your messages…</p></div><button class="secondary" id="refreshStudentPrivateMessages" type="button">Refresh messages</button></section><button id="studentChatLauncher" class="chat-fab" type="button" aria-label="Open class chat"><span>💬</span><b>Class chat</b></button><div id="studentChatOverlay" class="chat-overlay" hidden><section class="panel chat-popup" role="dialog" aria-modal="true" aria-labelledby="studentChatTitle"><div class="chat-popup-head"><div><span class="eyebrow">YOUR CLASS COMMUNITY</span><h3 id="studentChatTitle">💬 Class chat</h3></div><button id="closeStudentChat" class="chat-close" type="button" aria-label="Close chat">×</button></div><p class="muted">Messages are shared with members of your class and school staff.</p><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : (profile.role === "teacher" ? '<div id="teacherPortal"><section class="panel"><h3>👩‍🏫 Teacher dashboard</h3><p>Welcome to the Junacad class portal.</p><p><strong>Assigned classes:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>💬 Class chat</h3><p class="muted">Exchange messages with students and school staff in your assigned classes.</p><label for="teacherChatClass">Choose class chat</label><select id="teacherChatClass" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0"></select><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : '<p class="notice">This account does not have a student, teacher, or administrator role. Please contact the school administrator.</p>'))) +
+    (profile.role === "admin" ? '<div id="livePortal"><div class="admin-welcome"><div><span class="eyebrow">ADMINISTRATION</span><h2>School overview</h2><p>Manage learning, attendance and student life from one place.</p></div><div class="welcome-mark">🎓</div></div><nav class="admin-shortcuts" aria-label="Admin pages"><button type="button" class="shortcut active" data-admin-page="dashboard"><span>🏠</span><strong>Home</strong><small>Overview</small></button><button type="button" class="shortcut" data-admin-page="chat"><span>💬</span><strong>Class chat</strong><small>Talk to classes</small></button><button type="button" class="shortcut" data-admin-page="students"><span>🎓</span><strong>Student records</strong><small>View and register</small></button><button type="button" class="shortcut" data-admin-page="registered-students"><span>📋</span><strong>Registered students</strong><small>Class lists and management</small></button><button type="button" class="shortcut" data-admin-page="attendance"><span>🗓️</span><strong>Attendance</strong><small>Daily register</small></button><button type="button" class="shortcut" data-admin-page="password"><span>🔐</span><strong>Reset password</strong><small>Account support</small></button><button type="button" class="shortcut" data-admin-page="support"><span>✉️</span><strong>Message Admin</strong><small>Private student inbox</small></button><button type="button" class="shortcut" data-admin-page="fees"><span>📒</span><strong>School accounts</strong><small>Debit and credit ledger</small></button><button type="button" class="shortcut" data-admin-page="fees-analysis"><span>📊</span><strong>Accounts analysis</strong><small>Debtors and creditors</small></button><button type="button" class="shortcut" data-admin-page="spotlight"><span>🏆</span><strong>Student spotlight</strong><small>Week or month</small></button></nav><section id="adminPage-dashboard" class="admin-page"><div class="stats"><div class="card"><div class="stat-icon">📣</div><div class="stat-num" id="annCount">—</div><div class="muted">Live announcements</div></div><div class="card"><div class="stat-icon">📘</div><div class="stat-num" id="hwCount">—</div><div class="muted">Live homework tasks</div></div><div class="card"><div class="stat-icon">✨</div><div class="stat-num">1</div><div class="muted">School community</div></div></div><div id="liveStatus" class="notice">Loading live records…</div><div class="contentgrid" style="margin-top:14px"><section class="panel"><div class="panel-heading"><div><span class="eyebrow">KEEP EVERYONE INFORMED</span><h3>📣 School announcements</h3></div></div><div id="liveAnnouncements"></div><form class="form" id="liveAnnouncementForm"><h3>Publish announcement</h3><input name="title" maxlength="160" required placeholder="Announcement title"><textarea name="message" maxlength="5000" rows="3" required placeholder="Announcement message"></textarea><button class="primary" type="submit">Publish announcement</button></form></section><section class="panel"><div class="panel-heading"><div><span class="eyebrow">CLASSROOM LEARNING</span><h3>📘 Homework</h3></div></div><div id="liveHomework"></div><form class="form" id="liveHomeworkForm"><h3>Assign homework</h3><input name="title" maxlength="160" required placeholder="Homework title"><textarea name="instructions" maxlength="5000" rows="3" required placeholder="Homework instructions"></textarea><select name="class_name" required><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label>Due date (optional)</label><input name="due_date" type="date"><button class="primary" type="submit">Save homework</button></form></section></div></section><section id="adminPage-chat" class="admin-page" hidden><section class="panel" id="adminClassChat"><span class="eyebrow">CONNECT WITH LEARNERS</span><h3>💬 Class Chat</h3><p class="muted">Choose a class to read and send class messages.</p><label for="adminChatClass">Choose class</label><select id="adminChatClass" style="width:100%;border:1px solid #ccd7e5;border-radius:9px;padding:10px;margin-top:6px"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><div id="adminClassChatMessages" aria-live="polite" style="margin-top:10px"><p class="muted">Loading class messages…</p></div><button class="secondary" id="adminRefreshClassChatButton" type="button" style="margin-top:8px">Refresh messages</button><form id="adminClassChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to this class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="adminClassChatStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">STUDENT DIRECTORY</span><h3>🎓 Student records</h3><p class="muted">Live student accounts from the school database.</p><div id="adminStudentRecords"><p class="muted">Loading student records…</p></div><button class="secondary" id="refreshStudentRecordsButton" type="button" style="margin-top:10px">Refresh student records</button></section><section class="panel" style="margin-top:14px"><h3>Register a student</h3><p class="muted">Send a secure email invitation so the student can set their password.</p><form class="form" id="studentRegisterForm"><label for="newStudentName">Student full name</label><input id="newStudentName" name="full_name" maxlength="120" required placeholder="Student full name"><label for="newStudentEmail">Email address (optional)</label><input id="newStudentEmail" name="email" type="email" maxlength="254" placeholder="Leave blank if the student has no email yet"><label for="newStudentClass">Class</label><select id="newStudentClass" name="class_name" required><option value="">Choose class</option><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="primary" type="submit">Register student</button></form><p id="studentRegisterStatus" class="muted" role="status" aria-live="polite"></p></section><section class="panel" style="margin-top:14px"><h3>👩‍🏫 Register a staff member</h3><p class="muted">Invite a teacher securely by email. Staff choose their own password through the invitation link.</p><form class="form" id="staffRegisterForm"><input name="full_name" maxlength="120" required placeholder="Staff full name"><input name="email" type="email" maxlength="254" required placeholder="Staff email address"><fieldset style="border:1px solid var(--line);border-radius:10px;padding:12px"><legend>Assigned classes (select all that apply)</legend><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px"><label><input type="checkbox" name="class_names" value="JSS 1"> JSS 1</label><label><input type="checkbox" name="class_names" value="JSS 2"> JSS 2</label><label><input type="checkbox" name="class_names" value="JSS 3"> JSS 3</label><label><input type="checkbox" name="class_names" value="SS 1"> SS 1</label><label><input type="checkbox" name="class_names" value="SS 2"> SS 2</label><label><input type="checkbox" name="class_names" value="SS 3"> SS 3</label></div></fieldset><button class="primary" type="submit">Invite teacher securely</button></form><p id="staffRegisterStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-registered-students" class="admin-page" hidden><section class="panel"><span class="eyebrow">CLASS ROSTERS</span><h3>📋 Registered students by class</h3><p class="muted">Students are grouped by their registered class. Use Edit to change a name or class, or Delete to remove a student record and linked login.</p><div id="registeredStudentsByClass"><p class="muted">Loading class lists…</p></div><button class="secondary" id="refreshRegisteredStudentsButton" type="button" style="margin-top:10px">Refresh class lists</button><p id="registeredStudentsStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-attendance" class="admin-page" hidden><section class="panel"><span class="eyebrow">DAILY CLASS REGISTER</span><h3>🗓️ Student attendance</h3><p class="muted">Choose a date and class, mark each student, then save the register.</p><div class="form"><label for="attendanceDate">Attendance date</label><input id="attendanceDate" type="date" required><label for="attendanceClass">Class</label><select id="attendanceClass"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><button class="secondary" id="loadAttendanceButton" type="button">Load register</button></div><div id="attendanceStatus" class="muted" role="status" aria-live="polite" style="margin-top:10px">Choose a date and class to load attendance.</div><div id="attendanceRecords"></div><button class="primary" id="saveAttendanceButton" type="button" style="margin-top:12px" disabled>Save attendance</button></section></section><section id="adminPage-password" class="admin-page" hidden><section class="panel"><span class="eyebrow">ACCOUNT SUPPORT</span><h3>🔐 Reset a student password</h3><p class="muted">Enter the student user ID and a temporary password. Share it privately with the student.</p><form class="form" id="studentPasswordResetForm"><label for="resetStudentUserId">Student user ID</label><input id="resetStudentUserId" name="user_id" required placeholder="Paste student user ID"><label for="resetStudentPassword">New temporary password (8–72 characters)</label><input id="resetStudentPassword" name="password" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Enter a temporary password"><label for="resetStudentPasswordConfirm">Confirm temporary password</label><input id="resetStudentPasswordConfirm" name="password_confirm" type="password" minlength="8" maxlength="72" autocomplete="new-password" required placeholder="Type it again"><button class="primary" type="submit">Reset student password</button></form><p id="studentPasswordResetStatus" class="muted" role="status" aria-live="polite"></p></section></section><section id="adminPage-support" class="admin-page" hidden><section class="panel"><span class="eyebrow">PRIVATE STUDENT SUPPORT</span><h3>✉️ Student messages</h3><p class="muted">Private messages are visible only to the student who sent them and school administrators. Open a message to reply, review receipts, and update its status.</p><button class="secondary" id="refreshAdminPrivateMessages" type="button">Refresh inbox</button><p id="adminPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><div id="adminPrivateMessageList"><p class="muted">Loading private messages…</p></div></section></section><section id="adminPage-fees" class="admin-page" hidden>
+<section class="panel"><span class="eyebrow">SCHOOL ACCOUNTS LEDGER</span><h3>📒 Student debit and credit accounts</h3><p class="muted">Debit records what the student owes. Credit records payments received. Select a student to view the complete account history. No invoices are created.</p></section>
+<div class="contentgrid" style="margin-top:14px">
+<section class="panel"><h3>Record a debit or credit</h3><form class="form" id="feeLedgerForm">
+<label for="ledgerStudent">Student</label><select id="ledgerStudent" name="student_profile_id" required><option value="">Loading students…</option></select>
+<label for="ledgerType">Account side</label><select id="ledgerType" name="entry_type" required><option value="debit">Debit — amount owed / fee charged</option><option value="credit">Credit — payment received</option></select>
+<div id="ledgerCategoryWrap"><label for="ledgerCategory">Debit item</label><select id="ledgerCategory" name="fee_category"><option value="balance_brought_forward">Balance brought forward</option><option value="tuition_fees">Tuition fees</option><option value="uniform_fees">Uniform fees</option><option value="sports_wear_fees">Sport wear fees</option><option value="cas_fees">CAS fees</option><option value="other">Other</option></select></div>
+<label for="ledgerAmount">Amount (₦)</label><input id="ledgerAmount" name="amount" type="number" min="0.01" step="0.01" required placeholder="Enter amount">
+<label for="ledgerDescription">Description</label><input id="ledgerDescription" name="description" maxlength="240" required placeholder="Describe the fee or payment">
+<label for="ledgerYear">Academic year</label><input id="ledgerYear" name="academic_year" maxlength="30" required placeholder="e.g. 2026/2027">
+<label for="ledgerTerm">Term</label><select id="ledgerTerm" name="term" required><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select>
+<label for="ledgerDate">Date</label><input id="ledgerDate" name="entry_date" type="date" required>
+<button class="primary" id="ledgerSubmit" type="submit">Record debit</button></form><p id="ledgerStatus" class="muted" role="status" aria-live="polite"></p></section>
+<section class="panel"><div class="panel-heading"><div><span class="eyebrow">SELECTED STUDENT</span><h3>Account summary</h3></div><button class="secondary" id="refreshLedger" type="button">Refresh</button></div><label for="ledgerHistoryStudent">Choose student account</label><select id="ledgerHistoryStudent" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0"><option value="">Choose a student</option></select><div id="ledgerStudentSummary"><p class="muted">Choose a student to see their account.</p></div><div id="ledgerHistory"><p class="muted">The student's full debit and credit history will appear here.</p></div></section>
+</div></section>
+<section id="adminPage-fees-analysis" class="admin-page" hidden>
+<section class="panel"><span class="eyebrow">SCHOOL ACCOUNT REPORTS</span><h3>📊 Debtors and creditors analysis</h3><p class="muted">Debtors have an outstanding debit balance. Creditors have a credit balance because payments exceed charges. Reports can be printed or saved as PDF, downloaded, copied, or shared.</p>
+<div class="contentgrid" style="margin-top:12px"><div><label for="feeAnalysisYear">Academic year</label><select id="feeAnalysisYear" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:9px"><option value="">All academic years</option></select></div><div><label for="feeAnalysisTerm">Term</label><select id="feeAnalysisTerm" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:9px"><option value="">All terms</option><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option></select></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="primary" id="feeReportPrint" type="button">Print / Save PDF</button><button class="secondary" id="feeReportDownload" type="button">Download CSV</button><button class="secondary" id="feeReportCopy" type="button">Copy report</button><button class="secondary" id="feeReportShare" type="button">Share report</button><button class="secondary" id="feeReportRefresh" type="button">Refresh analysis</button></div><p id="feeAnalysisStatus" class="muted" role="status" aria-live="polite"></p></section>
+<div class="stats" style="margin-top:14px"><div class="card"><div class="stat-icon">📕</div><div class="stat-num" id="feeDebtorCount">0</div><div class="muted">Debtors</div></div><div class="card"><div class="stat-icon">📗</div><div class="stat-num" id="feeCreditorCount">0</div><div class="muted">Creditors</div></div><div class="card"><div class="stat-icon">₦</div><div class="stat-num" id="feeTotalDebtors">₦0</div><div class="muted">Total outstanding</div></div><div class="card"><div class="stat-icon">₦</div><div class="stat-num" id="feeTotalCreditors">₦0</div><div class="muted">Total credit balances</div></div></div>
+<section class="panel" style="margin-top:14px"><h3>Debtors list</h3><div id="feeDebtorsList"><p class="muted">Loading report…</p></div></section>
+<section class="panel" style="margin-top:14px"><h3>Creditors list</h3><div id="feeCreditorsList"><p class="muted">Loading report…</p></div></section>
+</section>
+<section id="adminPage-spotlight" class="admin-page" hidden><section class="panel spotlight-admin"><span class="eyebrow">CELEBRATE EXCELLENCE</span><h3>🏆 Student of the week or month</h3><p class="muted">Upload a student photo and publish a recognition card for the school community.</p><form class="form" id="spotlightForm"><label for="spotlightPeriod">Recognition period</label><select id="spotlightPeriod" name="period"><option value="Student of the Week">Student of the Week</option><option value="Student of the Month">Student of the Month</option></select><label for="spotlightName">Student name</label><input id="spotlightName" name="student_name" maxlength="120" required placeholder="Student full name"><label for="spotlightClass">Class</label><select id="spotlightClass" name="class_name"><option>JSS 1</option><option>JSS 2</option><option>JSS 3</option><option>SS 1</option><option>SS 2</option><option>SS 3</option></select><label for="spotlightReason">Achievement or reason</label><textarea id="spotlightReason" name="reason" maxlength="1000" rows="3" placeholder="For example: Excellent academic progress and kindness"></textarea><label for="spotlightImage">Student photo</label><input id="spotlightImage" name="image" type="file" accept="image/png,image/jpeg,image/webp" required><p class="muted">Use JPG, PNG or WebP, up to 5 MB. Please use a photo approved for school publication.</p><button class="primary" type="submit">Publish student spotlight</button></form><p id="spotlightStatus" class="muted" role="status" aria-live="polite"></p><div id="spotlightPreview" class="spotlight-preview"><div class="spotlight-placeholder">🏆<br>Student recognition preview will appear here.</div></div></section></section></div>'  : (profile.role === "student" ? '<div id="studentPortal"><section class="panel"><div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap"><div id="studentAvatarFrame" style="width:96px;height:96px;border-radius:50%;background:#edf4fc;border:2px solid #d8e5f4;display:grid;place-items:center;overflow:hidden;flex-shrink:0"><span id="studentAvatarInitials" style="font-size:30px;font-weight:800;color:#153b67">👤</span></div><div style="flex:1;min-width:180px"><h3>🎒 Student dashboard</h3><p>Welcome to your personal Junacad school dashboard.</p><p><strong>Class:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p><form id="studentPhotoForm" class="form"><label for="studentPhotoFile">Profile picture (JPG, PNG or WebP; up to 3 MB)</label><input id="studentPhotoFile" name="photo" type="file" accept="image/jpeg,image/png,image/webp" required><button class="primary" type="submit">Upload / change picture</button></form><p id="studentPhotoStatus" class="muted" role="status" aria-live="polite"></p></div></div></section><nav class="admin-shortcuts" aria-label="Student pages" style="grid-template-columns:repeat(2,minmax(0,1fr))"><button type="button" class="shortcut" id="studentFeesButton"><span>💳</span><strong>School fees</strong><small>Invoices and balances</small></button><button type="button" class="shortcut" id="studentAttendanceButton"><span>🗓️</span><strong>Attendance</strong><small>Your attendance record</small></button></nav><section class="panel" id="studentFeesSection" style="margin-top:14px"><h3>💳 My school fees</h3><div id="studentFees"><p class="muted">Loading your fee records…</p></div></section><section class="panel" id="studentAttendanceSection" style="margin-top:14px"><h3>🗓️ My attendance</h3><div id="studentAttendance"><p class="muted">Loading your attendance…</p></div></section><section class="panel" style="margin-top:14px"><h3>📣 School announcements</h3><div id="studentAnnouncements"><p class="muted">Loading announcements…</p></div></section><section class="panel" style="margin-top:14px"><div class="panel-heading"><div><span class="eyebrow">CELEBRATING OUR LEARNERS</span><h3>🏆 Student spotlight</h3></div></div><div id="studentSpotlight"><p class="muted">Loading student recognition…</p></div></section><section class="panel" style="margin-top:14px"><h3>📘 Your class homework</h3><div id="studentHomework"><p class="muted">Loading homework…</p></div></section><section class="panel" style="margin-top:14px" id="studentPrivateSupport"><span class="eyebrow">PRIVATE SCHOOL SUPPORT</span><h3>✉️ Message Admin</h3><p class="muted">Only you and the school administrator can see these messages. You may attach a payment receipt (image or PDF, up to 5 MB).</p><form id="studentPrivateMessageForm" class="form"><label for="privateMessageSubject">Subject</label><input id="privateMessageSubject" name="subject" maxlength="160" required placeholder="e.g. School fees payment question"><label for="privateMessageBody">Your message</label><textarea id="privateMessageBody" name="message" maxlength="5000" rows="4" required placeholder="Explain how the school can help…"></textarea><label for="privateMessageAttachment">Attach receipt (optional)</label><input id="privateMessageAttachment" name="attachment" type="file" accept="image/jpeg,image/png,image/webp,application/pdf"><button class="primary" type="submit">Send private message</button></form><p id="studentPrivateMessageStatus" class="muted" role="status" aria-live="polite"></p><h4>Your private messages</h4><div id="studentPrivateMessageList"><p class="muted">Loading your messages…</p></div><button class="secondary" id="refreshStudentPrivateMessages" type="button">Refresh messages</button></section><button id="studentChatLauncher" class="chat-fab" type="button" aria-label="Open class chat"><span>💬</span><b>Class chat</b></button><div id="studentChatOverlay" class="chat-overlay" hidden><section class="panel chat-popup" role="dialog" aria-modal="true" aria-labelledby="studentChatTitle"><div class="chat-popup-head"><div><span class="eyebrow">YOUR CLASS COMMUNITY</span><h3 id="studentChatTitle">💬 Class chat</h3></div><button id="closeStudentChat" class="chat-close" type="button" aria-label="Close chat">×</button></div><p class="muted">Messages are shared with members of your class and school staff.</p><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div><p id="studentDataStatus" class="notice">Loading your school information…</p></div>' : (profile.role === "teacher" ? '<div id="teacherPortal"><section class="panel"><h3>👩‍🏫 Teacher dashboard</h3><p>Welcome to the Junacad class portal.</p><p><strong>Assigned classes:</strong> '+safeNameText(profile.class_name || "Not assigned yet")+'</p></section><section class="panel" style="margin-top:14px"><h3>💬 Class chat</h3><p class="muted">Exchange messages with students and school staff in your assigned classes.</p><label for="teacherChatClass">Choose class chat</label><select id="teacherChatClass" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;margin:8px 0"></select><div id="classChatMessages" aria-live="polite"><p class="muted">Loading class messages…</p></div><button class="secondary" id="refreshClassChatButton" type="button">Refresh messages</button><form id="classChatForm" class="form" style="margin-top:10px"><textarea name="message" maxlength="2000" rows="3" required placeholder="Write a message to your class…"></textarea><button class="primary" type="submit">Send message</button></form><p id="classChatStatus" class="muted" role="status" aria-live="polite"></p></section></div>' : '<p class="notice">This account does not have a student, teacher, or administrator role. Please contact the school administrator.</p>'))) +
     '<button class="secondary" id="signOutButton" type="button">Sign out</button>';
   authMessage.textContent = "";
   if(profile.role === "student"){
@@ -178,88 +201,21 @@ async function connectStudentDashboard(profile){
   if(attendanceButton) attendanceButton.onclick=()=>$("#studentAttendanceSection")?.scrollIntoView({behavior:"smooth",block:"start"});
 
   if(profile.auth_user_id && feesEl){
-    const money = value => new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      maximumFractionDigits: 2
-    }).format(Number(value) || 0);
-
-    const [invoiceResult, balanceResult] = await Promise.all([
-      supabaseClient.from("school_fee_invoices")
-        .select("id,description,academic_year,term,amount_due,due_date,created_at")
-        .eq("student_auth_user_id", profile.auth_user_id)
-        .order("created_at", { ascending: false }).limit(100),
-      supabaseClient.from("school_fee_opening_balances")
-        .select("id,academic_year,term,opening_balance,source_academic_year,source_term,created_at")
-        .eq("student_auth_user_id", profile.auth_user_id)
-        .eq("status", "approved")
-        .order("created_at", { ascending: false }).limit(500)
-    ]);
-
-    if(invoiceResult.error || balanceResult.error){
-      feesEl.innerHTML = '<p class="empty">Fee records could not be fully loaded. Please contact the school administrator.</p>';
+    const money = value => new Intl.NumberFormat("en-NG",{style:"currency",currency:"NGN",maximumFractionDigits:2}).format(Number(value)||0);
+    const categoryName = value => ({balance_brought_forward:"Balance brought forward",tuition_fees:"Tuition fees",uniform_fees:"Uniform fees",sports_wear_fees:"Sport wear fees",cas_fees:"CAS fees",other:"Other"})[value] || value || "Account entry";
+    const {data: entries,error} = await supabaseClient.from("school_fee_ledger_entries")
+      .select("entry_type,fee_category,amount,description,academic_year,term,entry_date,created_at")
+      .eq("student_auth_user_id",profile.auth_user_id).order("entry_date",{ascending:false}).order("created_at",{ascending:false}).limit(1000);
+    if(error){
+      feesEl.innerHTML='<p class="empty">Your school account could not be loaded. Please contact the school administrator.</p>';
     } else {
-      const invoices = invoiceResult.data || [];
-      const balances = balanceResult.data || [];
-
-      const [paymentResult, openingPaymentResult] = await Promise.all([
-        invoices.length
-          ? supabaseClient.from("school_fee_payments")
-              .select("invoice_id,amount,status")
-              .in("invoice_id", invoices.map(x => x.id))
-              .eq("status", "paid").limit(5000)
-          : Promise.resolve({ data: [], error: null }),
-        balances.length
-          ? supabaseClient.from("school_fee_opening_balance_payments")
-              .select("opening_balance_id,amount,status")
-              .in("opening_balance_id", balances.map(x => x.id))
-              .eq("status", "paid").limit(5000)
-          : Promise.resolve({ data: [], error: null })
-      ]);
-
-      if(paymentResult.error || openingPaymentResult.error){
-        feesEl.innerHTML = '<p class="empty">Your fee records loaded, but payment details could not be loaded. Please contact the school administrator.</p>';
-      } else {
-        const payments = paymentResult.data || [];
-        const openingPayments = openingPaymentResult.data || [];
-
-        const invoiceCards = invoices.map(inv => {
-          const paid = payments.filter(p => p.invoice_id === inv.id)
-            .reduce((sum, p) => sum + Number(p.amount || 0), 0);
-          const due = Number(inv.amount_due) || 0;
-
-          return '<article class="item"><div class="dot">Fee</div><div><strong>' +
-            safe(inv.description || "School fee") + '</strong><p>' +
-            safe(inv.academic_year || "") + ' · ' + safe(inv.term || "") +
-            ' · Due: ' + safe(inv.due_date || "Not set") +
-            '</p><p>Amount: <strong>' + money(due) +
-            '</strong> · Paid: <strong>' + money(paid) +
-            '</strong> · Balance: <strong>' + money(Math.max(0, due - paid)) +
-            '</strong></p></div></article>';
-        });
-
-        const openingCards = balances.map(b => {
-          const paid = openingPayments
-            .filter(p => p.opening_balance_id === b.id)
-            .reduce((sum, p) => sum + Number(p.amount || 0), 0);
-          const amount = Number(b.opening_balance) || 0;
-
-          return '<article class="item"><div class="dot">Carry</div><div><strong>Opening balance (carried forward)</strong><p>' +
-            safe(b.academic_year || "") + ' · ' + safe(b.term || "") +
-            '</p><p>Previous term: ' + safe(b.source_academic_year || "") +
-            ' · ' + safe(b.source_term || "") +
-            '</p><p>Opening amount: <strong>' + money(amount) +
-            '</strong> · Paid: <strong>' + money(paid) +
-            '</strong> · Remaining: <strong>' +
-            money(Math.max(0, amount - paid)) +
-            '</strong></p></div></article>';
-        });
-
-        const cards = [...openingCards, ...invoiceCards];
-        feesEl.innerHTML = cards.length
-          ? cards.join("")
-          : '<p class="empty">No fee invoices or approved opening balances have been issued to your account yet.</p>';
-      }
+      const rows=entries||[];
+      const debits=rows.filter(x=>x.entry_type==="debit").reduce((n,x)=>n+Number(x.amount||0),0);
+      const credits=rows.filter(x=>x.entry_type==="credit").reduce((n,x)=>n+Number(x.amount||0),0);
+      const balance=debits-credits;
+      const summary='<div class="stats"><div class="card"><div class="stat-num">'+money(debits)+'</div><div class="muted">Total debit</div></div><div class="card"><div class="stat-num">'+money(credits)+'</div><div class="muted">Total credit / payments</div></div><div class="card"><div class="stat-num">'+money(Math.abs(balance))+'</div><div class="muted">'+(balance>0?'Outstanding balance':balance<0?'Credit balance':'Account settled')+'</div></div></div>';
+      const history=rows.map(row=>'<article class="item"><div class="dot">'+(row.entry_type==="debit"?"DR":"CR")+'</div><div><strong>'+safe(categoryName(row.fee_category))+' — '+money(row.amount)+'</strong><p>'+safe(row.description||"")+'</p><p class="muted">'+safe(row.academic_year||"")+' · '+(row.term?"Term "+safe(row.term):"Term not set")+' · '+safe(row.entry_date||"")+'</p></div></article>').join("");
+      feesEl.innerHTML=summary+(rows.length?'<h4>Account history</h4>'+history:'<p class="empty">No school account record exists for you yet. The school will add your debit fees and payments here when they are entered.</p>');
     }
   } else if(feesEl){
     feesEl.innerHTML = '<p class="empty">Your student account is not linked correctly. Please contact the school administrator.</p>';
@@ -734,787 +690,231 @@ async function connectStudentSpotlight(user){
 }
 
 async function connectAdminFees(user) {
-  const studentSelect = $("#feeStudent");
-  const invoiceSelect = $("#feePaymentInvoice");
-  const invoiceForm = $("#feeInvoiceForm");
-  const paymentForm = $("#feePaymentForm");
-  const invoiceStatus = $("#feeInvoiceStatus");
-  const paymentStatus = $("#feePaymentStatus");
-  const list = $("#feeInvoiceList");
-
-  if (!studentSelect || !invoiceSelect || !invoiceForm ||
-      !paymentForm || !list) return;
-
-  const money = value =>
-    new Intl.NumberFormat("en-NG", {
-      style: "currency",
-      currency: "NGN",
-      maximumFractionDigits: 2
-    }).format(Number(value) || 0);
-
-  const safe = value =>
-    esc(value == null ? "" : String(value));
-
+  const studentSelect = $("#ledgerStudent");
+  const historySelect = $("#ledgerHistoryStudent");
+  const form = $("#feeLedgerForm");
+  const typeSelect = $("#ledgerType");
+  const categoryWrap = $("#ledgerCategoryWrap");
+  const categorySelect = $("#ledgerCategory");
+  const amountInput = $("#ledgerAmount");
+  const descriptionInput = $("#ledgerDescription");
+  const yearInput = $("#ledgerYear");
+  const termInput = $("#ledgerTerm");
+  const dateInput = $("#ledgerDate");
+  const submitButton = $("#ledgerSubmit");
+  const status = $("#ledgerStatus");
+  const historyEl = $("#ledgerHistory");
+  const summaryEl = $("#ledgerStudentSummary");
+  const safe = value => esc(value == null ? "" : String(value));
+  const money = value => new Intl.NumberFormat("en-NG",{style:"currency",currency:"NGN",maximumFractionDigits:2}).format(Number(value)||0);
+  const categories = {balance_brought_forward:"Balance brought forward",tuition_fees:"Tuition fees",uniform_fees:"Uniform fees",sports_wear_fees:"Sport wear fees",cas_fees:"CAS fees",other:"Other"};
   let students = [];
-  let invoices = [];
-  let payments = [];
+  let entries = [];
+  let analysisRows = [];
+  let editingId = null;
 
-  function paidForInvoiceForPayment(invoiceId) { return payments.filter(p => p.invoice_id === invoiceId).reduce((sum, payment) => sum + Number(payment.amount || 0), 0); }
+  function setFormMode() {
+    const isDebit = typeSelect.value === "debit";
+    categoryWrap.hidden = !isDebit;
+    submitButton.textContent = editingId ? "Save changes" : (isDebit ? "Record debit" : "Record payment");
+  }
+  typeSelect.addEventListener("change",setFormMode);
+  setFormMode();
+  if(dateInput && !dateInput.value) dateInput.value = new Date().toISOString().slice(0,10);
 
   async function loadStudents() {
-    studentSelect.innerHTML =
-      '<option value="">Loading students...</option>';
-
-    const { data, error } = await supabaseClient
-      .from("school_profiles")
-      .select("id,auth_user_id,full_name,email,class_name")
-      .eq("role", "student")
-      .order("full_name", { ascending: true })
-      .limit(1000);
-
-    if (error) {
-      studentSelect.innerHTML =
-        '<option value="">Could not load students</option>';
-      if (invoiceStatus) {
-        invoiceStatus.textContent =
-          "Student list error: " + error.message;
-      }
+    const {data,error} = await supabaseClient.from("school_profiles")
+      .select("id,auth_user_id,full_name,email,class_name").eq("role","student")
+      .order("full_name",{ascending:true}).limit(2000);
+    if(error) {
+      if(studentSelect) studentSelect.innerHTML='<option value="">Could not load students</option>';
+      if(historySelect) historySelect.innerHTML='<option value="">Could not load students</option>';
+      if(status) status.textContent="Student list error: "+error.message;
       return false;
     }
-
-    students = data || [];
-
-    studentSelect.innerHTML =
-      '<option value="">Choose a student</option>' +
-      students.map(student =>
-        '<option value="' + safe(student.id) + '">' +
-        safe(student.full_name || student.email || "Student") +
-        " — " + safe(student.class_name || "Class not assigned") +
-        (student.auth_user_id ? "" : " — No login yet") +
-        "</option>"
-      ).join("");
-
+    students=data||[];
+    const options='<option value="">Choose a student</option>'+students.map(s=>'<option value="'+safe(s.id)+'">'+safe(s.full_name||s.email||"Student")+' — '+safe(s.class_name||"Class not assigned")+'</option>').join("");
+    studentSelect.innerHTML=options;
+    historySelect.innerHTML=options;
     return true;
   }
 
-
-  // FEES OPENING BALANCE UPGRADE
-  let openingBalances = [];
-  let openingBalancePayments = [];
-
-  const openingPanel = document.createElement("section");
-  openingPanel.className = "panel";
-  openingPanel.style.marginTop = "14px";
-  openingPanel.innerHTML = [
-    '<span class="eyebrow">BALANCE BROUGHT FORWARD</span>',
-    '<h3>Opening balances and carry-forward</h3>',
-    '<p class="muted">Calculate unpaid fees, create a pending balance, and approve it after review. Original invoices and payments remain unchanged.</p>',
-    '<div class="form" style="max-width:700px">',
-    '<label>Student</label><select id="obStudent" required><option value="">Choose a student</option></select>',
-    '<label>Source academic year</label><input id="obSourceYear" maxlength="30" placeholder="e.g. 2025/2026" required>',
-    '<label>Source term</label><select id="obSourceTerm"><option>First Term</option><option>Second Term</option><option>Third Term</option></select>',
-    '<label>Target academic year</label><input id="obTargetYear" maxlength="30" placeholder="e.g. 2026/2027" required>',
-    '<label>Target term</label><select id="obTargetTerm"><option>First Term</option><option>Second Term</option><option>Third Term</option></select>',
-    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="obPreview" type="button">Calculate unpaid balance</button><button class="primary" id="obCreate" type="button">Create pending balance</button></div>',
-    '<p id="obStatus" class="muted" role="status" aria-live="polite"></p>',
-    '<div id="obPreviewResult"></div></div>',
-    '<hr style="margin:18px 0">',
-    '<div class="panel-heading"><h3>Review and manage balances</h3><button class="secondary" id="obRefresh" type="button">Refresh balances</button></div>',
-    '<div id="obList"><p class="muted">Loading opening balances…</p></div>'
-  ].join("");
-
-  const accountPanel = list.closest(".panel");
-  if (accountPanel && accountPanel.parentNode) {
-    accountPanel.parentNode.insertBefore(openingPanel, accountPanel);
+  function studentLabel(student) {
+    return (student?.full_name||student?.email||"Student")+" · "+(student?.class_name||"Class not assigned");
+  }
+  function totals(rows) {
+    return rows.reduce((acc,row)=>{if(row.entry_type==="debit") acc.debit+=Number(row.amount||0); else acc.credit+=Number(row.amount||0); return acc;},{debit:0,credit:0});
+  }
+  function entryCard(row) {
+    return '<article class="item" style="align-items:flex-start"><div class="dot">'+(row.entry_type==="debit"?"DR":"CR")+'</div><div style="flex:1;min-width:0"><strong>'+safe(categories[row.fee_category]||row.fee_category||"Account entry")+' · '+money(row.amount)+'</strong><p>'+safe(row.description||"")+'</p><p class="muted">'+safe(row.academic_year||"")+' · '+(row.term?"Term "+safe(row.term):"Term not set")+' · '+safe(row.entry_date||"")+'</p><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button type="button" class="secondary ledger-edit" data-id="'+safe(row.id)+'">Edit</button><button type="button" class="secondary ledger-delete" data-id="'+safe(row.id)+'" style="border-color:#d44;color:#b42318">Delete</button></div></div></article>';
   }
 
-  const ob = id => openingPanel.querySelector("#" + id);
-  const obStatus = ob("obStatus");
-
-  function outstandingOpeningBalance(balance) {
-    const paid = openingBalancePayments
-      .filter(p => p.opening_balance_id === balance.id && p.status === "paid")
-      .reduce((sum, p) => sum + Number(p.amount || 0), 0);
-    return Math.max(0, Number(balance.opening_balance || 0) - paid);
+  async function refreshHistory() {
+    const id=historySelect.value;
+    const student=students.find(s=>s.id===id);
+    if(!id) {summaryEl.innerHTML='<p class="muted">Choose a student to see their account.</p>';historyEl.innerHTML='<p class="muted">The student account history will appear here.</p>';return;}
+    historyEl.innerHTML='<p class="muted">Loading account history…</p>';
+    const {data,error}=await supabaseClient.from("school_fee_ledger_entries")
+      .select("id,student_profile_id,student_auth_user_id,entry_type,fee_category,amount,description,academic_year,term,entry_date,created_at")
+      .eq("student_profile_id",id).order("entry_date",{ascending:false}).order("created_at",{ascending:false}).limit(2000);
+    if(error) {historyEl.innerHTML='<p class="empty">Could not load this account: '+safe(error.message)+'</p>';return;}
+    entries=data||[];
+    const sums=totals(entries),balance=sums.debit-sums.credit;
+    summaryEl.innerHTML='<p><strong>'+safe(studentLabel(student))+'</strong></p><div class="stats"><div class="card"><div class="stat-num">'+money(sums.debit)+'</div><div class="muted">Total debit</div></div><div class="card"><div class="stat-num">'+money(sums.credit)+'</div><div class="muted">Total credit</div></div><div class="card"><div class="stat-num">'+money(Math.abs(balance))+'</div><div class="muted">'+(balance>0?"Student owes":balance<0?"Credit balance":"Settled")+'</div></div></div>';
+    historyEl.innerHTML=entries.length?'<h4>Account history ('+entries.length+')</h4>'+entries.map(entryCard).join(""):'<p class="empty">No school account records exist for this student yet. Use the form on the left to enter the first debit or payment.</p>';
+    historyEl.querySelectorAll(".ledger-edit").forEach(button=>button.onclick=()=>editEntry(button.dataset.id));
+    historyEl.querySelectorAll(".ledger-delete").forEach(button=>button.onclick=()=>deleteEntry(button.dataset.id));
   }
 
-  function calculateCarryForward(studentId, sourceYear, sourceTerm) {
-    const student = students.find(s => s.id === studentId);
-    if (!student) return { amount: 0, error: "Choose a student." };
-    if (!sourceYear || !sourceTerm) {
-      return { amount: 0, error: "Enter the source year and term." };
-    }
-
-    const sourceInvoices = invoices.filter(inv =>
-      inv.academic_year === sourceYear &&
-      inv.term === sourceTerm &&
-      (inv.student_profile_id === studentId ||
-       (!inv.student_profile_id && student.auth_user_id &&
-        inv.student_auth_user_id === student.auth_user_id))
-    );
-
-    let amount = sourceInvoices.reduce((sum, inv) =>
-      sum + Math.max(0, Number(inv.amount_due || 0) -
-        paidForInvoiceForPayment(inv.id)), 0);
-
-    amount += openingBalances.filter(b =>
-      b.student_profile_id === studentId &&
-      b.academic_year === sourceYear &&
-      b.term === sourceTerm &&
-      b.status === "approved"
-    ).reduce((sum, b) =>
-      sum + outstandingOpeningBalance(b), 0);
-
-    return {
-      amount: Math.round((amount + Number.EPSILON) * 100) / 100
-    };
+  async function editEntry(id) {
+    const row=entries.find(x=>x.id===id);
+    if(!row) return;
+    const type=prompt("Account side: debit or credit",row.entry_type);
+    if(type===null) return;
+    const normalizedType=type.trim().toLowerCase();
+    if(!["debit","credit"].includes(normalizedType)){alert("Enter debit or credit.");return;}
+    const category=normalizedType==="debit" ? (prompt("Debit item (balance_brought_forward, tuition_fees, uniform_fees, sports_wear_fees, cas_fees, other)",row.fee_category||"other")||"").trim() : "other";
+    if(normalizedType==="debit" && !Object.prototype.hasOwnProperty.call(categories,category)){alert("Choose a valid debit item.");return;}
+    const amountText=prompt("Amount (NGN)",String(row.amount));
+    if(amountText===null) return;
+    const amount=Number(amountText);
+    const description=prompt("Description",row.description||"");
+    if(description===null) return;
+    const year=prompt("Academic year",row.academic_year||"");
+    if(year===null) return;
+    const termText=prompt("Term (1, 2 or 3)",row.term==null?"1":String(row.term));
+    if(termText===null) return;
+    const term=Number(termText);
+    const entryDate=prompt("Date (YYYY-MM-DD)",row.entry_date||new Date().toISOString().slice(0,10));
+    if(entryDate===null) return;
+    if(!Number.isFinite(amount)||amount<=0||!description.trim()||!year.trim()||![1,2,3].includes(term)||!/^\d{4}-\d{2}-\d{2}$/.test(entryDate)){alert("Please enter a valid amount, description, academic year, term and date.");return;}
+    const {error}=await supabaseClient.from("school_fee_ledger_entries").update({entry_type:normalizedType,fee_category:category,amount,description:description.trim(),academic_year:year.trim(),term,entry_date:entryDate}).eq("id",id);
+    if(error){alert("Account entry could not be edited: "+error.message);return;}
+    if(status) status.textContent="Account entry updated.";
+    await refreshHistory();await refreshAnalysis();
   }
 
-  async function refreshOpeningBalances() {
-    const results = await Promise.all([
-      supabaseClient.from("school_fee_opening_balances")
-        .select("*").order("created_at", { ascending: false }).limit(2000),
-      supabaseClient.from("school_fee_opening_balance_payments")
-        .select("*").order("created_at", { ascending: false }).limit(5000)
-    ]);
-
-    if (results[0].error || results[1].error) {
-      ob("obList").innerHTML =
-        '<p class="empty">Could not load opening balances: ' +
-        safe((results[0].error || results[1].error).message) + "</p>";
-      return;
-    }
-
-    openingBalances = results[0].data || [];
-    openingBalancePayments = results[1].data || [];
-
-    ob("obStudent").innerHTML =
-      '<option value="">Choose a student</option>' +
-      students.map(st =>
-        '<option value="' + safe(st.id) + '">' +
-        safe(st.full_name || st.email || "Student") + " — " +
-        safe(st.class_name || "Class not assigned") + "</option>"
-      ).join("");
-
-    if (!openingBalances.length) {
-      ob("obList").innerHTML =
-        '<p class="muted">No opening balances have been created yet.</p>';
-      return;
-    }
-
-    ob("obList").innerHTML = openingBalances.map(b => {
-      const student = students.find(st => st.id === b.student_profile_id);
-      const remaining = outstandingOpeningBalance(b);
-
-      const history = openingBalancePayments.filter(p =>
-        p.opening_balance_id === b.id && p.status === "paid"
-      ).map(p =>
-        '<p class="muted">Payment: ' + money(p.amount) + " · " +
-        safe(String(p.payment_method || "").replace(/_/g, " ")) + " · " +
-        safe(p.reference || "No reference") + " · " +
-        safe(p.paid_at || p.created_at || "") + "</p>"
-      ).join("");
-
-      let actions = "";
-      if (b.status === "pending") {
-        actions =
-          '<button class="primary" type="button" data-ob-action="approve" data-id="' +
-          safe(b.id) + '">Approve</button> ' +
-          '<button class="secondary" type="button" data-ob-action="reject" data-id="' +
-          safe(b.id) + '">Reject</button>';
-      } else if (b.status === "approved" && remaining > 0) {
-        actions =
-          '<form data-ob-payment="' + safe(b.id) +
-          '" class="form" style="margin-top:10px">' +
-          '<label>Payment amount (₦)</label><input name="amount" type="number" min="0.01" step="0.01" max="' +
-          remaining.toFixed(2) + '" required>' +
-          '<label>Payment method</label><select name="payment_method"><option value="cash">Cash</option><option value="bank_transfer">Bank transfer</option><option value="pos">POS</option><option value="other">Other</option></select>' +
-          '<label>Receipt or transfer reference</label><input name="reference" maxlength="120">' +
-          '<button class="primary" type="submit">Record opening-balance payment</button></form>';
-      }
-
-      return '<article class="item"><div style="width:100%">' +
-        "<strong>" + safe(student?.full_name || "Student") + "</strong>" +
-        '<p class="muted">' + safe(student?.class_name || "") + " · " +
-        safe(b.academic_year) + " · " + safe(b.term) + "</p>" +
-        "<p>Opening balance: <strong>" + money(b.opening_balance) +
-        "</strong> · Remaining: <strong>" + money(remaining) +
-        "</strong> · Status: <strong>" + safe(b.status) + "</strong></p>" +
-        '<p class="muted">Source: ' + safe(b.source_academic_year || "") +
-        " · " + safe(b.source_term || "") + "</p>" +
-        history + actions + "</div></article>";
-    }).join("");
+  async function deleteEntry(id) {
+    const row=entries.find(x=>x.id===id);
+    if(!row || !confirm("Delete this account entry of "+money(row.amount)+"? This cannot be undone.")) return;
+    const {error}=await supabaseClient.from("school_fee_ledger_entries").delete().eq("id",id);
+    if(error){alert("Account entry could not be deleted: "+error.message);return;}
+    if(status) status.textContent="Account entry deleted.";
+    await refreshHistory();await refreshAnalysis();
   }
 
-  ob("obPreview").onclick = () => {
-    const result = calculateCarryForward(
-      ob("obStudent").value,
-      ob("obSourceYear").value.trim(),
-      ob("obSourceTerm").value
-    );
-    ob("obPreviewResult").innerHTML = result.error
-      ? '<p class="empty">' + safe(result.error) + "</p>"
-      : "<p>Unpaid amount to review: <strong>" +
-        money(result.amount) + "</strong></p>";
-    obStatus.textContent = result.error ||
-      "Calculation completed. Review the amount before creating a pending balance.";
-  };
-
-  ob("obCreate").onclick = async () => {
-    const student = students.find(st => st.id === ob("obStudent").value);
-    const sourceYear = ob("obSourceYear").value.trim();
-    const sourceTerm = ob("obSourceTerm").value;
-    const targetYear = ob("obTargetYear").value.trim();
-    const targetTerm = ob("obTargetTerm").value;
-
-    if (!student || !sourceYear || !targetYear) {
-      obStatus.textContent = "Choose a student and complete both academic years.";
-      return;
-    }
-    if (sourceYear === targetYear && sourceTerm === targetTerm) {
-      obStatus.textContent = "Source and target terms must be different.";
-      return;
-    }
-
-    const calc = calculateCarryForward(student.id, sourceYear, sourceTerm);
-    if (calc.error || calc.amount <= 0) {
-      obStatus.textContent = calc.error ||
-        "No unpaid balance was found for that student and source term.";
-      return;
-    }
-
-    if (openingBalances.some(b =>
-      b.student_profile_id === student.id &&
-      b.academic_year === targetYear &&
-      b.term === targetTerm
-    )) {
-      obStatus.textContent =
-        "An opening balance already exists for this student and target term.";
-      return;
-    }
-
-    const button = ob("obCreate");
-    button.disabled = true;
-    button.textContent = "Creating…";
-
-    const { error } = await supabaseClient
-      .from("school_fee_opening_balances")
-      .insert({
-        student_profile_id: student.id,
-        student_auth_user_id: student.auth_user_id || null,
-        academic_year: targetYear,
-        term: targetTerm,
-        opening_balance: calc.amount,
-        status: "pending",
-        source_academic_year: sourceYear,
-        source_term: sourceTerm,
-        created_by: user.id
-      });
-
-    button.disabled = false;
-    button.textContent = "Create pending balance";
-
-    if (error) {
-      obStatus.textContent = "Could not create pending balance: " + error.message;
-      return;
-    }
-
-    obStatus.textContent = "Pending balance created. It must be approved before use.";
-    ob("obPreviewResult").innerHTML = "";
-    await refreshOpeningBalances();
-  };
-
-  openingPanel.addEventListener("click", async event => {
-    if (event.target.closest("#obRefresh")) {
-      await refreshOpeningBalances();
-      return;
-    }
-
-    const button = event.target.closest("button[data-ob-action]");
-    if (button) {
-      const action = button.getAttribute("data-ob-action");
-      const id = button.getAttribute("data-id");
-      const balance = openingBalances.find(b => b.id === id);
-      if (!balance || balance.status !== "pending") return;
-
-      button.disabled = true;
-      const payload = action === "approve"
-        ? { status: "approved", approved_by: user.id, approved_at: new Date().toISOString() }
-        : { status: "rejected" };
-
-      const { error } = await supabaseClient
-        .from("school_fee_opening_balances").update(payload).eq("id", id);
-
-      if (error) {
-        obStatus.textContent = "Could not update balance: " + error.message;
-        button.disabled = false;
-        return;
-      }
-
-      obStatus.textContent = action === "approve"
-        ? "Opening balance approved." : "Opening balance rejected.";
-      await refreshOpeningBalances();
-    }
-  });
-
-  openingPanel.addEventListener("submit", async event => {
-    const form = event.target.closest("form[data-ob-payment]");
-    if (!form) return;
+  form.onsubmit=async event=>{
     event.preventDefault();
+    const fd=new FormData(form);
+    const student=students.find(s=>s.id===String(fd.get("student_profile_id")||""));
+    const amount=Number(fd.get("amount"));
+    const description=String(fd.get("description")||"").trim();
+    const year=String(fd.get("academic_year")||"").trim();
+    const term=Number(fd.get("term"));
+    const entryDate=String(fd.get("entry_date")||"");
+    const type=String(fd.get("entry_type")||"debit");
+    const category=type==="debit"?String(fd.get("fee_category")||"other"):"other";
+    if(!student||!Number.isFinite(amount)||amount<=0||!description||!year||![1,2,3].includes(term)||!/^\d{4}-\d{2}-\d{2}$/.test(entryDate)){status.textContent="Complete all fields with a valid amount, date and term.";return;}
+    const button=form.querySelector('button[type="submit"]');
+    button.disabled=true;button.textContent="Saving account entry…";status.textContent="";
+    const payload={student_profile_id:student.id,student_auth_user_id:student.auth_user_id||null,entry_type:type,fee_category:category,amount,description,academic_year:year,term,entry_date:entryDate,created_by:user.id};
+    const {error}=await supabaseClient.from("school_fee_ledger_entries").insert(payload);
+    button.disabled=false;setFormMode();
+    if(error){status.textContent="Account entry could not be saved: "+error.message;return;}
+    const historyId=historySelect.value;
+    form.reset();if(dateInput)dateInput.value=new Date().toISOString().slice(0,10);
+    if(studentSelect)studentSelect.value=student.id;
+    if(historySelect)historySelect.value=student.id;
+    status.textContent=(type==="debit"?"Debit recorded.":"Payment recorded as credit.")+" Student account updated.";
+    setFormMode();await refreshHistory();await refreshAnalysis();
+  };
 
-    const id = form.getAttribute("data-ob-payment");
-    const balance = openingBalances.find(b => b.id === id);
-    if (!balance || balance.status !== "approved") {
-      obStatus.textContent = "Only approved opening balances can receive payments.";
-      return;
-    }
+  if(historySelect) historySelect.addEventListener("change",refreshHistory);
+  const refreshButton=$("#refreshLedger");
+  if(refreshButton) refreshButton.onclick=refreshHistory;
 
-    const fd = new FormData(form);
-    const amount = Number(fd.get("amount"));
-    const remaining = outstandingOpeningBalance(balance);
-
-    if (!Number.isFinite(amount) || amount <= 0 || amount > remaining) {
-      obStatus.textContent = "Enter a valid payment no greater than " +
-        money(remaining) + ".";
-      return;
-    }
-
-    const button = form.querySelector('button[type="submit"]');
-    if (button) { button.disabled = true; button.textContent = "Recording…"; }
-
-    const { error } = await supabaseClient
-      .from("school_fee_opening_balance_payments")
-      .insert({
-        opening_balance_id: balance.id,
-        student_profile_id: balance.student_profile_id,
-        student_auth_user_id: balance.student_auth_user_id || null,
-        amount,
-        payment_method: String(fd.get("payment_method") || "other"),
-        reference: String(fd.get("reference") || "").trim() || null,
-        status: "paid",
-        received_by: user.id,
-        paid_at: new Date().toISOString()
-      });
-
-    if (error) {
-      obStatus.textContent = "Payment could not be recorded: " + error.message;
-      if (button) {
-        button.disabled = false;
-        button.textContent = "Record opening-balance payment";
-      }
-      return;
-    }
-
-    obStatus.textContent = "Opening-balance payment recorded.";
-    await refreshOpeningBalances();
-  });
-  async function refreshInvoices() {
-    list.innerHTML =
-      '<p class="muted">Loading fee records...</p>';
-
-    const [invoiceResult, paymentResult] = await Promise.all([
-      supabaseClient
-        .from("school_fee_invoices")
-        .select(
-          "id,student_profile_id,student_auth_user_id,student_name," +
-          "class_name,description,academic_year,term,amount_due," +
-          "due_date,created_at"
-        )
-        .order("created_at", { ascending: false })
-        .limit(1000),
-
-      supabaseClient
-        .from("school_fee_payments")
-        .select(
-          "id,invoice_id,student_profile_id,student_auth_user_id," +
-          "amount,payment_method,status,reference,paid_at,created_at"
-        )
-        .eq("status", "paid")
-        .order("created_at", { ascending: false })
-        .limit(5000)
-    ]);
-
-    if (invoiceResult.error) {
-      list.innerHTML =
-        '<p class="empty">Could not load invoices: ' +
-        safe(invoiceResult.error.message) + "</p>";
-      return;
-    }
-
-    if (paymentResult.error) {
-      list.innerHTML =
-        '<p class="empty">Could not load payments: ' +
-        safe(paymentResult.error.message) + "</p>";
-      return;
-    }
-
-    invoices = invoiceResult.data || [];
-    payments = paymentResult.data || [];
-
-    function invoicePayments(invoiceId) {
-      return payments.filter(p => p.invoice_id === invoiceId);
-    }
-
-    function paidForInvoice(invoiceId) {
-      return invoicePayments(invoiceId).reduce(
-        (sum, payment) => sum + Number(payment.amount || 0),
-        0
-      );
-    }
-
-    invoiceSelect.innerHTML =
-      '<option value="">Choose an invoice</option>' +
-      invoices.map(invoice => {
-        const balance = Math.max(
-          0,
-          Number(invoice.amount_due || 0) -
-          paidForInvoiceForPayment(invoice.id)
-        );
-
-        return (
-          '<option value="' + safe(invoice.id) + '">' +
-          safe(invoice.student_name) + " — " +
-          safe(invoice.description) + " (" +
-          money(balance) + " outstanding)</option>"
-        );
-      }).join("");
-
-    if (!invoices.length) {
-      list.innerHTML =
-        '<p class="empty">No fee invoices yet. Create the first invoice above.</p>';
-      return;
-    }
-
-    const accounts = new Map();
-
-    invoices.forEach(invoice => {
-      let profileId = invoice.student_profile_id;
-
-      if (!profileId && invoice.student_auth_user_id) {
-        const match = students.find(
-          student =>
-            student.auth_user_id === invoice.student_auth_user_id
-        );
-        if (match) profileId = match.id;
-      }
-
-      const key = profileId
-        ? "profile:" + profileId
-        : "legacy:" + invoice.student_auth_user_id +
-          ":" + invoice.student_name;
-
-      if (!accounts.has(key)) {
-        const student = students.find(s => s.id === profileId);
-
-        accounts.set(key, {
-          name: student?.full_name ||
-            invoice.student_name || "Student",
-          className: student?.class_name ||
-            invoice.class_name || "",
-          profileId,
-          rows: [],
-          totalFees: 0,
-          totalPaid: 0
-        });
-      }
-
-      const account = accounts.get(key);
-      const paid = paidForInvoiceForPayment(invoice.id);
-      const amountDue = Number(invoice.amount_due || 0);
-
-      account.rows.push({
-        invoice,
-        paid,
-        balance: Math.max(0, amountDue - paid),
-        payments: invoicePayments(invoice.id)
-      });
-
-      account.totalFees += amountDue;
-      account.totalPaid += paid;
-    });
-
-    list.innerHTML = Array.from(accounts.values()).map(account => {
-      const rows = account.rows.map(row => {
-        const invoice = row.invoice;
-
-        const paymentRows = row.payments.map(payment =>
-          '<p class="muted">Payment: ' +
-          money(payment.amount) + " · " +
-          safe(String(payment.payment_method || "").replace(/_/g, " ")) +
-          " · " + safe(payment.reference || "No reference") +
-          " · " + safe(payment.paid_at || payment.created_at || "") +
-          "</p>"
-        ).join("");
-
-        return (
-          '<div style="border-top:1px solid #ddd;padding:10px 0">' +
-          "<strong>" + safe(invoice.description) + "</strong>" +
-          '<p class="muted">' +
-          safe(invoice.academic_year) + " · " +
-          safe(invoice.term) + " · Due: " +
-          safe(invoice.due_date || "Not set") + "</p>" +
-          "<p>Fee: <strong>" + money(invoice.amount_due) +
-          "</strong> · Paid: <strong>" + money(row.paid) +
-          "</strong> · Balance: <strong>" +
-          money(row.balance) + "</strong></p>" +
-          paymentRows +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">' +
-          '<button type="button" class="secondary fee-edit-invoice" data-invoice-id="' + safe(invoice.id) + '">Edit fee</button>' +
-          '<button type="button" class="secondary fee-delete-invoice" data-invoice-id="' + safe(invoice.id) + '">Delete fee</button>' +
-          '</div></div>'
-        );
-      }).join("");
-
-      return (
-        '<article class="item">' +
-        '<div class="dot">🧾</div>' +
-        '<div style="width:100%">' +
-        "<strong>" + safe(account.name) + "</strong>" +
-        '<p class="muted">' +
-        safe(account.className || "Class not assigned") +
-        "</p>" +
-        "<p>Total fees: <strong>" + money(account.totalFees) +
-        "</strong> · Payments received: <strong>" +
-        money(account.totalPaid) + "</strong></p>" +
-        "<p>Outstanding balance: <strong>" +
-        money(Math.max(0, account.totalFees - account.totalPaid)) +
-        "</strong></p>" +
-        rows + "</div></article>"
-      );
-    }).join("");
-
-    list.querySelectorAll(".fee-edit-invoice").forEach(button => {
-      button.onclick = async () => {
-        const invoice = invoices.find(item => item.id === button.dataset.invoiceId);
-        if (!invoice) return;
-        const description = prompt("Fee description:", invoice.description || "");
-        if (description === null) return;
-        const academicYear = prompt("Academic year:", invoice.academic_year || "");
-        if (academicYear === null) return;
-        const term = prompt("Term (e.g. First Term):", invoice.term || "");
-        if (term === null) return;
-        const amountText = prompt("Total fee amount (NGN):", String(invoice.amount_due || ""));
-        if (amountText === null) return;
-        const amount = Number(amountText);
-        const dueDate = prompt("Due date (YYYY-MM-DD, leave blank for none):", invoice.due_date || "");
-        if (dueDate === null) return;
-        const alreadyPaid = paidForInvoiceForPayment(invoice.id);
-        if (!description.trim() || !academicYear.trim() || !term.trim() ||
-            !Number.isFinite(amount) || amount <= 0) {
-          alert("Enter a description, academic year, term, and a fee amount greater than zero.");
-          return;
-        }
-        if (amount < alreadyPaid) {
-          alert("The fee cannot be lower than payments already received (" + money(alreadyPaid) + ").");
-          return;
-        }
-        button.disabled = true;
-        const { error } = await supabaseClient.from("school_fee_invoices")
-          .update({
-            description: description.trim(),
-            academic_year: academicYear.trim(),
-            term: term.trim(),
-            amount_due: amount,
-            due_date: dueDate.trim() || null
-          }).eq("id", invoice.id);
-        button.disabled = false;
-        if (error) {
-          alert("Fee could not be edited: " + error.message);
-          return;
-        }
-        if (invoiceStatus) invoiceStatus.textContent = "Fee invoice updated.";
-        await refreshInvoices();
-      };
-    });
-
-    list.querySelectorAll(".fee-delete-invoice").forEach(button => {
-      button.onclick = async () => {
-        const invoice = invoices.find(item => item.id === button.dataset.invoiceId);
-        if (!invoice) return;
-        const { data: linkedPayments, error: paymentCheckError } = await supabaseClient
-          .from("school_fee_payments").select("id").eq("invoice_id", invoice.id).limit(1);
-        if (paymentCheckError) {
-          alert("Could not verify linked payments. Fee was not deleted: " + paymentCheckError.message);
-          return;
-        }
-        if (linkedPayments && linkedPayments.length) {
-          alert("This fee has linked payment records. To protect the student's account history, it cannot be deleted. Edit the fee instead.");
-          return;
-        }
-        if (!confirm("Delete the fee invoice '" + (invoice.description || "School fee") +
-          "' for " + (invoice.student_name || "this student") + "? This cannot be undone.")) return;
-        button.disabled = true;
-        const { error } = await supabaseClient.from("school_fee_invoices")
-          .delete().eq("id", invoice.id);
-        button.disabled = false;
-        if (error) {
-          alert("Fee could not be deleted: " + error.message);
-          return;
-        }
-        if (invoiceStatus) invoiceStatus.textContent = "Fee invoice deleted.";
-        await refreshInvoices();
-      };
-    });
+  function filteredAnalysis() {
+    const year=$("#feeAnalysisYear")?.value||"";
+    const term=$("#feeAnalysisTerm")?.value||"";
+    const chosen=analysisRows.filter(e=>(!year||e.academic_year===year)&&(!term||String(e.term)===term));
+    const grouped=new Map();
+    students.forEach(s=>grouped.set(s.id,{student:s,debit:0,credit:0,entries:0}));
+    chosen.forEach(e=>{const key=e.student_profile_id;let a=grouped.get(key);if(!a){const student=students.find(s=>s.id===key)||{id:key,full_name:"Student"};a={student,debit:0,credit:0,entries:0};grouped.set(key,a);}if(e.entry_type==="debit")a.debit+=Number(e.amount||0);else a.credit+=Number(e.amount||0);a.entries++;});
+    return Array.from(grouped.values()).map(x=>({...x,balance:x.debit-x.credit})).filter(x=>x.entries>0);
   }
-
-  invoiceForm.onsubmit = async event => {
-    event.preventDefault();
-
-    const fd = new FormData(invoiceForm);
-    const student = students.find(
-      s => s.id === String(fd.get("student_id"))
-    );
-
-    if (!student) {
-      if (invoiceStatus) invoiceStatus.textContent =
-        "Choose a registered student first.";
-      return;
-    }
-
-    const description = String(fd.get("description") || "").trim();
-    const academicYear = String(fd.get("academic_year") || "").trim();
-    const term = String(fd.get("term") || "");
-    const amount = Number(fd.get("amount_due"));
-
-    if (!description || !academicYear || !term) {
-      if (invoiceStatus) invoiceStatus.textContent =
-        "Complete the fee description, academic year and term.";
-      return;
-    }
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      if (invoiceStatus) invoiceStatus.textContent =
-        "Enter an amount greater than zero.";
-      return;
-    }
-
-    const button = invoiceForm.querySelector('button[type="submit"]');
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Saving invoice...";
-    }
-    if (invoiceStatus) invoiceStatus.textContent = "";
-
-    const { error } = await supabaseClient
-      .from("school_fee_invoices")
-      .insert({
-        student_profile_id: student.id,
-        student_auth_user_id: student.auth_user_id || null,
-        student_name: student.full_name || student.email || "Student",
-        class_name: student.class_name || null,
-        description,
-        academic_year: academicYear,
-        term,
-        amount_due: amount,
-        due_date: String(fd.get("due_date") || "") || null,
-        created_by: user.id
-      });
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Create fee invoice";
-    }
-
-    if (error) {
-      if (invoiceStatus) invoiceStatus.textContent =
-        "Invoice could not be saved: " + error.message;
-      return;
-    }
-
-    invoiceForm.reset();
-    if (invoiceStatus) invoiceStatus.textContent =
-      "Fee invoice created successfully.";
-
-    await refreshInvoices();
+  function reportText() {
+    const rows=filteredAnalysis();
+    const debtors=rows.filter(x=>x.balance>0).sort((a,b)=>b.balance-a.balance);
+    const creditors=rows.filter(x=>x.balance<0).sort((a,b)=>a.balance-b.balance);
+    const year=$("#feeAnalysisYear")?.value||"All academic years";
+    const term=$("#feeAnalysisTerm")?.value||"All terms";
+    const out=["JUNACAD HIGH SCHOOL — SCHOOL ACCOUNTS ANALYSIS","Academic year: "+year,"Term: "+term,"","DEBTORS","Student,Class,Debit,Credit,Outstanding balance",...debtors.map(x=>[x.student.full_name||x.student.email||"Student",x.student.class_name||"",x.debit.toFixed(2),x.credit.toFixed(2),x.balance.toFixed(2)].join(", ")), "","CREDITORS","Student,Class,Debit,Credit,Credit balance",...creditors.map(x=>[x.student.full_name||x.student.email||"Student",x.student.class_name||"",x.debit.toFixed(2),x.credit.toFixed(2),Math.abs(x.balance).toFixed(2)].join(", "))];
+    return {text:out.join("\n"),debtors,creditors,rows,year,term};
+  }
+  function csvEscape(value){return '"'+String(value==null?"":value).replace(/"/g,'""')+'"';}
+  function refreshAnalysisUI() {
+    const report=reportText();
+    const debtors=report.debtors,creditors=report.creditors;
+    $("#feeDebtorCount").textContent=String(debtors.length);
+    $("#feeCreditorCount").textContent=String(creditors.length);
+    $("#feeTotalDebtors").textContent=money(debtors.reduce((n,x)=>n+x.balance,0));
+    $("#feeTotalCreditors").textContent=money(creditors.reduce((n,x)=>n+Math.abs(x.balance),0));
+    const renderList=(rows,isCreditor)=>rows.length?'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse"><thead><tr><th style="text-align:left;padding:8px">Student</th><th style="text-align:left;padding:8px">Class</th><th style="text-align:right;padding:8px">Debit</th><th style="text-align:right;padding:8px">Credit</th><th style="text-align:right;padding:8px">'+(isCreditor?"Credit balance":"Outstanding")+'</th></tr></thead><tbody>'+rows.map(x=>'<tr><td style="padding:8px;border-top:1px solid var(--line)">'+safe(x.student.full_name||x.student.email||"Student")+'</td><td style="padding:8px;border-top:1px solid var(--line)">'+safe(x.student.class_name||"")+'</td><td style="padding:8px;text-align:right;border-top:1px solid var(--line)">'+money(x.debit)+'</td><td style="padding:8px;text-align:right;border-top:1px solid var(--line)">'+money(x.credit)+'</td><td style="padding:8px;text-align:right;border-top:1px solid var(--line)"><strong>'+money(Math.abs(x.balance))+'</strong></td></tr>').join("")+'</tbody></table></div>':'<p class="empty">No '+(isCreditor?"creditors":"debtors")+' for this selection.</p>';
+    $("#feeDebtorsList").innerHTML=renderList(debtors,false);
+    $("#feeCreditorsList").innerHTML=renderList(creditors,true);
+  }
+  async function refreshAnalysis() {
+    const statusEl=$("#feeAnalysisStatus");
+    if(statusEl) statusEl.textContent="Loading school account analysis…";
+    const {data,error}=await supabaseClient.from("school_fee_ledger_entries")
+      .select("student_profile_id,entry_type,amount,academic_year,term").limit(10000);
+    if(error){if(statusEl)statusEl.textContent="Analysis could not be loaded: "+error.message;return;}
+    analysisRows=data||[];
+    const years=[...new Set(analysisRows.map(x=>x.academic_year).filter(Boolean))].sort().reverse();
+    const yearSelect=$("#feeAnalysisYear"),previous=yearSelect.value;
+    yearSelect.innerHTML='<option value="">All academic years</option>'+years.map(y=>'<option value="'+safe(y)+'">'+safe(y)+'</option>').join("");
+    if(years.includes(previous))yearSelect.value=previous;
+    refreshAnalysisUI();
+    if(statusEl)statusEl.textContent="Analysis updated. Balances are calculated from debit totals minus credit totals.";
+  }
+  const yearSelect=$("#feeAnalysisYear"),termSelect=$("#feeAnalysisTerm");
+  if(yearSelect)yearSelect.addEventListener("change",refreshAnalysisUI);
+  if(termSelect)termSelect.addEventListener("change",refreshAnalysisUI);
+  const printButton=$("#feeReportPrint");
+  if(printButton)printButton.onclick=()=>{
+    const report=reportText();
+    const buildRows=rows=>rows.length?rows.map(x=>"<tr><td>"+safe(x.student.full_name||x.student.email||"Student")+"</td><td>"+safe(x.student.class_name||"")+"</td><td>"+money(x.debit)+"</td><td>"+money(x.credit)+"</td><td>"+money(Math.abs(x.balance))+"</td></tr>").join(""):'<tr><td colspan="5">No records</td></tr>';
+    const win=window.open("","_blank");
+    if(!win){if($("#feeAnalysisStatus"))$("#feeAnalysisStatus").textContent="Allow pop-ups to print or save the PDF report.";return;}
+    win.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Junacad School Accounts Report</title><style>body{font-family:Arial,sans-serif;padding:24px;color:#15253a}h1{font-size:22px}h2{font-size:18px;margin-top:26px}p{color:#555}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border:1px solid #bbb;padding:7px;text-align:left}th:nth-child(n+3),td:nth-child(n+3){text-align:right}@media print{button{display:none}}</style></head><body><h1>JUNACAD HIGH SCHOOL</h1><p>School accounts analysis · Academic year: '+safe(report.year)+' · '+safe(report.term)+'</p><h2>Debtors</h2><table><thead><tr><th>Student</th><th>Class</th><th>Debit</th><th>Credit</th><th>Outstanding</th></tr></thead><tbody>'+buildRows(report.debtors)+'</tbody></table><h2>Creditors</h2><table><thead><tr><th>Student</th><th>Class</th><th>Debit</th><th>Credit</th><th>Credit balance</th></tr></thead><tbody>'+buildRows(report.creditors)+'</tbody></table><script>window.onload=()=>window.print();<\/script></body></html>');
+    win.document.close();
   };
-
-  paymentForm.onsubmit = async event => {
-    event.preventDefault();
-
-    const fd = new FormData(paymentForm);
-    const invoice = invoices.find(
-      item => item.id === String(fd.get("invoice_id"))
-    );
-
-    if (!invoice) {
-      if (paymentStatus) paymentStatus.textContent =
-        "Choose a valid invoice first.";
-      return;
-    }
-
-    const amount = Number(fd.get("amount"));
-
-    if (!Number.isFinite(amount) || amount <= 0) {
-      if (paymentStatus) paymentStatus.textContent =
-        "Enter an amount greater than zero.";
-      return;
-    }
-
-    const outstanding = Math.max(
-      0,
-      Number(invoice.amount_due || 0) -
-      paidForInvoiceForPayment(invoice.id)
-    );
-
-    if (amount > outstanding) {
-      if (paymentStatus) paymentStatus.textContent =
-        "Payment exceeds the outstanding balance of " +
-        money(outstanding) + ".";
-      return;
-    }
-
-    const button = paymentForm.querySelector('button[type="submit"]');
-    if (button) {
-      button.disabled = true;
-      button.textContent = "Recording payment...";
-    }
-    if (paymentStatus) paymentStatus.textContent = "";
-
-    const payload = {
-      invoice_id: invoice.id,
-      student_profile_id: invoice.student_profile_id || null,
-      student_auth_user_id: invoice.student_auth_user_id || null,
-      amount,
-      payment_method: String(fd.get("payment_method") || ""),
-      status: "paid",
-      received_by: user.id,
-      notes: String(fd.get("notes") || "").trim() || null,
-      paid_at: new Date().toISOString()
-    };
-
-    const reference = String(fd.get("reference") || "").trim();
-    if (reference) payload.reference = reference;
-
-    const { error } = await supabaseClient
-      .from("school_fee_payments")
-      .insert(payload);
-
-    if (button) {
-      button.disabled = false;
-      button.textContent = "Record payment";
-    }
-
-    if (error) {
-      if (paymentStatus) paymentStatus.textContent =
-        "Payment could not be recorded: " + error.message;
-      return;
-    }
-
-    paymentForm.reset();
-    if (paymentStatus) paymentStatus.textContent =
-      "Payment recorded successfully.";
-
-    await refreshInvoices();
+  const downloadButton=$("#feeReportDownload");
+  if(downloadButton)downloadButton.onclick=()=>{
+    const r=reportText();
+    const lines=[["Report","JUNACAD HIGH SCHOOL — SCHOOL ACCOUNTS ANALYSIS"],["Academic year",r.year],["Term",r.term],[],["DEBTORS"],["Student","Class","Debit","Credit","Outstanding"],...r.debtors.map(x=>[x.student.full_name||x.student.email||"Student",x.student.class_name||"",x.debit.toFixed(2),x.credit.toFixed(2),x.balance.toFixed(2)]),[],["CREDITORS"],["Student","Class","Debit","Credit","Credit balance"],...r.creditors.map(x=>[x.student.full_name||x.student.email||"Student",x.student.class_name||"",x.debit.toFixed(2),x.credit.toFixed(2),Math.abs(x.balance).toFixed(2)])];
+    const csv=lines.map(row=>row.map(csvEscape).join(",")).join("\r\n");
+    const url=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv;charset=utf-8"}));
+    const a=document.createElement("a");a.href=url;a.download="junacad-school-accounts-analysis.csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);
   };
-
-  const refreshButton = $("#refreshFeeRecords");
-  if (refreshButton) refreshButton.onclick = refreshInvoices;
-
+  const copyButton=$("#feeReportCopy");
+  if(copyButton)copyButton.onclick=async()=>{
+    const text=reportText().text;
+    try{await navigator.clipboard.writeText(text);$("#feeAnalysisStatus").textContent="Accounts report copied to clipboard.";}
+    catch(_e){const area=document.createElement("textarea");area.value=text;document.body.appendChild(area);area.select();const ok=document.execCommand("copy");area.remove();$("#feeAnalysisStatus").textContent=ok?"Accounts report copied to clipboard.":"Copy failed. Use Download CSV instead.";}
+  };
+  const shareButton=$("#feeReportShare");
+  if(shareButton)shareButton.onclick=async()=>{
+    const text=reportText().text;
+    try{if(navigator.share){await navigator.share({title:"Junacad School Accounts Analysis",text});$("#feeAnalysisStatus").textContent="Report shared.";}else{await navigator.clipboard.writeText(text);$("#feeAnalysisStatus").textContent="Sharing is not available on this browser; report copied instead.";}}
+    catch(error){if(error?.name!=="AbortError")$("#feeAnalysisStatus").textContent="Could not share the report. Try Copy report or Download CSV.";}
+  };
+  const analysisRefresh=$("#feeReportRefresh");
+  if(analysisRefresh)analysisRefresh.onclick=refreshAnalysis;
   await loadStudents();
-  await refreshInvoices();
-  await refreshOpeningBalances();
+  await refreshHistory();
+  await refreshAnalysis();
 }
-
 async function connectAdminClassChat(user){
   const messagesEl = $("#adminClassChatMessages");
   const form = $("#adminClassChatForm");
