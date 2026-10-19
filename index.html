@@ -1092,21 +1092,33 @@ async function connectAdminPrivateMessages(user){
 }
 
 async function loadSchoolProfile(user){
-  authMessage.textContent = "Checking your school profile…";
-  const {data:profile, error} = await supabaseClient
-    .from("school_profiles")
-    .select("auth_user_id, full_name, email, role, class_name")
-    .eq("auth_user_id", user.id)
-    .maybeSingle();
-  if(error){
-    showLogin("Signed in, but the school profile could not be loaded. Check the school_profiles read policy and try again. Details: " + error.message);
-    return;
+  authMessage.textContent = "Signed in. Loading your school dashboard…";
+  try {
+    const profileRequest = supabaseClient
+      .from("school_profiles")
+      .select("auth_user_id, full_name, email, role, class_name")
+      .eq("auth_user_id", user.id)
+      .maybeSingle();
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("The school profile request timed out. Check your internet connection and the school_profiles access policy.")), 15000));
+    const {data:profile, error} = await Promise.race([profileRequest, timeout]);
+    if(error){
+      showLogin("Signed in, but the school profile could not be loaded. Details: " + error.message);
+      return;
+    }
+    if(!profile){
+      showLogin("This login has no linked school profile. Contact the school administrator.");
+      return;
+    }
+    try {
+      showSignedIn(user, profile);
+    } catch (renderError) {
+      console.error("Dashboard display error:", renderError);
+      showLogin("Your account was verified, but the dashboard failed to open. Refresh the page. Details: " + (renderError?.message || "Unknown display error"));
+    }
+  } catch (error) {
+    console.error("School profile loading error:", error);
+    showLogin("Could not finish loading your school profile. " + (error?.message || "Please refresh and try again."));
   }
-  if(!profile){
-    showLogin("This login has no linked school profile. Contact the school administrator.");
-    return;
-  }
-  showSignedIn(user, profile);
 }
 loginForm.addEventListener("submit", async (event)=>{
   event.preventDefault();
@@ -1115,25 +1127,42 @@ loginForm.addEventListener("submit", async (event)=>{
   authRequestInProgress = true;
   loginButton.disabled = true;
   loginButton.textContent = "Signing in…";
-  authMessage.textContent = "";
+  authMessage.textContent = "Connecting securely…";
   const formData = new FormData(loginForm);
-  const {data, error} = await supabaseClient.auth.signInWithPassword({
-    email: String(formData.get("email")).trim(),
-    password: String(formData.get("password"))
-  });
-  authRequestInProgress = false;
-  if(error){
-    showLogin("Sign-in failed. Check your email and password. If your email is unconfirmed, confirm it in Supabase first.");
-    return;
+  try {
+    const signInRequest = supabaseClient.auth.signInWithPassword({
+      email: String(formData.get("email")).trim(),
+      password: String(formData.get("password"))
+    });
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("The sign-in request timed out. Check your internet connection and try again.")), 20000));
+    const {data, error} = await Promise.race([signInRequest, timeout]);
+    if(error){
+      showLogin("Sign-in failed: " + error.message);
+      return;
+    }
+    if(data.user) await loadSchoolProfile(data.user);
+    else showLogin("Supabase did not return a user after sign-in. Please try again.");
+  } catch (error) {
+    console.error("Sign-in error:", error);
+    showLogin("Sign-in could not finish. " + (error?.message || "Check your internet connection and try again."));
+  } finally {
+    authRequestInProgress = false;
+    if(loginButton.disabled){ loginButton.disabled = false; loginButton.textContent = "Sign in securely"; }
   }
-  if(data.user) await loadSchoolProfile(data.user);
 });
 async function initializeAuth(){
   if(!supabaseClient){ showLogin("Supabase client library did not load. Refresh the page and try again."); return; }
-  const {data, error} = await supabaseClient.auth.getSession();
-  if(error){ showLogin("Could not check your sign-in session. Refresh the page and try again."); return; }
-  if(data.session?.user) await loadSchoolProfile(data.session.user);
-  else showLogin();
+  try {
+    const sessionRequest = supabaseClient.auth.getSession();
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("Checking the saved session timed out. Refresh the page and sign in again.")), 12000));
+    const {data, error} = await Promise.race([sessionRequest, timeout]);
+    if(error){ showLogin("Could not check your sign-in session. " + error.message); return; }
+    if(data.session?.user) await loadSchoolProfile(data.session.user);
+    else showLogin();
+  } catch(error) {
+    console.error("Session initialization error:", error);
+    showLogin("Could not initialize sign-in. " + (error?.message || "Refresh the page and try again."));
+  }
   supabaseClient.auth.onAuthStateChange((event, session)=>{
     if(event === "SIGNED_OUT" || !session) showLogin();
   });
